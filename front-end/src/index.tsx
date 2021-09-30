@@ -13,6 +13,7 @@ import AboutPage from './views/About/AboutPage';
 import ApartmentsPage from './views/Apartments/ApartmentsPage';
 import EntertainmentsPage from './views/Entertainments/EntertainmentsPage';
 import UniversitiesPage from './views/Universities/UniversitiesPage';
+import InvalidPage from './views/Invalid/InvalidPage';
 
 import Apartment1 from './views/HardInstances/Apartment1';
 import Apartment2 from './views/HardInstances/Apartment2';
@@ -88,6 +89,11 @@ ReactDOM.render(
           exact
           component={University3}
         />
+
+        {/* Invalid Page for missing links */}
+        <Route path="/404" component={InvalidPage} />
+        {/* Catch all to the invalid page */}
+        <Redirect to="/404" />
       </Switch>
     </BrowserRouter>
   </React.StrictMode>,
