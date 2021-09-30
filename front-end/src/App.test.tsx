@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import CampCatSplashPage from './CampCatSplashPage';
+import CampCatSplashPage from './views/SplashPage/CampCatSplashPage';
 
 test('renders basic text', () => {
   render(<CampCatSplashPage />);
