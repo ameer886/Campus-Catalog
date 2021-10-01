@@ -7,6 +7,7 @@ import {
   Switch,
 } from 'react-router-dom';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import CampCatSplashPage from './views/SplashPage/CampCatSplashPage';
 import AboutPage from './views/About/AboutPage';
