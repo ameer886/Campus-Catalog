@@ -24,6 +24,10 @@ import Table from 'react-bootstrap/Table';
  * Provide a sort function if you want a column to be sortable.
  * For those unfamiliar, sort functions take two objects and compare them
  * Return a negative number if a < b, positive if a > b, and 0 if a = b
+ *
+ * Provide a print function if you want a column to be formatted uniquely
+ * For example: print number as money, rather than as a raw int
+ * It should return a string version of that specific cell
  */
 export type ColumnDefinitionType<T, K extends keyof T> = {
   header: string;
@@ -32,6 +36,7 @@ export type ColumnDefinitionType<T, K extends keyof T> = {
   // but it's impossible to statically type these generic columns
   // so instead we can compare entire rows uniquely on columns
   sortFunc?: (a: T, b: T) => number;
+  printFunc?: (a: T) => string;
 };
 
 /*
@@ -51,10 +56,15 @@ const GenericRows = <T, K extends keyof T>({
 }: GenericTableProps<T, K>): JSX.Element => {
   return (
     <tbody>
+      {/* For each data point, make a row */}
       {data.map((row, index) => (
         <tr key={`TB${index}`}>
+          {/* For each column definition, build a cell */}
           {columnDefinitions.map((def, index2) => (
-            <td key={`cell${index2}`}>{row[def.key]}</td>
+            <td key={`cell${index2}`}>
+              {/* Format cell if available; otherwise print */}
+              {def.printFunc ? def.printFunc(row) : row[def.key]}
+            </td>
           ))}
         </tr>
       ))}

@@ -1,6 +1,25 @@
 import React from 'react';
 import University from '../../components/University/University';
 
+import { UniversityType } from '../Universities/UniversitiesPage';
+
+export const university3: UniversityType = {
+  schoolName: 'Princeton University',
+  city: 'Princeton',
+  state: 'NJ',
+  zipCode: '08544',
+  type: 'Private',
+  ranking: 1,
+  undergradEnrollment: 4773,
+  graduateEnrollment: 3079,
+  inStateTuition: 56010,
+  outStateTuition: 56010,
+  mascot: 'The Tiger',
+  avgFinancialAid: 52670,
+  graduationRate: 0.58,
+  acceptanceRate: 0.89,
+};
+
 /*
  * Hard-code a university here
  */
