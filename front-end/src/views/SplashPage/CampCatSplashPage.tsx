@@ -37,12 +37,12 @@ const CampCatSplashPage: React.FunctionComponent = () => {
     {
       key: 'flavor',
       header: 'Flavor',
-      sortFunc: (a: string, b: string) => a.localeCompare(b),
+      sortFunc: (a, b) => a.flavor.localeCompare(b.flavor),
     },
     {
       key: 'price',
       header: 'Price',
-      sortFunc: (a: number, b: number) => a - b,
+      sortFunc: (a, b) => a.price - b.price,
     },
   ];
 

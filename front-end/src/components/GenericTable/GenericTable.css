@@ -1,3 +1,7 @@
 .GenericTable {
   max-width: 1080px;
 }
+
+.pointer {
+  cursor: pointer;
+}

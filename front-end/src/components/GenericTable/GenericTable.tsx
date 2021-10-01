@@ -1,4 +1,7 @@
 import React from 'react';
+import { useState, useMemo } from 'react';
+
+import './GenericTable.css';
 
 import Table from 'react-bootstrap/Table';
 
@@ -25,12 +28,10 @@ import Table from 'react-bootstrap/Table';
 export type ColumnDefinitionType<T, K extends keyof T> = {
   header: string;
   key: K;
-  // It's impossible to statically type check params on this sort function
-  // The types will be T[K] but the compiler can only expand that
-  // to all possible keys, not a specific key
-  // Thus this any is intentional
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  sortFunc?: (a: any, b: any) => number;
+  // I'd love for a and b to be the type of the column
+  // but it's impossible to statically type these generic columns
+  // so instead we can compare entire rows uniquely on columns
+  sortFunc?: (a: T, b: T) => number;
 };
 
 /*
@@ -41,29 +42,6 @@ export type ColumnDefinitionType<T, K extends keyof T> = {
 type GenericTableProps<T, K extends keyof T> = {
   columnDefinitions: Array<ColumnDefinitionType<T, K>>;
   data: Array<T>;
-};
-
-// Header is fussy and needs a more specific type
-// too bad we can't $Diff these like in Flow
-type GenericHeaderProps<T, K extends keyof T> = {
-  columnDefinitions: Array<ColumnDefinitionType<T, K>>;
-};
-
-// Builds the header row
-const GenericHeader = <T, K extends keyof T>({
-  columnDefinitions,
-}: GenericHeaderProps<T, K>): JSX.Element => {
-  return (
-    <thead className="bg-dark text-white">
-      <tr>
-        {columnDefinitions.map((col, index) => (
-          <th onClick={() => alert(col.header)} key={`TH${index}`}>
-            {col.header}
-          </th>
-        ))}
-      </tr>
-    </thead>
-  );
 };
 
 // Builds the table itself
@@ -99,12 +77,72 @@ const GenericTable = <T, K extends keyof T>({
   columnDefinitions,
   data,
 }: GenericTableProps<T, K>): JSX.Element => {
+  /*
+   * This state allows us to track our current sort state
+   * We know for certain that all keys K are unique, so the states are:
+   * - null for no sort
+   * - keyasc for ascending on key column
+   * - keydesc for descending on key column
+   */
+  const [curSort, setSort] = useState<null | string>(null);
+
+  /*
+   * Memoize sorted data based on key, sort calculation is expensive
+   */
+  const sortedData = useMemo(() => {
+    let copy = data;
+    if (curSort) {
+      columnDefinitions.forEach((col) => {
+        if (col.sortFunc && curSort.includes(col.key.toString())) {
+          /*
+           * If we're actually sorting, we need to make a copy because
+           * otherwise we could lose the "original" order and be stuck
+           * only doing ascending or descending.
+           * Conversely, if that's desirable behavior then we can
+           * both get rid of the null sort state and this copy.
+           */
+          copy = JSON.parse(JSON.stringify(data));
+          copy.sort(col.sortFunc);
+          if (curSort.includes('desc')) {
+            copy.reverse();
+          }
+        }
+      });
+    }
+    return copy;
+  }, [curSort, data, columnDefinitions]);
+
+  // This is a useful wrapper on how to change our sort order
+  const changeSortFunc = (key: string) => {
+    if (!curSort) {
+      setSort(`${key}asc`);
+    } else if (curSort.includes(`${key}asc`)) {
+      setSort(`${key}desc`);
+    } else {
+      setSort(null);
+    }
+    console.log(curSort);
+  };
+
   return (
     <Table className="GenericTable" bordered hover>
-      <GenericHeader columnDefinitions={columnDefinitions} />
+      {/* GenericHeader is here so that it has access to state */}
+      <thead className="bg-dark text-white">
+        <tr>
+          {columnDefinitions.map((col, index) => (
+            <th
+              className="pointer"
+              onClick={() => changeSortFunc(col.key.toString())}
+              key={`TH${index}`}
+            >
+              {col.header}
+            </th>
+          ))}
+        </tr>
+      </thead>
       <GenericRows
         columnDefinitions={columnDefinitions}
-        data={data}
+        data={sortedData}
       />
     </Table>
   );
