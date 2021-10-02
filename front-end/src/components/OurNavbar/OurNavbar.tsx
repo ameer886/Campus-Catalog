@@ -1,11 +1,7 @@
 import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import Image from 'react-bootstrap/Image';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
+import './OurNavbar.css'
 
 const OurNavbar: React.FunctionComponent = () => {
   const links = [
@@ -33,8 +29,7 @@ const OurNavbar: React.FunctionComponent = () => {
 
   return (
     <Navbar bg="dark" variant="dark">
-      <Navbar.Brand href="/">Campus Catalog</Navbar.Brand>
-
+      <Navbar.Brand className="brand" href="/">Campus Catalog</Navbar.Brand>
       <Nav className="mr-auto">
         {links.map((link) => (
           <Nav.Link href={link.href} key={link.key}>
