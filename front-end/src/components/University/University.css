@@ -1,3 +1,107 @@
-.University {
+/* General information at the top */
+.Centering {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.UniversityName {
+  font-size: 48px;
   text-align: center;
+}
+
+.UniversityLocation {
+  font-size: 24px;
+  text-align: center;
+  color: #666;
+}
+
+/* Tags for the prices and ranking element */
+.PricesAndRankingContainer {
+  width: 600px;
+  height: 120px;
+  display: flex;
+  flex-direction: row;
+}
+
+.PricesContainer {
+  align-items: center;
+  display: flex;
+  width: 75%;
+  border: 3px solid #222;
+}
+
+.RankingContainer {
+  width: 25%;
+  margin-left: -3px;
+  border: 3px solid #222;
+}
+
+.SinglePrice {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.Tuition {
+  text-align: left;
+  width: 65%;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 2px 0px 2px 2px;
+}
+
+.InState {
+  color: blue;
+}
+
+.OutState {
+  color: orange;
+}
+
+.Cost {
+  text-align: right;
+  width: 33%;
+}
+
+.RankingLabel {
+  text-align: center;
+  width: 100%;
+  font-size: 24px;
+  font-weight: bold;
+  color: red;
+  margin-bottom: 0;
+}
+
+.Ranking {
+  text-align: center;
+  font-size: 60px;
+  font-weight: bold;
+}
+
+/* Tags for the publicity element */
+.PublicityLabel {
+  font-size: 24px;
+  font-weight: bold;
+  display: inline;
+}
+
+.Selected {
+  color: goldenrod;
+  font-weight: bolder;
+  font-size: 32px;
+}
+
+.Unselected {
+  color: #999;
+}
+
+/* Miscellaneous tags */
+.Section {
+  font-style: bold;
+}
+
+.Stats {
+  color: darkgreen;
+  font-style: bold;
 }
