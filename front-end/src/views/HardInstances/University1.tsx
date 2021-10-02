@@ -25,7 +25,7 @@ export const university1: UniversityType = {
  * Hard-code a university here
  */
 const University1: React.FunctionComponent = () => {
-  return <University id={1} name="Example University 1" />;
+  return <University uniQuery={university1} />;
 };
 
 export default University1;
