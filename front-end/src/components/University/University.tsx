@@ -5,6 +5,10 @@ import { formatNumberToMoney } from '../../utilities';
 
 import { UniversityType } from '../../views/Universities/UniversitiesPage';
 
+const UNAVAILABLE = (
+  <p>We couldn&#39;t find any information on this topic.</p>
+);
+
 type UniversityProps = {
   uniQuery: UniversityType;
 };
@@ -25,7 +29,7 @@ function formatLocation(
   return str;
 }
 
-type PricesAndRankingType = {
+type PricesAndRankingProps = {
   inStateTuition?: number;
   outStateTuition?: number;
   ranking?: number;
@@ -33,12 +37,12 @@ type PricesAndRankingType = {
 
 // Component that should show the
 // prices and ranking of this school
-const PricesAndRanking: React.FunctionComponent<PricesAndRankingType> =
+const PricesAndRanking: React.FunctionComponent<PricesAndRankingProps> =
   ({
     inStateTuition,
     outStateTuition,
     ranking,
-  }: PricesAndRankingType) => {
+  }: PricesAndRankingProps) => {
     const inState = formatNumberToMoney(inStateTuition);
     const outState = formatNumberToMoney(outStateTuition);
 
@@ -69,10 +73,111 @@ const PricesAndRanking: React.FunctionComponent<PricesAndRankingType> =
     );
   };
 
-// Indicates whether the school is public or private
-const PublicityIndicator: React.FunctionComponent = () => {
-  return <div />;
+type PublicityIndicatorProps = {
+  status: 'Public' | 'Private';
 };
+
+// Indicates whether the school is public or private
+const PublicityIndicator: React.FunctionComponent<PublicityIndicatorProps> =
+  ({ status }: PublicityIndicatorProps) => {
+    const selectedClassName = 'PublicityLabel Selected';
+    const unSelectedClassName = 'PublicityLabel Unselected';
+    const publicClassName =
+      status === 'Public' ? selectedClassName : unSelectedClassName;
+    const privateClassName =
+      status === 'Public' ? unSelectedClassName : selectedClassName;
+
+    return (
+      <div className="Centering">
+        <span>
+          <p className="PublicityLabel">This university is </p>
+          <p className={publicClassName}>Public</p>
+          <p className="PublicityLabel"> | </p>
+          <p className={privateClassName}>Private</p>
+        </span>
+      </div>
+    );
+  };
+
+type EnrollmentStatsProps = {
+  undergradEnrollment?: number;
+  graduateEnrollment?: number;
+};
+
+// Component to show all available enrollment stats
+const EnrollmentStats: React.FunctionComponent<EnrollmentStatsProps> =
+  ({
+    undergradEnrollment,
+    graduateEnrollment,
+  }: EnrollmentStatsProps) => {
+    if (
+      undergradEnrollment !== undefined &&
+      graduateEnrollment !== undefined
+    ) {
+      return (
+        <p>
+          This university currently has{' '}
+          {undergradEnrollment.toLocaleString('en-US')} undergraduate
+          students and {graduateEnrollment.toLocaleString('en-US')}{' '}
+          graduate students enrolled.
+        </p>
+      );
+    } else if (undergradEnrollment !== undefined) {
+      return (
+        <p>
+          This university currently has{' '}
+          {undergradEnrollment.toLocaleString('en-US')} undergraduate
+          students enrolled.
+        </p>
+      );
+    } else if (graduateEnrollment !== undefined) {
+      return (
+        <p>
+          This university currently has{' '}
+          {graduateEnrollment.toLocaleString('en-US')} graduate
+          students enrolled.
+        </p>
+      );
+    }
+    return UNAVAILABLE;
+  };
+
+type AcceptanceStatsProps = {
+  acceptanceRate?: number;
+  graduationRate?: number;
+};
+
+// Component to show all available enrollment stats
+const AcceptanceStats: React.FunctionComponent<AcceptanceStatsProps> =
+  ({ acceptanceRate, graduationRate }: AcceptanceStatsProps) => {
+    if (
+      acceptanceRate !== undefined &&
+      graduationRate !== undefined
+    ) {
+      return (
+        <p>
+          The acceptance rate at this university is{' '}
+          {acceptanceRate * 100}%, and the graduation rate is{' '}
+          {graduationRate * 100}%.
+        </p>
+      );
+    } else if (acceptanceRate !== undefined) {
+      return (
+        <p>
+          The acceptance rate at this university is{' '}
+          {acceptanceRate * 100}%.
+        </p>
+      );
+    } else if (graduationRate !== undefined) {
+      return (
+        <p>
+          The acceptance rate at this university is{' '}
+          {graduationRate * 100}%.
+        </p>
+      );
+    }
+    return UNAVAILABLE;
+  };
 
 /*
  * The instance page for a single university
@@ -87,6 +192,7 @@ const University: React.FunctionComponent<UniversityProps> = ({
     uniQuery.city,
     uniQuery.zipCode,
   );
+  const finAid = formatNumberToMoney(uniQuery.avgFinancialAid);
 
   return (
     <div>
@@ -97,7 +203,38 @@ const University: React.FunctionComponent<UniversityProps> = ({
         inStateTuition={uniQuery.inStateTuition}
         outStateTuition={uniQuery.outStateTuition}
       />
-      <PublicityIndicator />
+      {uniQuery.type && <PublicityIndicator status={uniQuery.type} />}
+      <h4 className="Stats">University Statistics:</h4>
+
+      {/* Section for all other stats */}
+      <h5 className="Section">Financial Aid</h5>
+      {uniQuery.avgFinancialAid !== undefined ? (
+        <p>
+          This university offers an average of {finAid} in financial
+          support.
+        </p>
+      ) : (
+        { UNAVAILABLE }
+      )}
+
+      <h5 className="Section">Mascot</h5>
+      {uniQuery.mascot ? (
+        <p>This university&#39;s mascot is {uniQuery.mascot}</p>
+      ) : (
+        { UNAVAILABLE }
+      )}
+
+      <h5 className="Section">Enrollment</h5>
+      <EnrollmentStats
+        undergradEnrollment={uniQuery.undergradEnrollment}
+        graduateEnrollment={uniQuery.graduateEnrollment}
+      />
+
+      <h5 className="Section">Acceptance and Graduation</h5>
+      <AcceptanceStats
+        acceptanceRate={uniQuery.acceptanceRate}
+        graduationRate={uniQuery.graduationRate}
+      />
     </div>
   );
 };

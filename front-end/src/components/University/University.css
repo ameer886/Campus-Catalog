@@ -1,7 +1,9 @@
+/* General information at the top */
 .Centering {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 24px;
 }
 
 .UniversityName {
@@ -15,6 +17,7 @@
   color: #666;
 }
 
+/* Tags for the prices and ranking element */
 .PricesAndRankingContainer {
   width: 600px;
   height: 120px;
@@ -74,4 +77,31 @@
   text-align: center;
   font-size: 60px;
   font-weight: bold;
+}
+
+/* Tags for the publicity element */
+.PublicityLabel {
+  font-size: 24px;
+  font-weight: bold;
+  display: inline;
+}
+
+.Selected {
+  color: goldenrod;
+  font-weight: bolder;
+  font-size: 32px;
+}
+
+.Unselected {
+  color: #999;
+}
+
+/* Miscellaneous tags */
+.Section {
+  font-style: bold;
+}
+
+.Stats {
+  color: darkgreen;
+  font-style: bold;
 }
