@@ -4,6 +4,7 @@ import University from '../../components/University/University';
 import { UniversityType } from '../Universities/UniversitiesPage';
 
 export const university2: UniversityType = {
+  id: 2,
   schoolName: 'The University of Texas at Austin',
   city: 'Austin',
   state: 'TX',

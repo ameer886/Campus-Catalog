@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
+import Nav from 'react-bootstrap/Nav';
 
 import './GenericTable.css';
 
@@ -12,6 +14,10 @@ import Table from 'react-bootstrap/Table';
  * The logic behind this takes a lot of TypeScript knowledge, so I'll try
  * to be as detailed as I possibly can
  */
+
+interface RowWithIndex {
+  id: number;
+}
 
 /*
  * This type tells you what a single column type is
@@ -29,7 +35,10 @@ import Table from 'react-bootstrap/Table';
  * For example: print number as money, rather than as a raw int
  * It should return a string version of that specific cell
  */
-export type ColumnDefinitionType<T, K extends keyof T> = {
+export type ColumnDefinitionType<
+  T extends RowWithIndex,
+  K extends keyof T,
+> = {
   header: string;
   key: K;
   // I'd love for a and b to be the type of the column
@@ -44,28 +53,50 @@ export type ColumnDefinitionType<T, K extends keyof T> = {
  * columnDefinitions tells the table what the columns should look like
  * data is the data actually being displayed
  */
-type GenericTableProps<T, K extends keyof T> = {
+type GenericTableProps<T extends RowWithIndex, K extends keyof T> = {
   columnDefinitions: Array<ColumnDefinitionType<T, K>>;
   data: Array<T>;
 };
 
 // Builds the table itself
-const GenericRows = <T, K extends keyof T>({
+const GenericRows = <T extends RowWithIndex, K extends keyof T>({
   data,
   columnDefinitions,
 }: GenericTableProps<T, K>): JSX.Element => {
+  // Get the current URL Router path
+  const location = useLocation();
+  const curPath = location.pathname;
+
   return (
     <tbody>
       {/* For each data point, make a row */}
       {data.map((row, index) => (
         <tr key={`TB${index}`}>
           {/* For each column definition, build a cell */}
-          {columnDefinitions.map((def, index2) => (
-            <td key={`cell${index2}`}>
-              {/* Format cell if available; otherwise print */}
-              {def.printFunc ? def.printFunc(row) : row[def.key]}
-            </td>
-          ))}
+          {columnDefinitions.map((def, index2) => {
+            const cellStr = def.printFunc
+              ? def.printFunc(row)
+              : row[def.key];
+            console.log(row);
+
+            if (index2 === 0) {
+              // Special return: make a link on first column
+              return (
+                <td key={`cell${index2}`}>
+                  <Nav.Link href={curPath + '/id=' + row.id}>
+                    {cellStr}
+                  </Nav.Link>
+                </td>
+              );
+            }
+
+            return (
+              <td key={`cell${index2}`}>
+                {/* Format cell if available; otherwise print */}
+                {def.printFunc ? def.printFunc(row) : row[def.key]}
+              </td>
+            );
+          })}
         </tr>
       ))}
     </tbody>
@@ -83,7 +114,7 @@ const GenericRows = <T, K extends keyof T>({
  *     sortFunc?: compare function
  *   }
  */
-const GenericTable = <T, K extends keyof T>({
+const GenericTable = <T extends RowWithIndex, K extends keyof T>({
   columnDefinitions,
   data,
 }: GenericTableProps<T, K>): JSX.Element => {

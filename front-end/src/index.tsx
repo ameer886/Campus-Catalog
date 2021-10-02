@@ -23,8 +23,8 @@ import Entertainment1 from './views/HardInstances/Entertainment1';
 import Entertainment2 from './views/HardInstances/Entertainment2';
 import Entertainment3 from './views/HardInstances/Entertainment3';
 import University1 from './views/HardInstances/University1';
-import University2 from './views/HardInstances/University1';
-import University3 from './views/HardInstances/University1';
+import University2 from './views/HardInstances/University2';
+import University3 from './views/HardInstances/University3';
 
 import reportWebVitals from './reportWebVitals';
 

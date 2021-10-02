@@ -8,6 +8,7 @@ import { university2 } from '../HardInstances/University2';
 import { university3 } from '../HardInstances/University3';
 
 export type UniversityType = {
+  id: number;
   schoolName: string;
   city?: string;
   state?: string;
