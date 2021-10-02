@@ -1,9 +1,10 @@
 import React from 'react';
 import './Apartment.css';
+import { ApartmentsType } from '../../views/Apartments/ApartmentsPage';
+
 
 type ApartmentProps = {
-  id?: number;
-  name?: string;
+  aptQuery: ApartmentsType;
 };
 
 /*
@@ -12,12 +13,11 @@ type ApartmentProps = {
  * Any attribute information should be passed in as a property
  */
 const Apartment: React.FunctionComponent<ApartmentProps> = ({
-  id,
-  name = 'ERR: name not found',
+ aptQuery
 }: ApartmentProps) => {
   return (
     <div className="Apartment">
-      <h1>Apartment {id ?? ' - ERR: ID not found'}</h1>
+      <h1>Apartment {aptQuery.id ?? ' - ERR: ID not found'}</h1>
       <p>Welcome to the page for {name}</p>
     </div>
   );
