@@ -1,6 +1,29 @@
 import React from 'react';
 import './ApartmentsPage.css';
 
+import ApartmentTable from '../../components/ApartmentTable/ApartmentTable';
+
+import { apartment1 } from '../HardInstances/Apartment1';
+import { apartment2 } from '../HardInstances/Apartment2';
+import { apartment3 } from '../HardInstances/Apartment3';
+
+export type ApartmentType = {
+  id: number;
+  propertyName: string;
+  location: Array<string>;
+  minRent?: number;
+  maxRent?: number;
+  beds?: string;
+  baths?: string;
+  sqft?: string;
+  petFriendly?: 'true' | 'false';
+  schools: Array<string>;
+  amenities?: Array<string>;
+  rating?: number;
+  walkScore?: number;
+  transitScore?: number;
+};
+
 /*
  * The Apartments page
  * One of the three main model collection pages
@@ -10,7 +33,7 @@ const ApartmentsPage: React.FunctionComponent = () => {
   return (
     <div className="Apartments">
       <h1>Apartments</h1>
-      <p>To do: add a list of apartments here</p>
+      <ApartmentTable rows={[apartment1, apartment2, apartment3]} />
     </div>
   );
 };

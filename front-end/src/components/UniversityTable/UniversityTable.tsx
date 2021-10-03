@@ -24,8 +24,8 @@ const universityTableHeaders: ColumnDefinitionType<
     key: 'state',
     header: 'State',
     sortFunc: (a, b) => {
-      if (!a.state) return 1;
-      if (!b.state) return -1;
+      if (!a.state) return -1;
+      if (!b.state) return 1;
       return a.state.localeCompare(b.state);
     },
   },
@@ -33,8 +33,8 @@ const universityTableHeaders: ColumnDefinitionType<
     key: 'inStateTuition',
     header: 'In-State Tuition',
     sortFunc: (a, b) => {
-      if (!a.inStateTuition) return 1;
-      if (!b.inStateTuition) return -1;
+      if (!a.inStateTuition) return -1;
+      if (!b.inStateTuition) return 1;
       return a.inStateTuition - b.inStateTuition;
     },
     printFunc: (a) => formatNumberToMoney(a.inStateTuition),
@@ -43,8 +43,8 @@ const universityTableHeaders: ColumnDefinitionType<
     key: 'outStateTuition',
     header: 'Out-of-State Tuition',
     sortFunc: (a, b) => {
-      if (!a.outStateTuition) return 1;
-      if (!b.outStateTuition) return -1;
+      if (!a.outStateTuition) return -1;
+      if (!b.outStateTuition) return 1;
       return a.outStateTuition - b.outStateTuition;
     },
     printFunc: (a) => formatNumberToMoney(a.outStateTuition),
@@ -53,8 +53,8 @@ const universityTableHeaders: ColumnDefinitionType<
     key: 'ranking',
     header: 'Ranking',
     sortFunc: (a, b) => {
-      if (!a.ranking) return 1;
-      if (!b.ranking) return -1;
+      if (!a.ranking) return -1;
+      if (!b.ranking) return 1;
       return a.ranking - b.ranking;
     },
   },
