@@ -19,8 +19,9 @@ export const apartment3: ApartmentType = {
   sqft: '389 - 920 sqft',
   petFriendly: 'true',
   schools: [
+    'Harvard University',
+    'Princeton University',
     'The University of Texas at Austin',
-    'St. Edwards University',
   ],
   amenities: [
     'Pool',
