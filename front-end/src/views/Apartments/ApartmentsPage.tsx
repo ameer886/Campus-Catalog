@@ -16,8 +16,8 @@ export type ApartmentsType = {
   beds?: string;
   baths?: string;
   sqft?: string;
-  petFriendly?: boolean;
-  schools?:Array<string>;
+  petFriendly?: 'true' | 'false';
+  schools:Array<string>;
   amenities?:Array<string>;
   rating?:number;
   walkScore?:number;

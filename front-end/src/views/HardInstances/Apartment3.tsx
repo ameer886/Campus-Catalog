@@ -12,7 +12,7 @@ export const apartment3: ApartmentsType = {
   beds: 'Studio - 2',
   baths: '1',
   sqft: '389 - 920 sqft',
-  petFriendly: true,
+  petFriendly: 'true',
   schools: ['The University of Texas at Austin','St. Edwards University'],
   amenities: ['Pool',
   'Fitness Center',

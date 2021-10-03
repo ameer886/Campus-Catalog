@@ -12,7 +12,7 @@ export const apartment1: ApartmentsType = {
   beds: '1 - 3',
   baths: '1 - 1.5',
   sqft: '580 - 1,100 sqft',
-  petFriendly: true,
+  petFriendly: 'true',
   schools: ['Harvard University','Massachusetts Institute of Technology','Boston University'],
   amenities: ['Concierge','Fitness Center','Playground','Clubhouse'],
   rating: 9.4,
