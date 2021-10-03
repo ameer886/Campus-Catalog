@@ -16,7 +16,9 @@ type OurNames =
 
 type Member = {
   name: OurNames;
+  username: string;
   commits: number;
+  issues: number;
 };
 
 // We map commits to author by email, so this function is useful
@@ -68,25 +70,38 @@ const AboutPage: React.FunctionComponent = () => {
   const [members, setMembers] = useState<Member[]>([
     {
       name: 'Ryan Gahagan',
+      username: 'RG8452',
       commits: 0,
+      issues: 0,
     },
     {
       name: 'Andrew Luo',
+      username: 'Glynkaw',
       commits: 0,
+      issues: 0,
     },
     {
       name: 'Brandon Hinh',
+      username: 'bhinh',
       commits: 0,
+      issues: 0,
     },
     {
       name: 'Richa Gadre',
+      username: 'richagadre',
       commits: 0,
+      issues: 0,
     },
     {
       name: 'David He',
+      username: 'ameer886',
       commits: 0,
+      issues: 0,
     },
   ]);
+
+  const [totalIssues, setTotalIssues] = useState(0);
+  const [totalCommits, setTotalCommits] = useState(0);
 
   // Copy our array and get its actual reference
   const membersCopy: Member[] = JSON.parse(JSON.stringify(members));
@@ -95,6 +110,32 @@ const AboutPage: React.FunctionComponent = () => {
   // Fetch data has side effects, so put it into useEffect
   useEffect(() => {
     // Axios is a library that allows us to easily ping gitlab
+    const issuePrefix =
+      'https://gitlab.com/api/v4/projects/29886588/issues_statistics?assignee_username=';
+    const requestArray = members.map((member) =>
+      axios.get(issuePrefix + member.username),
+    );
+
+    // First, find the number of issues by assignee
+    axios
+      .all([...requestArray])
+      .then(
+        axios.spread((...responses) => {
+          let issuesCount = 0;
+          for (let i = 0; i < responses.length; i++) {
+            const response = JSON.parse(JSON.stringify(responses[i]));
+            console.log(response);
+            const numClosed = response.data.statistics.counts.closed;
+            membersCopyRef[i].issues = numClosed;
+            issuesCount += numClosed;
+          }
+
+          setTotalIssues(issuesCount);
+        }),
+      )
+      .catch((errors) => console.error(errors));
+
+    // Next, track the number of commits
     axios
       .get(
         'https://gitlab.com/api/v4/projects/29886588/repository/commits?all&ref_name=main',
@@ -120,7 +161,9 @@ const AboutPage: React.FunctionComponent = () => {
         // This is a spread operator
         // This unpacks the objects into a new array reference
         setMembers([...membersCopyRef]);
-      });
+        setTotalCommits(arr.length);
+      })
+      .catch((errors) => console.error(errors));
   }, [membersCopyRef]);
   // The above line memoizes/stores the data for the reference to the copy
 
@@ -130,9 +173,18 @@ const AboutPage: React.FunctionComponent = () => {
     <div className="About">
       <h1>About</h1>
 
+      <p>
+        This project has a total of {totalIssues} total issues and{' '}
+        {totalCommits} total commits.
+      </p>
+
       {members.map((member, index) => (
         <div key={index}>
           <h2>{member.name}</h2>
+          <p>
+            This member was assigned to {member.issues} issues which
+            are now closed.
+          </p>
           <p>
             This member has made {member.commits} commits to main.
           </p>
