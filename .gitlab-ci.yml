@@ -1,0 +1,21 @@
+image: node:latest
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - echo "Building"
+    - cd front-end
+    - npm install
+    - CI=false npm run-script build
+
+test:
+  stage: test
+  script:
+    - echo "Testing"
+    - cd front-end
+    - npm install
+    - npm test
