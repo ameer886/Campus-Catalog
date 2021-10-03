@@ -1,0 +1,27 @@
+.Universities {
+  text-align: center;
+}
+
+.UniversitySplitter {
+  display: flex;
+}
+
+.SplitterGrid {
+  width: 75%;
+  margin: 0 24px;
+}
+
+.SplitterInfo {
+  width: 25%;
+  margin-right: 12px;
+}
+
+.RadioButtonDiv {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.RadioButton {
+  margin: 0 4px;
+}
