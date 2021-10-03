@@ -9,6 +9,7 @@ import {
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import Navbar from './components/OurNavbar/OurNavbar'
 import CampCatSplashPage from './views/SplashPage/CampCatSplashPage';
 import AboutPage from './views/About/AboutPage';
 import ApartmentsPage from './views/Apartments/ApartmentsPage';
@@ -31,6 +32,8 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
+      {/* Navbar */}
+      <Navbar />
       {/* put a Route to each page here */}
       <Switch>
         {/* Splash Page */}
