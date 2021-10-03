@@ -20,8 +20,8 @@ export const apartment1: ApartmentType = {
   petFriendly: 'true',
   schools: [
     'Harvard University',
-    'Massachusetts Institute of Technology',
-    'Boston University',
+    'Princeton University',
+    'The University of Texas at Austin',
   ],
   amenities: [
     'Concierge',
