@@ -1,7 +1,6 @@
 import React from 'react';
 import './UniversitiesPage.css';
 
-import UniversityTable from '../../components/UniversityTable/UniversityTable';
 import UniversityGrid from '../../components/UniversityGrid/UniversityGrid';
 
 import { university1 } from '../HardInstances/University1';
@@ -35,9 +34,6 @@ const UniversitiesPage: React.FunctionComponent = () => {
   return (
     <div className="Universities">
       <h1>Universities</h1>
-      <UniversityTable
-        rows={[university1, university2, university3]}
-      />
       <UniversityGrid
         cards={[university1, university2, university3]}
       />
