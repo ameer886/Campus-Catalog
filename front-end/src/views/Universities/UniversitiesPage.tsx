@@ -2,6 +2,7 @@ import React from 'react';
 import './UniversitiesPage.css';
 
 import UniversityTable from '../../components/UniversityTable/UniversityTable';
+import UniversityGrid from '../../components/UniversityGrid/UniversityGrid';
 
 import { university1 } from '../HardInstances/University1';
 import { university2 } from '../HardInstances/University2';
@@ -37,6 +38,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
       <UniversityTable
         rows={[university1, university2, university3]}
       />
+      <UniversityGrid />
     </div>
   );
 };

@@ -77,7 +77,6 @@ const GenericRows = <T extends RowWithIndex, K extends keyof T>({
             const cellStr = def.printFunc
               ? def.printFunc(row)
               : row[def.key];
-            console.log(row);
 
             if (index2 === 0) {
               // Special return: make a link on first column
