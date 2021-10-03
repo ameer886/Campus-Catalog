@@ -3,17 +3,17 @@ import React from 'react';
 import GenericTable, {
   ColumnDefinitionType,
 } from '../../components/GenericTable/GenericTable';
- import { ApartmentsType } from '../../views/Apartments/ApartmentsPage';
-// import { formatNumberToMoney } from '../../utilities';
+import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
+
 import './ApartmentTable.css';
 
 type ApartmentTableProps = {
-  rows: Array<ApartmentsType>;
+  rows: Array<ApartmentType>;
 };
 
 const apartmentTableHeaders: ColumnDefinitionType<
-  ApartmentsType,
-  keyof ApartmentsType
+  ApartmentType,
+  keyof ApartmentType
 >[] = [
   {
     key: 'propertyName',
@@ -24,8 +24,8 @@ const apartmentTableHeaders: ColumnDefinitionType<
     key: 'transitScore',
     header: 'Transit Score',
     sortFunc: (a, b) => {
-      if (!a.transitScore) return 1;
-      if (!b.transitScore) return -1;
+      if (!a.transitScore) return -1;
+      if (!b.transitScore) return 1;
       return a.transitScore - b.transitScore;
     },
   },
@@ -33,8 +33,8 @@ const apartmentTableHeaders: ColumnDefinitionType<
     key: 'rating',
     header: 'Rating',
     sortFunc: (a, b) => {
-      if (!a.rating) return 1;
-      if (!b.rating) return -1;
+      if (!a.rating) return -1;
+      if (!b.rating) return 1;
       return a.rating - b.rating;
     },
   },
@@ -42,13 +42,13 @@ const apartmentTableHeaders: ColumnDefinitionType<
     key: 'beds',
     header: 'Bedrooms',
     sortFunc: (a, b) => a.propertyName.localeCompare(b.propertyName),
-    },
+  },
   {
     key: 'walkScore',
     header: 'Walk Score',
     sortFunc: (a, b) => {
-      if (!a.walkScore) return 1;
-      if (!b.walkScore) return -1;
+      if (!a.walkScore) return -1;
+      if (!b.walkScore) return 1;
       return a.walkScore - b.walkScore;
     },
   },

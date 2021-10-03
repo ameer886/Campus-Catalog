@@ -20,9 +20,9 @@ export type UniversityType = {
   inStateTuition?: number;
   outStateTuition?: number;
   mascot?: string;
-  avgFinancialAid: number;
-  graduationRate: number;
-  acceptanceRate: number;
+  avgFinancialAid?: number;
+  graduationRate?: number;
+  acceptanceRate?: number;
 };
 
 /*
