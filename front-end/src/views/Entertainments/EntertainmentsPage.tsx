@@ -23,7 +23,7 @@ export type EntertainmentType = {
  * One of the three main model collection pages
  * Should contain a list of entertainments in a sortable table/grid
  */
-const EntertainmentPage: React.FunctionComponent = () => {
+const EntertainmentsPage: React.FunctionComponent = () => {
   return (
     <div className="Entertainment">
       <h1>Entertainments</h1>
@@ -34,4 +34,4 @@ const EntertainmentPage: React.FunctionComponent = () => {
   );
 };
 
-export default EntertainmentPage;
+export default EntertainmentsPage;

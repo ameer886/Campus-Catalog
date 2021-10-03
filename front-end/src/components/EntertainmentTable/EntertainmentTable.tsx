@@ -4,7 +4,7 @@ import GenericTable, {
   ColumnDefinitionType,
 } from '../../components/GenericTable/GenericTable';
 import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
-// import { formatNumberToMoney } from '../../utilities';
+
 import './EntertainmentTable.css';
 
 type EntertainmentTableProps = {
@@ -46,6 +46,10 @@ const entertainmentTableHeaders: ColumnDefinitionType<
       if (!a.ageRestriction) return 1;
       if (!b.ageRestriction) return -1;
       return a.ageRestriction - b.ageRestriction;
+    },
+    printFunc: (a) => {
+      if (a.ageRestriction === 0) return 'None';
+      else return a.ageRestriction.toString();
     },
   },
 ];

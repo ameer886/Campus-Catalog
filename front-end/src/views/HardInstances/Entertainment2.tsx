@@ -16,7 +16,7 @@ export const entertainment2: EntertainmentType = {
 };
 
 /*
- * Hard-code a university here
+ * Hard-code an entertainment here
  */
 const Entertainment2: React.FunctionComponent = () => {
   return <Entertainment entQuery={entertainment2} />;
