@@ -28,7 +28,7 @@ const OurNavbar: React.FunctionComponent = () => {
   ];
 
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar sticky="top" bg="dark" variant="dark">
       <Navbar.Brand className="brand" href="/">Campus Catalog</Navbar.Brand>
       <Nav className="mr-auto">
         {links.map((link) => (
