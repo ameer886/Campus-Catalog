@@ -9,9 +9,3 @@ test('renders basic text in splash', () => {
   expect(textElement).toBeInTheDocument();
 });
 
-test('renders basic text in entertainment', () => {
-  render(<EntertainmentsPage />);
-  const textElement = screen.getByText(/Entertainments/i);
-  expect(textElement).toBeInTheDocument();
-});
-
