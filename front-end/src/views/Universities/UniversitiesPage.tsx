@@ -38,7 +38,9 @@ const UniversitiesPage: React.FunctionComponent = () => {
       <UniversityTable
         rows={[university1, university2, university3]}
       />
-      <UniversityGrid />
+      <UniversityGrid
+        cards={[university1, university2, university3]}
+      />
     </div>
   );
 };

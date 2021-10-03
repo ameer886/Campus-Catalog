@@ -1,24 +1,83 @@
 import React from 'react';
+// import './UniversityGrid.css';
+import styles from './UniversityGrid.module.css';
 
-import './UniversityGrid.css';
+import { UniversityType } from '../../views/Universities/UniversitiesPage';
+import { Nav } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
+import { formatNumberToMoney } from '../../utilities';
 
-const UniversityCard: React.FunctionComponent = () => {
-  return <div className="UniversityCard">Test1</div>;
+type CardProps = {
+  university: UniversityType;
 };
 
-const UniversityGrid: React.FunctionComponent = () => {
+const UniversityCard: React.FunctionComponent<CardProps> = ({
+  university,
+}: CardProps) => {
+  const location = useLocation();
+  const curPath = location.pathname;
+
   return (
-    <div className="Centering">
-      <div className="UniversityGridContainer">
-        <UniversityCard />
-        <UniversityCard />
-        <UniversityCard />
-        <UniversityCard />
-        <UniversityCard />
-        <UniversityCard />
+    <Nav.Link
+      className={styles.CardLink}
+      href={curPath + '/id=' + university.id}
+    >
+      <div className={styles.UniversityCard}>
+        <h2 className={styles.UniversityName}>
+          {university.schoolName}
+        </h2>
+        {university.state && <p>Located in {university.state}</p>}
+
+        <div className={styles.LeftRightPair}>
+          <p className={styles.InState + ' ' + styles.Left}>
+            In-State Tuition:
+          </p>
+          <p className={styles.Tuition}>
+            {formatNumberToMoney(university.inStateTuition)}
+          </p>
+        </div>
+        <div className={styles.LeftRightPair}>
+          <p className={styles.OutState + ' ' + styles.Left}>
+            Out-of-State Tuition:
+          </p>
+          <p className={styles.Tuition}>
+            {formatNumberToMoney(university.outStateTuition)}
+          </p>
+        </div>
+
+        <div className={styles.LeftRightPair}>
+          <p className={styles.Left + ' ' + styles.RankingText}>
+            Ranking:
+          </p>
+          <p className={styles.Tuition + ' ' + styles.Ranking}>
+            {university.ranking ?? 'N/A'}
+          </p>
+        </div>
       </div>
-    </div>
+    </Nav.Link>
   );
 };
+
+type UniversityGridProps = {
+  cards: Array<UniversityType>;
+};
+
+/*
+ * Grid for displaying universities
+ * Each row will have at most 3 equally spaced cards
+ * Each card should have info for a single university
+ */
+const UniversityGrid: React.FunctionComponent<UniversityGridProps> =
+  ({ cards }: UniversityGridProps) => {
+    return (
+      <div className={styles.Centering}>
+        <div className={styles.UniversityGridContainer}>
+          {cards.map((university, index) => (
+            <UniversityCard university={university} key={index} />
+          ))}
+        </div>
+      </div>
+    );
+  };
 
 export default UniversityGrid;
