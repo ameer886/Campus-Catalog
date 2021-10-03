@@ -1,9 +1,9 @@
 import React from 'react';
 import './Entertainment.css';
+import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
 
 type EntertainmentProps = {
-  id?: number;
-  name?: string;
+  entQuery: EntertainmentType;
 };
 
 /*
@@ -12,13 +12,24 @@ type EntertainmentProps = {
  * Any attribute information should be passed in as a property
  */
 const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
-  id,
-  name = 'ERR: name not found',
+  entQuery,
 }: EntertainmentProps) => {
   return (
     <div className="Entertainment">
-      <h1>Entertainment {id ?? ' - ERR: ID not found'}</h1>
-      <p>Welcome to the page for {name}</p>
+      <h1>Entertainment {entQuery.id ?? ' - ERR: ID not found'}</h1>
+      <p>
+        Welcome to the page for {entQuery.businessName}. It is a{' '}
+        {entQuery.category} business.{' '}
+      </p>
+      <p>
+        {' '}
+        {entQuery.businessName} is located on {entQuery.location[0]},
+        {entQuery.location[1]} {entQuery.location[2]}{' '}
+        {entQuery.location[3]}. The age restriction is{' '}
+        {entQuery.ageRestriction} and the price is {entQuery.price}.
+        Is there delivery? The answer is{' '}
+        {entQuery.delivery ?? 'there may or may not be delivery'}.{' '}
+      </p>
     </div>
   );
 };
