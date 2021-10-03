@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type IntentionallyAny = any;
+
 const moneyFormatter = new Intl.NumberFormat('en-US', {
   // Formats to USD
   style: 'currency',
