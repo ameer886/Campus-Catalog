@@ -22,3 +22,14 @@
 .Info {
   font-size: 24px;
 }
+
+.BigLogoContainer {
+  width: 240px;
+  height: 240px;
+  margin: 12px 24px;
+}
+
+.BigLogo {
+  width: 240px;
+  height: 240px;
+}

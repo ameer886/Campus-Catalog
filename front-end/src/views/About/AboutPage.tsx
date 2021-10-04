@@ -1,10 +1,14 @@
 import React from 'react';
 import { useEffect, useRef, useState } from 'react';
 import styles from './AboutPage.module.css';
+import { Nav } from 'react-bootstrap';
 
 import axios from 'axios';
 import type { IntentionallyAny } from '../../utilities';
 import AboutMemberCard from './AboutMemberCard';
+
+import GitLabLogoImg from './Images/GitLabLogo.png';
+import PostmanLogoImg from './Images/PostmanLogo.png';
 
 import RyanGahaganImg from './Images/RyanGahagan.png';
 import BrandonHinhImg from './Images/BrandonHinh.png';
@@ -219,6 +223,35 @@ const AboutPage: React.FunctionComponent = () => {
         This project has a total of {totalIssues} total issues and{' '}
         {totalCommits} total commits.
       </p>
+
+      <div className={styles.Centering}>
+        <div className={styles.BigLogoContainer}>
+          <img
+            className={styles.BigLogo}
+            src={GitLabLogoImg}
+            alt="GitLab Logo"
+          />
+          <Nav.Link
+            className={styles.About}
+            href="https://gitlab.com/RG8452/campus-catalog/"
+          >
+            Our GitLab repository
+          </Nav.Link>
+        </div>
+        <div className={styles.BigLogoContainer}>
+          <img
+            className={styles.BigLogo}
+            src={PostmanLogoImg}
+            alt="Postman Logo"
+          />
+          <Nav.Link
+            className={styles.About}
+            href="https://documenter.getpostman.com/view/17627995/UUy3A7Rd"
+          >
+            Our GitLab repository
+          </Nav.Link>
+        </div>
+      </div>
     </div>
   );
 };
