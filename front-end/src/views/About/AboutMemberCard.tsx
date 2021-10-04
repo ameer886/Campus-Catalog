@@ -58,6 +58,10 @@ const AboutMemberCard: React.FunctionComponent<CardProps> = ({
               <li>
                 <strong>Commits made:</strong> {member.commits}
               </li>
+              <li>
+                <strong>Unit Tests Written:</strong>{' '}
+                {member.unitTests}
+              </li>
             </ul>
           </div>
         </div>

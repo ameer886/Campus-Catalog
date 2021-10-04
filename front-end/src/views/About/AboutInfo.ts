@@ -39,7 +39,7 @@ export const aboutTools: ToolOrAPI[] = [
   {
     name: 'React',
     description: 'Front-end Framework',
-    link: 'https://react-bootstrap.github.io/',
+    link: 'https://reactjs.org/',
     img: ReactLogoImg,
   },
   {

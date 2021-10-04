@@ -12,6 +12,9 @@ import PostmanLogoImg from './Images/PostmanLogo.png';
 
 import RyanGahaganImg from './Images/RyanGahagan.png';
 import BrandonHinhImg from './Images/BrandonHinh.png';
+import RichaGadreImg from './Images/RichaGadre.png';
+import DavidHeImg from './Images/DavidHe.png';
+import AndrewLuoImg from './Images/AndrewLuo.png';
 import { ToolGrid, APIGrid } from './AboutGrids';
 
 // Basic types to help process contributors
@@ -28,6 +31,7 @@ export type Member = {
   username: string;
   commits: number;
   issues: number;
+  unitTests: number;
   role: string;
   img?: string; // images should be 360px wide exactly
   color?: string;
@@ -86,6 +90,7 @@ const AboutPage: React.FunctionComponent = () => {
       username: 'RG8452',
       commits: 0,
       issues: 0,
+      unitTests: 0,
       color: '#31052f',
       role: 'Frontend Project Lead',
       img: RyanGahaganImg,
@@ -100,13 +105,19 @@ const AboutPage: React.FunctionComponent = () => {
       username: 'Glynkaw',
       commits: 0,
       issues: 0,
-      role: '???',
+      unitTests: 0,
+      color: '#ebda8a',
+      role: 'Backend Devops',
+      img: AndrewLuoImg,
+      bio: 'Andrew is a junior from Plano, Texas. Has no idea how he managed to get \
+            to this point. Enjoys cooking, playing tennis, and watching anime.',
     },
     {
       name: 'Brandon Hinh',
       username: 'bhinh',
       commits: 0,
       issues: 0,
+      unitTests: 0,
       color: '#90ee90',
       role: 'Backend Developer',
       img: BrandonHinhImg,
@@ -120,15 +131,28 @@ const AboutPage: React.FunctionComponent = () => {
       username: 'richagadre',
       commits: 0,
       issues: 0,
-      role: '???',
+      unitTests: 0,
+      role: 'Frontend Developer',
+      color: '#ff7f7f',
+      img: RichaGadreImg,
+      bio: 'Richa is currently studying Computer Science and minoring in Business \
+            at UT. She is originally from Sugar Land, TX. Richa is interested in web and \
+            mobile development and social entrepreneurship. In her free time, Richa is \
+            watching 90s sitcoms, going on walks, and trying new coffee shops.',
     },
     {
       name: 'David He',
       username: 'ameer886',
       commits: 0,
       issues: 0,
+      unitTests: 0,
       color: '#7df9ff',
-      role: '???',
+      role: 'Backend Developer',
+      img: DavidHeImg,
+      bio: 'David is a senior CS major at UT. He is from Shanghai, China. He is working \
+            on backend development and database management for the site. He is also \
+            interested in full stack development. He enjoys playing soccer, video \
+            games, and taking care of animals.',
     },
   ]);
 
