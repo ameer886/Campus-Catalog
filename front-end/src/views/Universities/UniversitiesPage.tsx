@@ -140,6 +140,9 @@ const UniversitiesPage: React.FunctionComponent = () => {
       <div className={styles.UniversitySplitter}>
         {/* Build the grid on the left */}
         <div className={styles.SplitterGrid}>
+          <p style={{ marginBottom: '0px' }}>
+            Found a total of {sortedCards.length} universities.
+          </p>
           <UniversityGrid cards={sortedCards} />
         </div>
 
