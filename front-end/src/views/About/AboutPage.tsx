@@ -258,7 +258,7 @@ const AboutPage: React.FunctionComponent = () => {
             className={styles.About}
             href="https://documenter.getpostman.com/view/17627995/UUy3A7Rd"
           >
-            Our GitLab repository
+            Our Postman docs
           </Nav.Link>
         </div>
       </div>

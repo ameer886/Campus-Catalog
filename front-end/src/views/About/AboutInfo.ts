@@ -1,3 +1,4 @@
+// Tool images
 import AWSLogoImg from './Images/AWSLogo.png';
 import DiscordLogoImg from './Images/DiscordLogo.png';
 import GitLabLogoImg from './Images/GitLabLogo.png';
@@ -8,6 +9,12 @@ import PostmanLogoImg from './Images/PostmanLogo.png';
 import ReactBootstrapLogoImg from './Images/ReactBootstrapLogo.png';
 import ReactLogoImg from './Images/ReactLogo.png';
 import TypeScriptLogoImg from './Images/TypeScriptLogo.png';
+
+// API images
+import ApifyLogoImg from './Images/ApifyLogo.png';
+import DoELogoImg from './Images/DoELogo.png';
+import GoogleMapsLogoImg from './Images/GoogleMapsLogo.png';
+import YelpLogoImg from './Images/YelpLogo.png';
 
 export type ToolOrAPI = {
   name: string;
@@ -81,9 +88,39 @@ export const aboutTools: ToolOrAPI[] = [
 
 export const aboutAPIs: ToolOrAPI[] = [
   {
-    name: 'API 1',
-    description: 'Used to get X',
-    link: 'www.google.com',
-    img: ReactLogoImg,
+    name: 'YelpFusion',
+    description: 'Used to get entertainment ratings',
+    link: 'https://www.yelp.com/developers/documentation/v3',
+    img: YelpLogoImg,
+  },
+  {
+    name: 'Department of Education',
+    description: 'Used to get university data',
+    link: 'https://collegescorecard.ed.gov/data/documentation/',
+    img: DoELogoImg,
+  },
+  {
+    name: 'Apartments.com',
+    description: 'Used to get apartment data',
+    link: 'https://apify.com/tugkan/apartments-scraper#apartments-scraper',
+    img: ApifyLogoImg,
+  },
+  {
+    name: 'Google Maps',
+    description: 'Used to find reviews',
+    link: 'https://developers.google.com/maps/documentation/places/web-service/overview',
+    img: GoogleMapsLogoImg,
+  },
+  {
+    name: 'GitLab',
+    description: 'Used to get repo info',
+    link: 'https://docs.gitlab.com/ee/api/api_resources.html',
+    img: GitLabLogoImg,
+  },
+  {
+    name: 'Google Maps: Embed',
+    description: 'Used to embed maps',
+    link: 'https://developers.google.com/maps/documentation/embed/get-started?hl=en_US',
+    img: GoogleMapsLogoImg,
   },
 ];
