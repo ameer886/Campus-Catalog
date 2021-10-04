@@ -2,6 +2,7 @@ import React from 'react';
 import Apartment from '../../components/Apartment/Apartment';
 
 import { ApartmentType } from '../Apartments/ApartmentsPage';
+import Logo from '../Media/3401Image.jpeg';
 
 export const apartment3: ApartmentType = {
   id: 3,
@@ -40,7 +41,13 @@ export const apartment3: ApartmentType = {
  * Hard-code a university here
  */
 const Apartment3: React.FunctionComponent = () => {
-  return <Apartment aptQuery={apartment3} />;
+  return (
+    <>
+      <Apartment aptQuery={apartment3} />
+      ;)
+      <img src={Logo} width="300" alt="Logo" />
+    </>
+  );
 };
 
 export default Apartment3;

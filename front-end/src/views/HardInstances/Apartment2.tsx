@@ -2,6 +2,7 @@ import React from 'react';
 import Apartment from '../../components/Apartment/Apartment';
 
 import { ApartmentType } from '../Apartments/ApartmentsPage';
+import Logo from '../Media/BarclaySquareImage.jpeg';
 
 export const apartment2: ApartmentType = {
   id: 2,
@@ -18,7 +19,11 @@ export const apartment2: ApartmentType = {
   baths: '2 - 3',
   sqft: '1,268 - 2,966 sqft',
   petFriendly: 'true',
-  schools: ['Harvard University','Princeton University','The University of Texas at Austin'],
+  schools: [
+    'Harvard University',
+    'Princeton University',
+    'The University of Texas at Austin',
+  ],
   amenities: [
     'Pool',
     'Sauna',
@@ -39,7 +44,13 @@ export const apartment2: ApartmentType = {
  * Hard-code a university here
  */
 const Apartment2: React.FunctionComponent = () => {
-  return <Apartment aptQuery={apartment2} />;
+  return (
+    <>
+      <Apartment aptQuery={apartment2} />
+      ;)
+      <img src={Logo} width="300" alt="Logo" />
+    </>
+  );
 };
 
 export default Apartment2;
