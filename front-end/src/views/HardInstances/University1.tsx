@@ -2,6 +2,7 @@ import React from 'react';
 import University from '../../components/University/University';
 
 import { UniversityType } from '../Universities/UniversitiesPage';
+import Logo from '../Media/HarvardLogo.jpg';
 
 export const university1: UniversityType = {
   id: 1,
@@ -25,7 +26,11 @@ export const university1: UniversityType = {
  * Hard-code a university here
  */
 const University1: React.FunctionComponent = () => {
-  return <University uniQuery={university1} />;
+  return (
+    <>
+      <University uniQuery={university1}/>)
+      <img src={Logo} width = "300" alt="Logo"/>
+    </>)
 };
 
 export default University1;
