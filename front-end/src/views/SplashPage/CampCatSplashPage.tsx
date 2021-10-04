@@ -1,5 +1,6 @@
 import React from 'react';
 import './CampCatSplashPage.css';
+import Logo from '../Media/Crying_Cat.jpg';
 
 /*
  * The Splash Page
@@ -10,6 +11,7 @@ const CampCatSplashPage: React.FunctionComponent = () => {
   return (
     <div className="App">
       <h1>Hello world!</h1>
+      <img src={Logo} width = "300" alt="cat"/>
     </div>
   );
 };
