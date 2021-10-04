@@ -224,6 +224,7 @@ const AboutPage: React.FunctionComponent = () => {
         {totalCommits} total commits.
       </p>
 
+      <h3 className={styles.Section}>Our Codebase</h3>
       <div className={styles.Centering}>
         <div className={styles.BigLogoContainer}>
           <img
@@ -252,6 +253,8 @@ const AboutPage: React.FunctionComponent = () => {
           </Nav.Link>
         </div>
       </div>
+
+      <h3>Our Tools</h3>
     </div>
   );
 };
