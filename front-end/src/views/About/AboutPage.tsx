@@ -12,6 +12,7 @@ import PostmanLogoImg from './Images/PostmanLogo.png';
 
 import RyanGahaganImg from './Images/RyanGahagan.png';
 import BrandonHinhImg from './Images/BrandonHinh.png';
+import ToolGrid from './ToolGrid';
 
 // Basic types to help process contributors
 type OurNames =
@@ -106,8 +107,13 @@ const AboutPage: React.FunctionComponent = () => {
       username: 'bhinh',
       commits: 0,
       issues: 0,
-      role: '???',
+      color: '#90ee90',
+      role: 'Backend Developer',
       img: BrandonHinhImg,
+      bio: 'Brandon is currently a junior CS and Actuarial Science major. He is \
+            from Houston, TX. He is interested in full-stack web development and \
+            machine learning. In his free time, he enjoys dancing, playing video \
+            games, and trying new foods.',
     },
     {
       name: 'Richa Gadre',
@@ -225,7 +231,10 @@ const AboutPage: React.FunctionComponent = () => {
       </p>
 
       <h3 className={styles.Section}>Our Codebase</h3>
-      <div className={styles.Centering}>
+      <div
+        className={styles.Centering}
+        style={{ minHeight: '360px' }}
+      >
         <div className={styles.BigLogoContainer}>
           <img
             className={styles.BigLogo}
@@ -254,7 +263,8 @@ const AboutPage: React.FunctionComponent = () => {
         </div>
       </div>
 
-      <h3>Our Tools</h3>
+      <h3 className={styles.Section}>Our Tools</h3>
+      <ToolGrid />
     </div>
   );
 };

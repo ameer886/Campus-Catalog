@@ -1,0 +1,49 @@
+.Centering {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ToolGridContainer {
+  display: grid;
+  width: 100%;
+
+  grid-template-columns: repeat(5, 1fr);
+
+  grid-gap: 16px;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.ToolCard {
+  min-height: 300px;
+
+  border: 2px solid maroon;
+  border-radius: 16px;
+
+  color: #222;
+}
+
+.ToolName {
+  color: cyan;
+  text-decoration: underline;
+  font-size: 36px;
+}
+
+.ToolLogoContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ToolLogo {
+  max-width: 180px;
+  max-height: 180px;
+}
+
+.Description {
+  font-size: 18px;
+  color: #444;
+}
