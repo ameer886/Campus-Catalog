@@ -106,7 +106,7 @@ export const aboutAPIs: ToolOrAPI[] = [
     img: ApifyLogoImg,
   },
   {
-    name: 'Google Maps',
+    name: 'Google Maps: Places For Reviews',
     description: 'Used to find reviews',
     link: 'https://developers.google.com/maps/documentation/places/web-service/overview',
     img: GoogleMapsLogoImg,
