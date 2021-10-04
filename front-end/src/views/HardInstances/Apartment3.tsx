@@ -46,6 +46,12 @@ const Apartment3: React.FunctionComponent = () => {
       <Apartment aptQuery={apartment3} />
       ;)
       <img src={Logo} width="300" alt="Logo" />
+      <iframe id="Apartment3Map"
+    title="Apartment3Map"
+    width="600"
+    height="400"
+    src="https://www.mapquest.com/search/result?slug=%2Fus%2Ftexas%2Faustin%2F78705-2615%2F3401-red-river-st-30.292788,-97.725179&query=3401%20Red%20River%20St,%20Austin,%20TX%2078705-2615&page=0&index=0">
+</iframe>      
     </>
   );
 };

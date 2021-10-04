@@ -49,6 +49,12 @@ const Apartment2: React.FunctionComponent = () => {
       <Apartment aptQuery={apartment2} />
       ;)
       <img src={Logo} width="300" alt="Logo" />
+      <iframe id="HarvardMap"
+    title="HarvardMap"
+    width="600"
+    height="400"
+    src="https://www.mapquest.com/search/result?slug=%2Fus%2Fnew-jersey%2Fprinceton%2F08540-5892%2F1900-barclay-blvd-40.360291,-74.620058&query=1900%20Barclay%20Blvd,%20Princeton,%20NJ%2008540-5892&page=0&index=0">
+</iframe>      
     </>
   );
 };
