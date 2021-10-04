@@ -1,9 +1,13 @@
 import React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import './AboutPage.css';
+import styles from './AboutPage.module.css';
 
 import axios from 'axios';
 import type { IntentionallyAny } from '../../utilities';
+import AboutMemberCard from './AboutMemberCard';
+
+import RyanGahaganImg from './Images/RyanGahagan.png';
+import BrandonHinhImg from './Images/BrandonHinh.png';
 
 // Basic types to help process contributors
 type OurNames =
@@ -14,11 +18,15 @@ type OurNames =
   | 'Brandon Hinh'
   | 'UNKNOWN';
 
-type Member = {
+export type Member = {
   name: OurNames;
   username: string;
   commits: number;
   issues: number;
+  role: string;
+  img?: string; // images should be 360px wide exactly
+  color?: string;
+  bio?: string;
 };
 
 // We map commits to author by email, so this function is useful
@@ -73,30 +81,44 @@ const AboutPage: React.FunctionComponent = () => {
       username: 'RG8452',
       commits: 0,
       issues: 0,
+      color: '#31052f',
+      role: 'Frontend Project Lead',
+      img: RyanGahaganImg,
+      bio: "Ryan is a senior at UT Austin. He's from Dripping Springs, TX. \
+            He takes math courses on the side, and plays video games as though \
+            he didn't get 4 hours of sleep all semester. Most of his experience \
+            is in front end programming, although he enjoys almost all CS topics. \
+            Next year he'll be working full time at Facebook in Seattle.",
     },
     {
       name: 'Andrew Luo',
       username: 'Glynkaw',
       commits: 0,
       issues: 0,
+      role: '???',
     },
     {
       name: 'Brandon Hinh',
       username: 'bhinh',
       commits: 0,
       issues: 0,
+      role: '???',
+      img: BrandonHinhImg,
     },
     {
       name: 'Richa Gadre',
       username: 'richagadre',
       commits: 0,
       issues: 0,
+      role: '???',
     },
     {
       name: 'David He',
       username: 'ameer886',
       commits: 0,
       issues: 0,
+      color: '#7df9ff',
+      role: '???',
     },
   ]);
 
@@ -124,7 +146,6 @@ const AboutPage: React.FunctionComponent = () => {
           let issuesCount = 0;
           for (let i = 0; i < responses.length; i++) {
             const response = JSON.parse(JSON.stringify(responses[i]));
-            console.log(response);
             const numClosed = response.data.statistics.counts.closed;
             membersCopyRef[i].issues = numClosed;
             issuesCount += numClosed;
@@ -167,29 +188,37 @@ const AboutPage: React.FunctionComponent = () => {
   }, [membersCopyRef]);
   // The above line memoizes/stores the data for the reference to the copy
 
-  console.log(members);
-
   return (
-    <div className="About">
-      <h1>About</h1>
+    <div className={styles.About}>
+      <h1 className={styles.Title}>About</h1>
 
-      <p>
-        This project has a total of {totalIssues} total issues and{' '}
-        {totalCommits} total commits.
+      {/* Mission Statement */}
+      <h3 className={styles.Section}>Our Mission</h3>
+      <div className={styles.Centering}>
+        <p className={styles.Info} style={{ maxWidth: '850px' }}>
+          Finding a college is one of life&#39;s biggest decisions, so
+          we feel that it is important to be as informed as possible.
+          This website has compiled universities, apartments, and
+          recreational amenities around the country to help people
+          determine how good a college is, where they could live
+          there, and what there is to do for fun.
+        </p>
+      </div>
+
+      {/* Members and statistics */}
+      <h3 className={styles.Section}>Us</h3>
+      <p className={styles.Info}>
+        Come and meet the people who built this project!
       </p>
 
       {members.map((member, index) => (
-        <div key={index}>
-          <h2>{member.name}</h2>
-          <p>
-            This member was assigned to {member.issues} issues which
-            are now closed.
-          </p>
-          <p>
-            This member has made {member.commits} commits to main.
-          </p>
-        </div>
+        <AboutMemberCard member={member} key={index} />
       ))}
+
+      <p className={styles.Info}>
+        This project has a total of {totalIssues} total issues and{' '}
+        {totalCommits} total commits.
+      </p>
     </div>
   );
 };
