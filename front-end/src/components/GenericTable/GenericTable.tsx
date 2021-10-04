@@ -165,26 +165,29 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
   };
 
   return (
-    <Table className="GenericTable" bordered hover>
-      {/* GenericHeader is here so that it has access to state */}
-      <thead className="bg-dark text-white">
-        <tr>
-          {columnDefinitions.map((col, index) => (
-            <th
-              className="pointer"
-              onClick={() => changeSortFunc(col.key.toString())}
-              key={`TH${index}`}
-            >
-              {col.header}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <GenericRows
-        columnDefinitions={columnDefinitions}
-        data={sortedData}
-      />
-    </Table>
+    <>
+      <Table className="GenericTable" bordered hover>
+        {/* GenericHeader is here so that it has access to state */}
+        <thead className="bg-dark text-white">
+          <tr>
+            {columnDefinitions.map((col, index) => (
+              <th
+                className="pointer"
+                onClick={() => changeSortFunc(col.key.toString())}
+                key={`TH${index}`}
+              >
+                {col.header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <GenericRows
+          columnDefinitions={columnDefinitions}
+          data={sortedData}
+        />
+      </Table>
+      <p>Found a total of {sortedData.length} elements.</p>
+    </>
   );
 };
 
