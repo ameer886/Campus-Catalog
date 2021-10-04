@@ -30,6 +30,12 @@ const University2: React.FunctionComponent = () => {
     <>
       <University uniQuery={university2}/>)
       <img src={Logo} width = "300" alt="Logo"/>
+      <iframe id="UTAustinMap"
+    title="UTAustinMap"
+    width="600"
+    height="400"
+    src="https://www.mapquest.com/search/result?slug=%2Fus%2Ftexas%2Funiversity-of-texas-at-austin-304265447&query=University%20Of%20Texas%20At%20Austin&page=0&mqId=304265447&index=0">
+</iframe>
     </>)
 };
 
