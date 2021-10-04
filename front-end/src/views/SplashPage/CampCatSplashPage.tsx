@@ -1,5 +1,6 @@
 import React from 'react';
-import './CampCatSplashPage.css';
+import styles from './CampCatSplashPage.module.css';
+import SplashGrid from './SplashGrid';
 
 /*
  * The Splash Page
@@ -8,8 +9,23 @@ import './CampCatSplashPage.css';
  */
 const CampCatSplashPage: React.FunctionComponent = () => {
   return (
-    <div className="App">
-      <h1>Hello world!</h1>
+    <div className={styles.Centering}>
+      <div className={styles.TextContainer}>
+        <h1 className={styles.Title}>Campus Catalog</h1>
+      </div>
+
+      <div className={styles.TextContainer}>
+        <h2 className={styles.Mission}>
+          Struggling to find the right university?
+          <br />
+          Not sure where to live or where to spend your time?
+        </h2>
+      </div>
+      <div className={styles.TextContainer}>
+        <h3 className={styles.Help}>We&#39;re here to help.</h3>
+      </div>
+
+      <SplashGrid />
     </div>
   );
 };

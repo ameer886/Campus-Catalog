@@ -1,0 +1,30 @@
+.Centering {
+  text-align: center;
+}
+
+.TextContainer {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.Title {
+  font-size: 72px;
+  font-weight: bold;
+  margin-bottom: 108px;
+}
+
+.Mission {
+  font-size: 40px;
+  max-width: 1080px;
+  color: #322477;
+}
+
+.Help {
+  font-size: 60px;
+  font-weight: bold;
+  color: maroon;
+  text-decoration: underline;
+  margin-bottom: 72px;
+}
