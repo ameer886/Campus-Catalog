@@ -9,14 +9,14 @@ import ReactBootstrapLogoImg from './Images/ReactBootstrapLogo.png';
 import ReactLogoImg from './Images/ReactLogo.png';
 import TypeScriptLogoImg from './Images/TypeScriptLogo.png';
 
-export type Tool = {
+export type ToolOrAPI = {
   name: string;
   description: string;
   link: string;
   img: string;
 };
 
-export const aboutTools: Tool[] = [
+export const aboutTools: ToolOrAPI[] = [
   {
     name: 'GitLab',
     description: 'Source control',
@@ -76,5 +76,14 @@ export const aboutTools: Tool[] = [
     description: 'Node Package Manager',
     link: 'https://www.npmjs.com/',
     img: NPMLogoImg,
+  },
+];
+
+export const aboutAPIs: ToolOrAPI[] = [
+  {
+    name: 'API 1',
+    description: 'Used to get X',
+    link: 'www.google.com',
+    img: ReactLogoImg,
   },
 ];

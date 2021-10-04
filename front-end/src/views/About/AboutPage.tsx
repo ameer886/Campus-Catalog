@@ -12,7 +12,7 @@ import PostmanLogoImg from './Images/PostmanLogo.png';
 
 import RyanGahaganImg from './Images/RyanGahagan.png';
 import BrandonHinhImg from './Images/BrandonHinh.png';
-import ToolGrid from './ToolGrid';
+import { ToolGrid, APIGrid } from './AboutGrids';
 
 // Basic types to help process contributors
 type OurNames =
@@ -265,6 +265,11 @@ const AboutPage: React.FunctionComponent = () => {
 
       <h3 className={styles.Section}>Our Tools</h3>
       <ToolGrid />
+
+      <h3 className={styles.Section} style={{ marginTop: '96px' }}>
+        Our APIs
+      </h3>
+      <APIGrid />
     </div>
   );
 };
