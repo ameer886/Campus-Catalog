@@ -2,7 +2,6 @@ import React from 'react';
 import './Apartment.css';
 import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
 import { formatNumberToMoney } from '../../utilities';
-import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 
 type ApartmentProps = {
@@ -19,11 +18,10 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
 }: ApartmentProps) => {
   return (
     <div className="Apartment">
-      <h1>Apartment {aptQuery.id ?? ' - ERR: ID not found'}</h1>
+      <h1>{aptQuery.propertyName}</h1>
       <p>
-        Welcome to the page for Apartment {aptQuery.id}. This
-        apartment is {aptQuery.propertyName}. It is located at{' '}
-        {aptQuery.location[0]}. It is in the city{' '}
+        Welcome to the page for {aptQuery.propertyName}. It is located
+        at {aptQuery.location[0]}. It is in the city{' '}
         {aptQuery.location[1]},{aptQuery.location[2]}. It has the zip
         code {aptQuery.location[3]}. The minimum rent is{' '}
         {formatNumberToMoney(aptQuery.minRent)} and the maximum rent
@@ -34,7 +32,7 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
         <NavLink to="/entertainments/id=1">
           Mozarts Coffee Roaters
         </NavLink>
-        ,<NavLink to="/entertainments/id=2">Target</NavLink>, and{' '}
+        , <NavLink to="/entertainments/id=2">Target</NavLink>, and{' '}
         <NavLink to="/entertainments/id=3">Lan Ramen</NavLink>. Some
         universities that are close to this apartment are{' '}
         <NavLink to="/universities/id=1">Harvard University</NavLink>,{' '}

@@ -17,7 +17,7 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
 }: EntertainmentProps) => {
   return (
     <div className="Entertainment">
-      <h1>Entertainment {entQuery.id ?? ' - ERR: ID not found'}</h1>
+      <h1>{entQuery.businessName}</h1>
       <p>
         Welcome to the page for {entQuery.businessName}. It is a{' '}
         {entQuery.category} business.{' '}

@@ -229,7 +229,7 @@ const University: React.FunctionComponent<UniversityProps> = ({
 
       <h5 className={styles.Section}>Mascot</h5>
       {uniQuery.mascot ? (
-        <p>This university&#39;s mascot is {uniQuery.mascot}</p>
+        <p>This university&#39;s mascot is {uniQuery.mascot}.</p>
       ) : (
         { UNAVAILABLE }
       )}
@@ -250,7 +250,7 @@ const University: React.FunctionComponent<UniversityProps> = ({
         <NavLink to="/entertainments/id=1">
           Mozarts Coffee Roaters
         </NavLink>
-        ,<NavLink to="/entertainments/id=2">Target</NavLink>, and{' '}
+        , <NavLink to="/entertainments/id=2">Target</NavLink>, and{' '}
         <NavLink to="/entertainments/id=3">Lan Ramen</NavLink>
         .Apartments that are located near this university include{' '}
         <NavLink to="/apartments/id=1">Parkside Place</NavLink>,{' '}
