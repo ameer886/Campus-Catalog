@@ -1,6 +1,7 @@
 import React from 'react';
 import './Entertainment.css';
 import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
+import { NavLink } from 'react-router-dom';
 import Image from 'react-bootstrap/Image'
 import { 
   GoogleMap,
