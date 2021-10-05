@@ -8,7 +8,7 @@
 - David He (UTEID: hh26758)
 
 ## General Info
-Git SHA: TODO post when nearly finished
+Git SHA: 7ef56124b99fd6253b67e1e5caea95ec10193606
 
 Project Leader: Ryan Gahagan
 
@@ -29,4 +29,4 @@ Time of completion:
 | Richa Gadre | 20 | 15 |
 | David He | 20 | 16 |
 
-Comments: Thank you Jefferson and Caitlin and all the other TAs for all the helpful guides and advice throughout the project.
+Comments: Thank you Jefferson and Caitlin and all the other TAs for all the helpful guides and advice throughout the project. Special shoutouts to Jefferson for linking [his group's repository](https://gitlab.com/forbesye/fitsbits) and Caitlin for linking [her group's repository](https://gitlab.com/caitlinlien/cs373-sustainability/). We referenced these repositories for general ideas, such as organizing code, as well as a few specific points: namely the GitLab CI, Dockerfile, axios backend calls to GitLab, and Google maps API.
