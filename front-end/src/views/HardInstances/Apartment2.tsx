@@ -2,7 +2,7 @@ import React from 'react';
 import Apartment from '../../components/Apartment/Apartment';
 
 import { ApartmentType } from '../Apartments/ApartmentsPage';
-import Logo from '../Media/BarclaySquareImage.jpeg';
+import Logo from '../Media/BarclaySquareImage.png';
 
 export const apartment2: ApartmentType = {
   id: 2,
