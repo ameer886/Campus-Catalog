@@ -3,30 +3,13 @@ import './Entertainment.css';
 import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
 import { NavLink } from 'react-router-dom';
 import Image from 'react-bootstrap/Image';
-import {
-  GoogleMap,
-  LoadScript,
-  Marker,
-} from '@react-google-maps/api';
-
-type Position = {
-  lat: number;
-  lng: number;
-};
+import { Position } from '../Location/Location';
+import Location from '../Location/Location';
 
 type EntertainmentProps = {
   entQuery: EntertainmentType;
   image: string;
   position: Position;
-};
-
-const options = {
-  disableDefaultUI: true,
-};
-const mapContainerStyle = {
-  width: '50vw',
-  height: '50vh',
-  margin: 'auto',
 };
 
 /*
@@ -76,16 +59,7 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
         src={image}
         style={{ width: '25vm', height: '25vh' }}
       ></Image>
-      <LoadScript googleMapsApiKey="AIzaSyCOeYOyODSruMATuBCLEYIO44DJVFF2DzI">
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          zoom={15}
-          center={position}
-          options={options}
-        >
-          <Marker position={position} />
-        </GoogleMap>
-      </LoadScript>
+      <Location position={position} />
     </div>
   );
 };
