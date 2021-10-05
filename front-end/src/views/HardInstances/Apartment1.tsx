@@ -42,7 +42,7 @@ const Apartment1: React.FunctionComponent = () => {
   return (
     <>
       <Apartment aptQuery={apartment1} />
-      ;)
+      
       <img src={Logo} width="300" alt="Logo" />
       <iframe id="HarvardMap"
     title="HarvardMap"

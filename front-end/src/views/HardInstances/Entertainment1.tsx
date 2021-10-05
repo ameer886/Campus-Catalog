@@ -17,8 +17,8 @@ export const entertainment1: EntertainmentType = {
 
 const position = {
   lat: 30.295588200238317,
-  lng: -97.78417627312469
-}
+  lng: -97.78417627312469,
+};
 /*
  * Hard-code an entertainment here
  */
