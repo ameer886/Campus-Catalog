@@ -1,7 +1,7 @@
 import React from 'react';
 import Entertainment from '../../components/Entertainment/Entertainment';
 import { EntertainmentType } from '../Entertainments/EntertainmentsPage';
-import Logo from '../Media/target.png'
+import Logo from '../Media/target.png';
 
 export const entertainment2: EntertainmentType = {
   id: 2,
@@ -17,14 +17,20 @@ export const entertainment2: EntertainmentType = {
 
 const position = {
   lat: 42.3645368543139,
-  lng: -71.10267374833074
-}
+  lng: -71.10267374833074,
+};
 
 /*
  * Hard-code an entertainment here
  */
 const Entertainment2: React.FunctionComponent = () => {
-  return <Entertainment entQuery={entertainment2} image={Logo} position={position} />;
+  return (
+    <Entertainment
+      entQuery={entertainment2}
+      image={Logo}
+      position={position}
+    />
+  );
 };
 
 export default Entertainment2;

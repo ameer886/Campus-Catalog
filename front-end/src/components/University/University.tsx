@@ -163,9 +163,9 @@ const AcceptanceStats: React.FunctionComponent<AcceptanceStatsProps> =
     if (
       acceptanceRate !== undefined &&
       graduationRate !== undefined
-    ) { 
-      acceptanceRate = acceptanceRate * 100
-      graduationRate = graduationRate * 100
+    ) {
+      acceptanceRate = acceptanceRate * 100;
+      graduationRate = graduationRate * 100;
       return (
         <p>
           The acceptance rate at this university is{' '}

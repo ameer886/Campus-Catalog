@@ -28,15 +28,17 @@ export const university3: UniversityType = {
 const University3: React.FunctionComponent = () => {
   return (
     <>
-      <University uniQuery={university3}/>)
-      <img src={Logo} width = "300" alt="Logo"/>
-      <iframe id="PrincetonMap"
-    title="PrincetonMap"
-    width="600"
-    height="400"
-    src="https://www.mapquest.com/search/result?slug=%2Fus%2Fnew-jersey%2Fprinceton-university-265770846&query=Princeton%20University&page=0&mqId=265770846&index=0">
-</iframe>
-    </>)
+      <University uniQuery={university3} />)
+      <img src={Logo} width="300" alt="Logo" />
+      <iframe
+        id="PrincetonMap"
+        title="PrincetonMap"
+        width="600"
+        height="400"
+        src="https://www.mapquest.com/search/result?slug=%2Fus%2Fnew-jersey%2Fprinceton-university-265770846&query=Princeton%20University&page=0&mqId=265770846&index=0"
+      ></iframe>
+    </>
+  );
 };
 
 export default University3;

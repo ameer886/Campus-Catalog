@@ -2,17 +2,17 @@ import React from 'react';
 import './Entertainment.css';
 import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
 import { NavLink } from 'react-router-dom';
-import Image from 'react-bootstrap/Image'
-import { 
+import Image from 'react-bootstrap/Image';
+import {
   GoogleMap,
   LoadScript,
   Marker,
-} from '@react-google-maps/api'
+} from '@react-google-maps/api';
 
 type Position = {
   lat: number;
   lng: number;
-}
+};
 
 type EntertainmentProps = {
   entQuery: EntertainmentType;
@@ -21,8 +21,8 @@ type EntertainmentProps = {
 };
 
 const options = {
-  disableDefaultUI: true
-}
+  disableDefaultUI: true,
+};
 const mapContainerStyle = {
   width: '50vw',
   height: '50vh',
@@ -37,7 +37,7 @@ const mapContainerStyle = {
 const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
   entQuery,
   image,
-  position
+  position,
 }: EntertainmentProps) => {
   return (
     <div className="Entertainment">
@@ -72,17 +72,20 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
         </NavLink>
         .
       </p>
-      <Image src={image} style={{width: "25vm", height: "25vh"}}></Image>
-      <LoadScript googleMapsApiKey='AIzaSyCOeYOyODSruMATuBCLEYIO44DJVFF2DzI'>
-        <GoogleMap 
-          mapContainerStyle={mapContainerStyle} 
-          zoom={15} 
+      <Image
+        src={image}
+        style={{ width: '25vm', height: '25vh' }}
+      ></Image>
+      <LoadScript googleMapsApiKey="AIzaSyCOeYOyODSruMATuBCLEYIO44DJVFF2DzI">
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={15}
           center={position}
           options={options}
         >
-          <Marker position={position}/>
+          <Marker position={position} />
         </GoogleMap>
-    </LoadScript>
+      </LoadScript>
     </div>
   );
 };
