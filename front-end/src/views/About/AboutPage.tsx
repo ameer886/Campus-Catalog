@@ -193,7 +193,7 @@ const AboutPage: React.FunctionComponent = () => {
     // Next, track the number of commits
     axios
       .get(
-        'https://gitlab.com/api/v4/projects/29886588/repository/commits?all&ref_name=main',
+        'https://gitlab.com/api/v4/projects/29886588/repository/commits?all&ref_name=main&per_page=-1',
       )
       .then((res) => {
         // res is the response/resolution of a promise
