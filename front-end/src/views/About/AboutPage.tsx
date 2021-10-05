@@ -239,6 +239,21 @@ const AboutPage: React.FunctionComponent = () => {
         </p>
       </div>
 
+      {/* Interesting Results */}
+      <h3 className={styles.Section}>Why Use Our Website?</h3>
+      <div className={styles.Centering}>
+        <p className={styles.Info} style={{ maxWidth: '850px' }}>
+          Being able to combine different datasets allowed us to find
+          out interesting things about Universities and the areas that
+          surround them. For example, there tend to be significantly
+          more available amenities near universities in urban areas
+          than rural areas, but the tuition and apartment prices also
+          tend to be higher. Using our website will allow users to
+          find similar connections and get a deeper understanding of
+          the colleges that they&#39;re interested in.
+        </p>
+      </div>
+
       {/* Members and statistics */}
       <h3 className={styles.Section}>Us</h3>
       <p className={styles.Info}>
