@@ -24,7 +24,8 @@ const options = {
 }
 const mapContainerStyle = {
   width: '50vw',
-  height: '50vh'
+  height: '50vh',
+  margin: 'auto',
 };
 
 /*
