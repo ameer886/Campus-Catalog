@@ -2,8 +2,8 @@ import React from 'react';
 import styles from './SplashGrid.module.css';
 
 import ApartmentImg from './Images/Apartment.png';
-import HarvardImg from './Images/Harvard.jpeg';
-import EntertainmentImg from './Images/Entertainment.jpeg';
+import HarvardImg from './Images/Harvard.png';
+import EntertainmentImg from './Images/Entertainment.png';
 import { Nav } from 'react-bootstrap';
 
 type CardProps = {
