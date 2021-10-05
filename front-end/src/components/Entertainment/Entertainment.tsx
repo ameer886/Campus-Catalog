@@ -2,9 +2,14 @@ import React from 'react';
 import './Entertainment.css';
 import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
 import { NavLink } from 'react-router-dom';
+import Image from 'react-bootstrap/Image';
+import { Position } from '../Location/Location';
+import Location from '../Location/Location';
 
 type EntertainmentProps = {
   entQuery: EntertainmentType;
+  image: string;
+  position: Position;
 };
 
 /*
@@ -14,6 +19,8 @@ type EntertainmentProps = {
  */
 const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
   entQuery,
+  image,
+  position,
 }: EntertainmentProps) => {
   return (
     <div className="Entertainment">
@@ -48,6 +55,11 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
         </NavLink>
         .
       </p>
+      <Image
+        src={image}
+        style={{ width: '25vm', height: '25vh' }}
+      ></Image>
+      <Location position={position} />
     </div>
   );
 };
