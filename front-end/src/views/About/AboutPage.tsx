@@ -222,6 +222,9 @@ const AboutPage: React.FunctionComponent = () => {
   }, [membersCopyRef]);
   // The above line memoizes/stores the data for the reference to the copy
 
+  let totalUnitTests = 0;
+  members.forEach((member) => (totalUnitTests += member.unitTests));
+
   return (
     <div className={styles.About}>
       <h1 className={styles.Title}>About</h1>
@@ -265,8 +268,9 @@ const AboutPage: React.FunctionComponent = () => {
       ))}
 
       <p className={styles.Info}>
-        This project has a total of {totalIssues} total issues and{' '}
-        {totalCommits} total commits.
+        This project has a total of {totalIssues} total issues,{' '}
+        {totalCommits} total commits, and {totalUnitTests} total unit
+        tests.
       </p>
 
       <h3 className={styles.Section}>Our Codebase</h3>
