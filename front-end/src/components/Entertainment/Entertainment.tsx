@@ -1,9 +1,30 @@
 import React from 'react';
 import './Entertainment.css';
 import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
+import Image from 'react-bootstrap/Image'
+import { 
+  GoogleMap,
+  LoadScript,
+  Marker,
+} from '@react-google-maps/api'
+
+type Position = {
+  lat: number;
+  lng: number;
+}
 
 type EntertainmentProps = {
   entQuery: EntertainmentType;
+  image: string;
+  position: Position;
+};
+
+const options = {
+  disableDefaultUI: true
+}
+const mapContainerStyle = {
+  width: '50vw',
+  height: '50vh'
 };
 
 /*
@@ -13,6 +34,8 @@ type EntertainmentProps = {
  */
 const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
   entQuery,
+  image,
+  position
 }: EntertainmentProps) => {
   return (
     <div className="Entertainment">
@@ -30,6 +53,17 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
         Is there delivery? The answer is{' '}
         {entQuery.delivery ?? 'there may or may not be delivery'}.{' '}
       </p>
+      <Image src={image} style={{width: "25vm", height: "25vh"}}></Image>
+      <LoadScript googleMapsApiKey='AIzaSyCOeYOyODSruMATuBCLEYIO44DJVFF2DzI'>
+        <GoogleMap 
+          mapContainerStyle={mapContainerStyle} 
+          zoom={15} 
+          center={position}
+          options={options}
+        >
+          <Marker position={position}/>
+        </GoogleMap>
+    </LoadScript>
     </div>
   );
 };
