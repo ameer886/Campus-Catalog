@@ -24,11 +24,7 @@ const position = {
  */
 const Entertainment1: React.FunctionComponent = () => {
   return (
-  <>
     <Entertainment entQuery={entertainment1} image={Logo} position={position} />
-    
-    
-  </>
   )};
 
 export default Entertainment1;
