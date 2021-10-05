@@ -1,5 +1,6 @@
 import React from 'react';
-import './University.css';
+import styles from './University.module.css';
+import { NavLink } from 'react-router-dom';
 
 import { formatNumberToMoney } from '../../utilities';
 
@@ -47,26 +48,32 @@ const PricesAndRanking: React.FunctionComponent<PricesAndRankingProps> =
     const outState = formatNumberToMoney(outStateTuition);
 
     return (
-      <div className="Centering">
-        <div className="PricesAndRankingContainer">
-          <div className="PricesContainer">
+      <div className={styles.Centering}>
+        <div className={styles.PricesAndRankingContainer}>
+          <div className={styles.PricesContainer}>
             <div style={{ width: '100%' }}>
-              <div className="SinglePrice">
-                <p className="Tuition InState">In-State Tuition:</p>
-                <p className="Tuition Cost">{inState}</p>
+              <div className={styles.SinglePrice}>
+                <p className={styles.Tuition + ' ' + styles.InState}>
+                  In-State Tuition:
+                </p>
+                <p className={styles.Tuition + styles.Cost}>
+                  {inState}
+                </p>
               </div>
-              <div className="SinglePrice">
-                <p className="Tuition OutState">
+              <div className={styles.SinglePrice}>
+                <p className={styles.Tuition + ' ' + styles.OutState}>
                   Out-of-State Tuition:
                 </p>
-                <p className="Tuition Cost">{outState}</p>
+                <p className={styles.Tuition + ' ' + styles.Cost}>
+                  {outState}
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="RankingContainer">
-            <p className="RankingLabel">Ranking</p>
-            <p className="Ranking">{ranking}</p>
+          <div className={styles.RankingContainer}>
+            <p className={styles.RankingLabel}>Ranking</p>
+            <p className={styles.Ranking}>{ranking}</p>
           </div>
         </div>
       </div>
@@ -80,19 +87,22 @@ type PublicityIndicatorProps = {
 // Indicates whether the school is public or private
 const PublicityIndicator: React.FunctionComponent<PublicityIndicatorProps> =
   ({ status }: PublicityIndicatorProps) => {
-    const selectedClassName = 'PublicityLabel Selected';
-    const unSelectedClassName = 'PublicityLabel Unselected';
+    const selectedClassName =
+      styles.PublicityLabel + ' ' + styles.Selected;
+    const unSelectedClassName =
+      styles.PublicityLabel + ' ' + styles.Unselected;
+
     const publicClassName =
       status === 'Public' ? selectedClassName : unSelectedClassName;
     const privateClassName =
       status === 'Public' ? unSelectedClassName : selectedClassName;
 
     return (
-      <div className="Centering">
+      <div className={styles.Centering}>
         <span>
-          <p className="PublicityLabel">This university is </p>
+          <p className={styles.PublicityLabel}>This university is </p>
           <p className={publicClassName}>Public</p>
-          <p className="PublicityLabel"> | </p>
+          <p className={styles.PublicityLabel}> | </p>
           <p className={privateClassName}>Private</p>
         </span>
       </div>
@@ -197,18 +207,18 @@ const University: React.FunctionComponent<UniversityProps> = ({
 
   return (
     <div>
-      <h1 className="UniversityName">{uniQuery.schoolName}</h1>
-      <h3 className="UniversityLocation">{location}</h3>
+      <h1 className={styles.UniversityName}>{uniQuery.schoolName}</h1>
+      <h3 className={styles.UniversityLocation}>{location}</h3>
       <PricesAndRanking
         ranking={uniQuery.ranking}
         inStateTuition={uniQuery.inStateTuition}
         outStateTuition={uniQuery.outStateTuition}
       />
       {uniQuery.type && <PublicityIndicator status={uniQuery.type} />}
-      <h4 className="Stats">University Statistics:</h4>
+      <h4 className={styles.Stats}>University Statistics:</h4>
 
       {/* Section for all other stats */}
-      <h5 className="Section">Financial Aid</h5>
+      <h5 className={styles.Section}>Financial Aid</h5>
       {uniQuery.avgFinancialAid !== undefined ? (
         <p>
           This university offers an average of {finAid} in financial
@@ -218,24 +228,40 @@ const University: React.FunctionComponent<UniversityProps> = ({
         { UNAVAILABLE }
       )}
 
-      <h5 className="Section">Mascot</h5>
+      <h5 className={styles.Section}>Mascot</h5>
       {uniQuery.mascot ? (
-        <p>This university&#39;s mascot is {uniQuery.mascot}</p>
+        <p>This university&#39;s mascot is {uniQuery.mascot}.</p>
       ) : (
         { UNAVAILABLE }
       )}
 
-      <h5 className="Section">Enrollment</h5>
+      <h5 className={styles.Section}>Enrollment</h5>
       <EnrollmentStats
         undergradEnrollment={uniQuery.undergradEnrollment}
         graduateEnrollment={uniQuery.graduateEnrollment}
       />
 
-      <h5 className="Section">Acceptance and Graduation</h5>
+      <h5 className={styles.Section}>Acceptance and Graduation</h5>
       <AcceptanceStats
         acceptanceRate={uniQuery.acceptanceRate}
         graduationRate={uniQuery.graduationRate}
       />
+      <p>
+        Close by entertainment includes:{' '}
+        <NavLink to="/entertainments/id=1">
+          Mozarts Coffee Roaters
+        </NavLink>
+        , <NavLink to="/entertainments/id=2">Target</NavLink>, and{' '}
+        <NavLink to="/entertainments/id=3">Lan Ramen</NavLink>
+        .Apartments that are located near this university include{' '}
+        <NavLink to="/apartments/id=1">Parkside Place</NavLink>,{' '}
+        <NavLink to="/apartments/id=3">3401 at Red River</NavLink>,
+        and{' '}
+        <NavLink to="/apartments/id=2">
+          Barclay Square at Princeton Forrestal
+        </NavLink>
+        .
+      </p>
     </div>
   );
 };

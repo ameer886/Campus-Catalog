@@ -16,6 +16,8 @@ Website: TODO add when we have a URL
 
 GitLab Pipelines: TODO add when we have a pipeline
 
+Postman API Documentation: https://documenter.getpostman.com/view/17627995/UUy3A7Rd
+
 ## Phase 1
 
 Time of completion:

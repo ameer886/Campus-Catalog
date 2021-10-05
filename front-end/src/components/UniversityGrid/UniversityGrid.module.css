@@ -1,0 +1,79 @@
+/* Generic Containers */
+.Centering {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.UniversityGridContainer {
+  display: grid;
+  width: 100%;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  grid-gap: 12px;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.UniversityCard {
+  min-height: 240px;
+
+  border: 1px solid black;
+  border-radius: 5px;
+
+  background-color: #ddd;
+  color: #222;
+}
+
+.CardLink {
+  padding: 0;
+}
+
+/* Specific Card elements */
+.UniversityName {
+  font-size: 20px;
+  font-style: bold;
+  color: darkblue;
+  margin-bottom: 0;
+}
+
+.LeftRightPair {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.Left {
+  text-align: left;
+  width: 65%;
+  font-weight: bold;
+  margin: 2px 0px 2px 2px;
+}
+
+.InState {
+  color: blue;
+}
+
+.OutState {
+  color: orange;
+}
+
+.Tuition {
+  text-align: right;
+  width: 33%;
+  margin: 2px 2px 2px 0px;
+}
+
+.RankingText {
+  color: red;
+  font-size: 18px;
+  font-style: bold;
+}
+
+.Ranking {
+  font-size: 18px;
+  font-style: bold;
+  color: black;
+}

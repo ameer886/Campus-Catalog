@@ -40,7 +40,7 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
 }: EntertainmentProps) => {
   return (
     <div className="Entertainment">
-      <h1>Entertainment {entQuery.id ?? ' - ERR: ID not found'}</h1>
+      <h1>{entQuery.businessName}</h1>
       <p>
         Welcome to the page for {entQuery.businessName}. It is a{' '}
         {entQuery.category} business.{' '}
@@ -52,7 +52,24 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
         {entQuery.location[3]}. The age restriction is{' '}
         {entQuery.ageRestriction} and the price is {entQuery.price}.
         Is there delivery? The answer is{' '}
-        {entQuery.delivery ?? 'there may or may not be delivery'}.{' '}
+        {entQuery.delivery ?? 'there may or may not be delivery'}.
+        Some universities that are close to this business are{' '}
+        <NavLink to="/universities/id=1">Harvard University</NavLink>,{' '}
+        <NavLink to="/universities/id=3">
+          Princeton University
+        </NavLink>
+        , and{' '}
+        <NavLink to="/universities/id=2">
+          The University of Texas at Austin
+        </NavLink>
+        . Apartments that are located near this business include{' '}
+        <NavLink to="/apartments/id=1">Parkside Place</NavLink>,{' '}
+        <NavLink to="/apartments/id=3">3401 at Red River</NavLink>,
+        and{' '}
+        <NavLink to="/apartments/id=2">
+          Barclay Square at Princeton Forrestal
+        </NavLink>
+        .
       </p>
       <Image src={image} style={{width: "25vm", height: "25vh"}}></Image>
       <LoadScript googleMapsApiKey='AIzaSyCOeYOyODSruMATuBCLEYIO44DJVFF2DzI'>

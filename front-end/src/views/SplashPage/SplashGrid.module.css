@@ -1,0 +1,48 @@
+.Centering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SplashGridContainer {
+  display: grid;
+  width: 100%;
+
+  grid-template-columns: 1fr 1fr 1fr;
+
+  grid-gap: 12px;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.SplashCardContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 48px;
+}
+
+.SplashCard {
+  height: 260px;
+  width: 380px;
+
+  border: 10px solid maroon;
+
+  background-color: #ddd;
+  color: #222;
+}
+
+.SplashImg {
+  height: 240px;
+  width: 360px;
+}
+
+.CardLabel {
+  font-size: 48px;
+  font-weight: bold;
+  color: cornflowerblue;
+  position: absolute;
+  margin-top: -324px;
+  text-decoration: underline;
+}

@@ -1,0 +1,53 @@
+.Centering {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.MemberContainer {
+  display: flex;
+  width: 1080px;
+  border: 4px solid black;
+  border-radius: 4px;
+  margin: 8px;
+  min-height: 240px;
+}
+
+.Image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 360px;
+  background-color: black;
+}
+
+.StatsContainer {
+  height: 100%;
+  width: 720px;
+}
+
+.NoPad {
+  margin-bottom: 0;
+}
+
+.MemberName {
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.MemberUsername {
+  font-size: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.Bio {
+  padding: 0 12px;
+}
+
+.SmallStats {
+  font-size: 24px;
+  text-align: left;
+  padding-left: 12px;
+}
