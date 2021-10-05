@@ -5,7 +5,7 @@ import EntertainmentsPage from './views/Entertainments/EntertainmentsPage';
 
 test('renders basic text in splash', () => {
   render(<CampCatSplashPage />);
-  const textElement = screen.getByText(/Hello World!/i);
+  const textElement = screen.getByText(/Campus Catalog/i);
   expect(textElement).toBeInTheDocument();
 });
 
