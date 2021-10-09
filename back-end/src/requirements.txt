@@ -1,0 +1,14 @@
+flask
+flask-restful
+SQLAlchemy
+requests
+flask-cors
+flask-SQLAlchemy
+flask-marshmallow
+flask-restless
+marshmallow-sqlalchemy
+python-dotenv
+psycopg2
+gunicorn
+black
+selenium
