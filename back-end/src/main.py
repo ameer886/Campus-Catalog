@@ -1,5 +1,5 @@
 from flask import Flask
-from db import db_init
+from models import app, University
 
-app = Flask(__name__)
-database = db_init(app)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
