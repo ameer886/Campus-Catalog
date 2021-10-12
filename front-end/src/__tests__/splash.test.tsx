@@ -24,6 +24,27 @@ describe('Splash Page Test Suite', () => {
     expect(textElement).toBeInTheDocument();
   });
 
+  // You can also use more complex tests such as this one
+  it('links have correct href', () => {
+    render(<CampCatSplashPage />);
+
+    const aptLink = screen.getByRole('link', { name: /Apartments/i });
+    expect(aptLink).not.toBeNull();
+    expect(aptLink.getAttribute('href')).toBe('/apartments');
+
+    const uniLink = screen.getByRole('link', {
+      name: /University/i,
+    });
+    expect(uniLink).not.toBeNull();
+    expect(uniLink.getAttribute('href')).toBe('/universities');
+
+    const entLink = screen.getByRole('link', {
+      name: /Entertainment/i,
+    });
+    expect(entLink).not.toBeNull();
+    expect(entLink.getAttribute('href')).toBe('/entertainments');
+  });
+
   // You can also mock functions using jest.mock, but
   // it wasn't necessary for this suite. It might become
   // more necessary for the model pages.
