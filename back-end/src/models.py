@@ -82,6 +82,9 @@ class Housing(db.Model):
     max_num_cat = db.Column(db.Integer, nullable=True)
     dog_weight = db.Column(db.Integer, nullable=True)
     cat_weight = db.Column(db.Integer, nullable=True)
+    building_amenity = db.Column(db.String(128), nullable=False)
+    included_util = db.Column(db.String(128), nullable=False)
+    accessibility = db.Column(db.String(128), nullable=False)
     #create another table and link to it here for lists
 
     def __repr__(self):
@@ -89,7 +92,8 @@ class Housing(db.Model):
 
     def __init__(self, property_id = "NaN", property_name = "NaN", property_type = "NaN", address = "NaN", neighborhood = "NaN", city = "NaN", state = "N", longitude = 0, latitude = 0, 
     min_rent = 0, max_rent = 0, min_bed = 0, max_bed = 0, min_bath = 0, max_bath = 0, min_sqft = 0, max_sqft = 0, dog_allow = None, 
-    cat_allow = None, max_num_dog = 0, max_num_cat = 0, dog_weight = 0, cat_weight = 0):
+    cat_allow = None, max_num_dog = 0, max_num_cat = 0, dog_weight = 0, cat_weight = 0, building_amenity = "NaN", included_util = "NaN",
+    accessibility = "NaN"):
         self.property_id = property_id
         self.property_name = property_name
         self.property_type = property_type
@@ -113,6 +117,9 @@ class Housing(db.Model):
         self.max_num_cat = max_num_cat
         self.dog_weight = dog_weight
         self.cat_weight = cat_weight
+        self.building_amenity = building_amenity
+        self.included_util = included_util
+        self.accessibility = accessibility
 
 class Amenities(db.Model):
     __tablename__ = 'amenities'
