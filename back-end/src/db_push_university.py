@@ -19,6 +19,16 @@ def map_ownership (num):
     else:
         return "Unknown"
 
+def rank_search(college, city, state):
+    term = college
+    reader = csv.reader(open('supp_data/rank_data.csv', 'r'))
+    for row in reader:
+        if row[0] == term or (row[1] == city + ', ' + state and row[0][:6] in term):
+            return row[2]
+    return 0
+
+rank_search('University of Texas at Austin', 'Austin', 'TX')
+
 app = Flask(__name__)
 db = db_init(app)
 
@@ -31,7 +41,8 @@ r = urllib.request.urlopen(request_url)
 data = json.loads(r.read())
 university_list = []
 for item in data['results']:
-    new_uni = University(univ_id = item['id'], univ_name = item['latest.school.name'], alias = item['latest.school.alias'], rank = 0, 
+    college_rank = rank_search(item['latest.school.name'], item['latest.school.city'], state = item['latest.school.state'])
+    new_uni = University(univ_id = item['id'], univ_name = item['latest.school.name'], alias = item['latest.school.alias'], rank = college_rank, 
     city = item['latest.school.city'], state = item['latest.school.state'],
     zip_code = item['latest.school.zip'], school_url = item['latest.school.school_url'], locale = item['latest.school.locale'],
     longitude = item['location.lon'], latitude = item['location.lat'], carnegie_undergrad = item['latest.school.carnegie_undergrad'], 
@@ -43,13 +54,9 @@ for item in data['results']:
     avg_cost_attendance = item['latest.cost.attendance.academic_year'])
     university_list.append(new_uni)
 
-db.create_all()
-
-
-
-
+#db.create_all()
 #db.session.query(univ).filter(univ.c.univ_id == 228778).delete()
-db.session.commit()
+#db.session.commit()
 #db.session.add_all(university_list)
 #db.session.commit()
 #original_row_count = db.session.query(univ).count()
