@@ -9,25 +9,25 @@ db = db_init(app)
 class University(db.Model):
     __tablename__ = 'university'
     univ_id = db.Column(db.Integer, primary_key=True)
-    univ_name = db.Column(db.String(128), nullable=False)
-    alias = db.Column(db.String(128), nullable=True)
+    univ_name = db.Column(db.String(255), nullable=False)
+    alias = db.Column(db.String(64), nullable=True)
     rank = db.Column(db.Integer, nullable=True)
-    city = db.Column(db.String(128), nullable=False)
+    city = db.Column(db.String(64), nullable=False)
     state = db.Column(db.String(2), nullable=False)
-    zip_code = db.Column(db.String(16), nullable=False)
-    school_url = db.Column(db.String(128), nullable=False)
-    locale = db.Column(db.Integer, nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
-    carnegie_undergrad = db.Column(db.Integer, nullable=False)
-    num_undergrad = db.Column(db.Integer, nullable=False)
-    num_graduate = db.Column(db.Integer, nullable=False)
+    zip_code = db.Column(db.String(32), nullable=True)
+    school_url = db.Column(db.String(128), nullable=True)
+    locale = db.Column(db.Integer, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+    latitude = db.Column(db.Float, nullable=True)
+    carnegie_undergrad = db.Column(db.Integer, nullable=True)
+    num_undergrad = db.Column(db.Integer, nullable=True)
+    num_graduate = db.Column(db.Integer, nullable=True)
     ownership_id = db.Column(db.String(128), nullable=False)
-    mascot_name = db.Column(db.String(255), nullable=True)
-    acceptance_rate = db.Column(db.Float, nullable=False)
-    graduation_rate = db.Column(db.Float, nullable=False)
-    tuition_in_st = db.Column(db.Float, nullable=False)
-    tuition_out_st = db.Column(db.Float, nullable=False)
+    mascot_name = db.Column(db.String(128), nullable=True)
+    acceptance_rate = db.Column(db.Float, nullable=True)
+    graduation_rate = db.Column(db.Float, nullable=True)
+    tuition_in_st = db.Column(db.Integer, nullable=True)
+    tuition_out_st = db.Column(db.Integer, nullable=True)
     avg_sat = db.Column(db.Float, nullable=True)
     avg_cost_attendance = db.Column(db.Float, nullable=True)
     
@@ -56,6 +56,8 @@ class University(db.Model):
         self.tuition_out_st = tuition_out_st
         self.avg_sat = avg_sat
         self.avg_cost_attendance = avg_cost_attendance
+        self.longitude = longitude
+        self.latitude = latitude
 
 class Housing(db.Model):
     __tablename__ = 'housing'
