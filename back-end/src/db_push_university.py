@@ -23,8 +23,8 @@ def rank_search(college, city, state):
     term = college
     reader = csv.reader(open('supp_data/rank_data.csv', 'r'))
     for row in reader:
-        if row[0] == term or (row[1] == city + ', ' + state and row[0][:6] in term):
-            return row[2]
+        if row[0] == term or (row[1] == city and row[2] ==  state and row[0][:6] in term):
+            return int(row[3])
     return 0
 
 rank_search('University of Texas at Austin', 'Austin', 'TX')
@@ -36,11 +36,12 @@ from models import University
 
 load_dotenv(find_dotenv())
 
-request_url = 'https://api.data.gov/ed/collegescorecard/v1/schools?api_key=' + os.getenv("COLLEGESCORECARD_API_KEY") + '&school.name=The%20University%20of%20Texas%20at%20Austin&fields=id,latest.school.name,latest.school.alias,latest.school.city,latest.school.state,latest.school.zip,latest.school.locale,latest.school.school_url,latest.school.carnegie_undergrad,latest.student.enrollment.undergrad_12_month,latest.student.enrollment.grad_12_month,latest.cost.tuition.in_state,latest.cost.tuition.out_of_state,latest.cost.roomboard.oncampus,latest.completion.completion_rate_4yr_150nt,latest.admissions.admission_rate.overall,latest.admissions.sat_scores.average.overall,latest.location.lat,latest.location.lon,latest.school.ownership,latest.cost.attendance.academic_year,location.lat,location.lon'
+request_url = 'https://api.data.gov/ed/collegescorecard/v1/schools?api_key=' + os.getenv("COLLEGESCORECARD_API_KEY") + '&school.name=Harvard%20University&fields=id,latest.school.name,latest.school.alias,latest.school.city,latest.school.state,latest.school.zip,latest.school.locale,latest.school.school_url,latest.school.carnegie_undergrad,latest.student.enrollment.undergrad_12_month,latest.student.enrollment.grad_12_month,latest.cost.tuition.in_state,latest.cost.tuition.out_of_state,latest.cost.roomboard.oncampus,latest.completion.completion_rate_4yr_150nt,latest.admissions.admission_rate.overall,latest.admissions.sat_scores.average.overall,latest.location.lat,latest.location.lon,latest.school.ownership,latest.cost.attendance.academic_year,location.lat,location.lon'
 r = urllib.request.urlopen(request_url)
 data = json.loads(r.read())
 university_list = []
 for item in data['results']:
+    print(item['latest']['school']['city'])
     college_rank = rank_search(item['latest.school.name'], item['latest.school.city'], state = item['latest.school.state'])
     new_uni = University(univ_id = item['id'], univ_name = item['latest.school.name'], alias = item['latest.school.alias'], rank = college_rank, 
     city = item['latest.school.city'], state = item['latest.school.state'],
@@ -53,7 +54,7 @@ for item in data['results']:
     tuition_out_st = item['latest.cost.tuition.out_of_state'], avg_sat = item['latest.admissions.sat_scores.average.overall'],
     avg_cost_attendance = item['latest.cost.attendance.academic_year'])
     university_list.append(new_uni)
-
+print(university_list[0])
 #db.create_all()
 #db.session.query(univ).filter(univ.c.univ_id == 228778).delete()
 #db.session.commit()
