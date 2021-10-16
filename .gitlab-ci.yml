@@ -9,7 +9,7 @@ build:
   script:
     - echo "Building"
     - cd front-end
-    - npm install
+    - npm install --legacy-peer-deps
     - CI=false npm run-script build
 
 test:
@@ -17,5 +17,5 @@ test:
   script:
     - echo "Testing"
     - cd front-end
-    - npm install
-    - npm test
+    - npm install --legacy-peer-deps
+    - yarn test
