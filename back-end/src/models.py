@@ -10,7 +10,7 @@ class University(db.Model):
     __tablename__ = 'university'
     univ_id = db.Column(db.Integer, primary_key=True)
     univ_name = db.Column(db.String(255), nullable=False)
-    alias = db.Column(db.String(64), nullable=True)
+    alias = db.Column(db.String(256), nullable=True)
     rank = db.Column(db.Integer, nullable=True)
     city = db.Column(db.String(64), nullable=False)
     state = db.Column(db.String(2), nullable=False)
