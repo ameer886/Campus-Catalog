@@ -19,13 +19,26 @@ def map_ownership (num):
     else:
         return "Unknown"
 
+def match_names (input, college):
+    isolate_name = input.split('--')
+    for phrase in isolate_name:
+        if not phrase in college:
+            return False
+    return True
+
 def rank_search(college, city, state):
-    term = college
     reader = csv.reader(open('supp_data/rank_data.csv', 'r'))
     for row in reader:
-        if row[0] == term or (row[1] == city and row[2] ==  state and row[0][:6] in term):
+        isolate_name = row[0].split('--')[0]
+        if row[0] == college or (row[1] == city and row[2] == state and match_names(row[0], college)):
             return int(row[3])
-    return 0
+    return None
+
+def alias_length(alias):
+    if isinstance(alias, str):
+        return len(alias)
+    else:
+        return 0
 
 app = Flask(__name__)
 db = db_init(app)
@@ -35,7 +48,7 @@ from models import University
 load_dotenv(find_dotenv())
 university_list = []
 page_num = 0
-
+#longest_alias = ''
 request_url = 'https://api.data.gov/ed/collegescorecard/v1/schools?api_key=' + os.getenv("COLLEGESCORECARD_API_KEY") + '&page=0&fields=id,latest.school.name,latest.school.alias,latest.school.city,latest.school.state,latest.school.zip,latest.school.locale,latest.school.school_url,latest.school.carnegie_undergrad,latest.student.enrollment.undergrad_12_month,latest.student.enrollment.grad_12_month,latest.cost.tuition.in_state,latest.cost.tuition.out_of_state,latest.cost.roomboard.oncampus,latest.completion.completion_rate_4yr_150nt,latest.admissions.admission_rate.overall,latest.admissions.sat_scores.average.overall,latest.location.lat,latest.location.lon,latest.school.ownership,latest.cost.attendance.academic_year,location.lat,location.lon'
 r = urllib.request.urlopen(request_url)
 data = json.loads(r.read())
@@ -46,8 +59,10 @@ if(data['metadata']['total'] % data['metadata']['per_page'] != 0):
 
 while page_num < page_limit:
     for item in data['results']:
+        alias_len = alias_length(item['latest.school.alias'])
         college_rank = rank_search(item['latest.school.name'], item['latest.school.city'], state = item['latest.school.state'])
-        new_uni = University(univ_id = item['id'], univ_name = item['latest.school.name'], alias = item['latest.school.alias'], rank = college_rank, 
+        new_uni = University(univ_id = item['id'], univ_name = item['latest.school.name'],
+        alias = item['latest.school.alias'] if alias_len <=256 else 'NaN', rank = college_rank, 
         city = item['latest.school.city'], state = item['latest.school.state'],
         zip_code = item['latest.school.zip'], school_url = item['latest.school.school_url'], locale = item['latest.school.locale'],
         longitude = item['location.lon'], latitude = item['location.lat'], carnegie_undergrad = item['latest.school.carnegie_undergrad'], 
@@ -66,8 +81,11 @@ while page_num < page_limit:
         r = urllib.request.urlopen(request_url)
         data = json.loads(r.read())
 
+#print(longest_alias)
+#print(len(longest_alias))
 db.create_all()
 #db.session.query(univ).filter(univ.c.univ_id == 228778).delete()
 db.session.add_all(university_list)
 db.session.commit()
+
 
