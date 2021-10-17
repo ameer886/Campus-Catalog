@@ -1,6 +1,7 @@
 from enum import unique
 from flask import Flask, request
 from sqlalchemy import Column, Integer
+from sqlalchemy.sql.schema import ForeignKey
 from db import db_init
 
 app = Flask(__name__)
@@ -116,31 +117,35 @@ class Housing(db.Model):
 
 class Amenities(db.Model):
     __tablename__ = 'amenities'
-    amen_id = db.Column(db.Integer, primary_key=True)
+    amen_id = db.Column(db.Integer, unique=True, primary_key=True)
     amen_name = db.Column(db.String(128), unique=True, nullable=False)
-    category = db.Column(db.String(128), unique=True, nullable=False)
+    amen_alias = db.Column(db.String(128), nullable=False)
+    yelp_id = db.Column(db.String(128), unique=True, nullable=False)
     rating = db.Column(db.Float, nullable=False)
-    num_review = db.Column(db.Integer, primary_key=True)
+    num_review = db.Column(db.Integer)
     address = db.Column(db.String(128), nullable=False)
     city = db.Column(db.String(128), nullable=False)
     state = db.Column(db.String(2), nullable=False)
     zip_code = db.Column(db.String(16), nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
-    age = db.Column(db.Integer, primary_key=True)
-    pricing = db.Column(db.String(128), nullable=False)
-    deliver = db.Column(db.Boolean)
-    takeout = db.Column(db.Boolean)
-    hours = db.Column(db.String(128), nullable=False)
+    pricing = db.Column(db.String(8))
+    deliver = db.Column(db.Boolean, nullable=False)
+    takeout = db.Column(db.Boolean, nullable=False)
+    hours = db.Column(db.String(256), nullable=False)
+    images = db.relationship('AmenitiesImages', cascade='all, delete-orphan', passive_deletes=True)
+    categories = db.relationship('AmenitiesCategories', cascade='all, delete-orphan', passive_deletes=True)
+    reviews = db.relationship('AmenitiesReviews', cascade='all, delete-orphan', passive_deletes=True)
 
     def __repr__(self):
         return '<Amenity %r>' %self.amen_name
 
-    def __init__(self, amen_id = 0, amen_name = "NaN", category = "NaN", rating = 0, num_review = 0, address = "NaN", city = "NaN", state = "N", zip_code = "NaN", longitude = 0,
-    latitude = 0, age = 0, pricing = "NaN", deliver = None, takeout = None, hours = "NaN"):
+    def __init__(self, amen_id = 0, amen_name = "NaN", amen_alias = "NaN", yelp_id = "NaN", rating = 0, num_review = 0, address = "NaN", city = "NaN", state = "N", zip_code = "NaN", longitude = 0,
+    latitude = 0, pricing = "NaN", deliver = None, takeout = None, hours = "NaN"):
         self.amen_id = amen_id
         self.amen_name = amen_name
-        self.category = category
+        self.amen_alias = amen_alias
+        self.yelp_id = yelp_id
         self.rating = rating
         self.num_review = num_review
         self.address = address
@@ -149,8 +154,44 @@ class Amenities(db.Model):
         self.zip_code = zip_code
         self.longitude = longitude
         self.latitude = latitude
-        self.age = age
         self.pricing = pricing
         self.deliver = deliver
         self.takeout = takeout
         self.hours = hours
+
+class AmenitiesImages(db.Model):
+    __tablename__ = "amenitiesImages"
+    id = db.Column(db.Integer, primary_key=True)
+    amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
+    url = db.Column(db.String(256), nullable=False)
+
+    def __init__(self, id = 0, amen_id = 0, url = "NaN"):
+        self.id = id
+        self.amen_id = amen_id
+        self.url = url
+
+class AmenitiesCategories(db.Model):
+    __tablename__ = "amenitiesCategories"
+    id = db.Column(db.Integer, primary_key=True)
+    amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
+    category = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, id = 0, amen_id = 0, category = "NaN"):
+        self.id = id
+        self.amen_id = amen_id
+        self.category = category
+
+class AmenitiesReviews(db.Model):
+    __tablename__ = "amenitiesReviews"
+    id = db.Column(db.Integer, primary_key=True)
+    amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
+    review_id = db.Column(db.String(128), nullable=False)
+    user_id = db.Column(db.String(128), nullable=False)
+    user_name = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, id = 0, amen_id = 0, review_id = "NaN", user_id = "NaN", user_name = "NaN"):
+        self.id = id
+        self.amen_id = amen_id
+        self.review_id = review_id
+        self.user_id = user_id
+        self.user_name = user_name       
