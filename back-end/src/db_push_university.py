@@ -81,8 +81,6 @@ while page_num < page_limit:
         r = urllib.request.urlopen(request_url)
         data = json.loads(r.read())
 
-#print(longest_alias)
-#print(len(longest_alias))
 db.create_all()
 #db.session.query(univ).filter(univ.c.univ_id == 228778).delete()
 db.session.add_all(university_list)
