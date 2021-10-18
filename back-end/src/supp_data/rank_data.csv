@@ -1,0 +1,202 @@
+Name,City,State,Rank
+Princeton University,Princeton,NJ,1
+Columbia University,New York,NY,2
+Harvard University,Cambridge,MA,2
+Massachusetts Institute of Technology,Cambridge,MA,2
+Yale University,New Haven,CT,5
+Stanford University,Stanford,CA,6
+University of Chicago,Chicago,IL,6
+University of Pennsylvania,Philadelphia,PA,8
+California Institute of Technology,Pasadena,CA,9
+Duke University,Durham,NC,9
+Johns Hopkins University,Baltimore,MD,9
+Northwestern University,Evanston,IL,9
+Dartmouth College,Hanover,NH,13
+Brown University,Providence,RI,14
+Vanderbilt University,Nashville,TN,14
+Washington University in St. Louis,St. Louis,MO,14
+Cornell University,Ithaca,NY,17
+Rice University,Houston,TX,17
+University of Notre Dame,Notre Dame,IN,19
+University of California--Los Angeles,Los Angeles,CA,20
+Emory University,Atlanta,GA,21
+University of California--Berkeley,Berkeley,CA,22
+Georgetown University,Washington,DC,23
+University of Michigan--Ann Arbor,Ann Arbor,MI,23
+Carnegie Mellon University,Pittsburgh,PA,25
+University of Virginia,Charlottesville,VA,25
+University of Southern California,Los Angeles,CA,27
+New York University,New York,NY,28
+Tufts University,Medford,MA,28
+University of California--Santa Barbara,Santa Barbara,CA,28
+University of Florida,Gainesville,FL,28
+University of North Carolina--Chapel Hill,Chapel Hill,NC,28
+Wake Forest University,Winston-Salem,NC,28
+University of California--San Diego,La Jolla,CA,34
+University of Rochester,Rochester,NY,34
+Boston College,Chestnut Hill,MA,36
+University of California--Irvine,Irvine,CA,36
+Georgia Institute of Technology,Atlanta,GA,38
+University of California--Davis,Davis,CA,38
+University of Texas at Austin,Austin,TX,38
+William & Mary,Williamsburg,VA,38
+Boston University,Boston,MA,42
+Brandeis University,Waltham,MA,42
+Case Western Reserve University,Cleveland,OH,42
+Tulane University,New Orleans,LA,42
+University of Wisconsin--Madison,Madison,WI,42
+University of Illinois--Urbana-Champaign,Champaign,IL,47
+University of Georgia,Athens,GA,48
+Lehigh University,Bethlehem,PA,49
+Northeastern University,Boston,MA,49
+Ohio State University--Columbus,Columbus,OH,49
+Pepperdine University,Malibu,CA,49
+Purdue University--West Lafayette,West Lafayette,IN,49
+Villanova University,Villanova,PA,49
+Florida State University,Tallahassee,FL,55
+Rensselaer Polytechnic Institute,Troy,NY,55
+Santa Clara University,Santa Clara,CA,55
+University of Miami,Coral Gables,FL,55
+Syracuse University,Syracuse,NY,59
+University of Maryland--College Park,College Park,MD,59
+University of Pittsburgh--Pittsburgh Campus,Pittsburgh,PA,59
+University of Washington,Seattle,WA,59
+George Washington University,Washington,DC,63
+Pennsylvania State University--University Park,University Park,PA,63
+Rutgers University--New Brunswick,Piscataway,NJ,63
+University of Connecticut,Storrs,CT,63
+Worcester Polytechnic Institute,Worcester,MA,63
+Fordham University,New York,NY,68
+Indiana University--Bloomington,Bloomington,IN,68
+Southern Methodist University,Dallas,TX,68
+Texas A&M University,College Station,TX,68
+University of Massachusetts--Amherst,Amherst,MA,68
+University of Minnesota--Twin Cities,Minneapolis,MN,68
+Yeshiva University,New York,NY,68
+Baylor University,Waco,TX,75
+Clemson University,Clemson,SC,75
+Loyola Marymount University,Los Angeles,CA,75
+Virginia Tech,Blacksburg,VA,75
+American University,Washington,DC,79
+Brigham Young University--Provo,Provo,UT,79
+Gonzaga University,Spokane,WA,79
+North Carolina State University,Raleigh,NC,79
+Binghamton University--SUNY,Binghamton,NY,83
+Colorado School of Mines,Golden,CO,83
+Elon University,Elon,NC,83
+Howard University,Washington,DC,83
+Marquette University,Milwaukee,WI,83
+Michigan State University,East Lansing,MI,83
+Stevens Institute of Technology,Hoboken,NJ,83
+Texas Christian University,Fort Worth,TX,83
+University of California--Riverside,Riverside,CA,83
+University of Iowa,Iowa City,IA,83
+Stony Brook University--SUNY,Stony Brook,NY,93
+University at Buffalo--SUNY,Buffalo,NY,93
+University of California--Merced,Merced,CA,93
+University of Delaware,Newark,DE,93
+University of Denver,Denver,CO,93
+University of San Diego,San Diego,CA,93
+Auburn University,Auburn,AL,99
+University of Colorado Boulder,Boulder,CO,99
+University of Oregon,Eugene,OR,99
+University of Utah,Salt Lake City,UT,99
+Clark University,Worcester,MA,103
+Creighton University,Omaha,NE,103
+Drexel University,Philadelphia,PA,103
+Loyola University Chicago,Chicago,IL,103
+Miami University--Oxford,Oxford,OH,103
+New Jersey Institute of Technology,Newark,NJ,103
+Saint Louis University,St. Louis,MO,103
+Temple University,Philadelphia,PA,103
+University of Arizona,Tucson,AZ,103
+University of California--Santa Cruz,Santa Cruz,CA,103
+University of Illinois--Chicago,Chicago,IL,103
+University of San Francisco,San Francisco,CA,103
+University of South Florida,Tampa,FL,103
+University of Tennessee,Knoxville,TN,103
+Arizona State University,Tempe,AZ,117
+Rochester Institute of Technology,Rochester,NY,117
+SUNY College of Environmental Science and Forestry,Syracuse,NY,117
+University of South Carolina,Columbia,SC,117
+University of Vermont,Burlington,VT,117
+Chapman University,Orange,CA,122
+Illinois Institute of Technology,Chicago,IL,122
+Iowa State University of Science and Technology,Ames,IA,122
+University of Kansas,Lawrence,KS,122
+University of Missouri,Columbia,MO,122
+Clarkson University,Potsdam,NY,127
+DePaul University,Chicago,IL,127
+Gallaudet University,Washington,DC,127
+Rutgers University--Newark,Newark,NJ,127
+Seattle University,Seattle,WA,127
+Seton Hall University,South Orange,NJ,127
+University of Dayton,Dayton,OH,127
+University of Kentucky,Lexington,KY,127
+University of Oklahoma,Norman,OK,127
+The Catholic University of America,Washington,DC,136
+Drake University,Des Moines,IA,136
+The New School,New York,NY,136
+Samford University,Birmingham,AL,136
+Simmons University,Boston,MA,136
+University of La Verne,La Verne,CA,136
+University of Nebraska--Lincoln,Lincoln,NE,136
+University of New Hampshire,Durham,NH,136
+University of St. Thomas (MN),St. Paul,MN,136
+University of Texas at Dallas,Richardson,TX,136
+University of the Pacific,Stockton,CA,136
+University of Tulsa,Tulsa,OK,136
+Colorado State University,Fort Collins,CO,148
+CUNY--City College,New York,NY,148
+Duquesne University,Pittsburgh,PA,148
+George Mason University,Fairfax,VA,148
+Michigan Technological University,Houghton,MI,148
+Quinnipiac University,Hamden,CT,148
+Rutgers University--Camden,Camden,NJ,148
+San Diego State University,San Diego,CA,148
+Thomas Jefferson University,Philadelphia,PA,148
+University of Alabama,Tuscaloosa,AL,148
+University of Alabama at Birmingham,Birmingham,AL,148
+University of Central Florida,Orlando,FL,148
+University of Cincinnati,Cincinnati,OH,148
+University of Mississippi,University,MS,148
+Belmont University,Nashville,TN,162
+Florida International University,Miami,FL,162
+Hofstra University,Hempstead,NY,162
+Kansas State University,Manhattan,KS,162
+Mercer University,Macon,GA,162
+Oregon State University,Corvallis,OR,162
+University of Arkansas,Fayetteville,AR,162
+University of Hawaii--Manoa,Honolulu,HI,162
+University of Maryland--Baltimore County,Baltimore,MD,162
+University of Rhode Island,Kingston,RI,162
+Adelphi University,Garden City,NY,172
+Chatham University,Pittsburgh,PA,172
+Louisiana State University--Baton Rouge,Baton Rouge,LA,172
+St. John's University (NY),Queens,NY,172
+University at Albany--SUNY,Albany,NY,172
+Valparaiso University,Valparaiso,IN,172
+Virginia Commonwealth University,Richmond,VA,172
+Missouri University of Science and Technology,Rolla,MO,179
+Montclair State University,Montclair,NJ,179
+Ohio University,Athens,OH,179
+Rowan University,Glassboro,NJ,179
+University of Houston,Houston,TX,179
+University of Idaho,Moscow,ID,179
+University of Massachusetts--Lowell,Lowell,MA,179
+Washington State University,Pullman,WA,179
+Oklahoma State University,Stillwater,OK,187
+Pacific University,Forest Grove,OR,187
+Robert Morris University,Moon Township,PA,187
+St. John Fisher College,Rochester,NY,187
+Union University,Jackson,TN,187
+University of Detroit Mercy,Detroit,MI,187
+University of Louisville,Louisville,KY,187
+University of North Carolina--Wilmington,Wilmington,NC,187
+University of Saint Joseph,West Hartford,CT,187
+Biola University,La Mirada,CA,196
+Indiana University-Purdue University--Indianapolis,Indianapolis,IN,196
+Mississippi State University,Mississippi State,MS,196
+Towson University,Towson,MD,196
+University of New Mexico,Albuquerque,NM,196
+University of Wyoming,Laramie,WY,196

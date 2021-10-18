@@ -43,17 +43,24 @@ class TestBackEnd(unittest.TestCase):
         dummy = dict()
         dummy['univ_id'] = 999
         dummy['univ_name'] = 'Dummy University'
+        dummy['alias'] = "DumU"
         dummy['rank'] = 2
         dummy['city'] = 'Shanghai'
         dummy['state'] = 'SH'
-        dummy['num_student'] = 1
-        dummy['is_private'] = True
+        dummy['zip_code'] = '38141'
+        dummy['school_url'] = 'www.dum.com'
+        dummy['locale'] = 3
+        dummy['carnegie_undergrad'] = 2
+        dummy['num_undergrad'] = 1
+        dummy['num_graduate'] = 0
+        dummy['avg_cost_attendance'] = 0
+        dummy['ownership_id'] = 1
         dummy['mascot_name'] = 'me'
         dummy['acceptance_rate'] = 0.0
         dummy['graduation_rate'] = 100.0
         dummy['tuition_in_st'] = 0
         dummy['tuition_out_st'] = 0
-        dummy['avg_fin_aid'] = 0
+        dummy['avg_sat'] = 0
         dummy_university = University(**dummy)
 
         # add instance to table
