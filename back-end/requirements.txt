@@ -12,3 +12,5 @@ psycopg2
 gunicorn
 black
 selenium
+yelpapi
+googlemaps
