@@ -8,7 +8,7 @@ RUN pip3 install -r requirements.txt
 
 WORKDIR /test
 
-RUN python3 -m unit_test.py
+RUN python3 -m unit_test
 
 WORKDIR /../src
 
