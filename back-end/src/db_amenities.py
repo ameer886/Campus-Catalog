@@ -1,14 +1,11 @@
 from db import db_init
-from models import Amenities, AmenitiesImages, AmenitiesCategories, AmenitiesReviews, University
+from models import Amenities, AmenitiesImages, AmenitiesCategories, AmenitiesReviews, University, db
 from flask import Flask
 from dotenv import load_dotenv, find_dotenv
 from yelpapi import YelpAPI
 import os
 import googlemaps
 import uuid
-
-app = Flask(__name__)
-db = db_init(app)
 
 # Initialize API clients with their respective API keys
 load_dotenv(find_dotenv())
@@ -23,7 +20,6 @@ limit = 10
 sort_by='rating'
 
 locations = db.session.query(University.city, University.state).filter(University.rank <= 200).order_by(University.state).distinct().all()
-
 num_locations_left = len(locations)
 # Query yelp business search api for businesses that fit these parameters
 for loc in locations:
@@ -31,8 +27,6 @@ for loc in locations:
    images = []
    reviews = []
    categories = []
-   app = Flask(__name__)
-   db = db_init(app)
    num_locations_left -= 1
    print(loc, 'Num locations left:', num_locations_left)
    location = ', '.join(loc)
@@ -50,7 +44,6 @@ for loc in locations:
          # Skip amenity if it already exists
          if Amenities.query.filter_by(yelp_id=item['id']).first() is not None:
             continue
-
          amen_alias = item['alias']
          yelp_id = item['id']
          rating = item['rating']
@@ -100,7 +93,7 @@ for loc in locations:
             while AmenitiesReviews.query.filter_by(id=id).first() is not None:
                id = uuid.uuid4().int>>98
             reviews.append(AmenitiesReviews(id=id, amen_id=amen_id, review_id=review['id'], user_id=review['user']['id'], user_name=review['user']['name']))
-         # Add all entities and commit to database
+      # Add all entities and commit to database
       db.session.add_all(amenities)
       db.session.add_all(images)
       db.session.add_all(reviews)
