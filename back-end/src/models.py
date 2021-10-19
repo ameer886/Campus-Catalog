@@ -1,55 +1,76 @@
 from enum import unique
-from flask import Flask, request
-from sqlalchemy import Column, Integer
-from db import db_init
+from flask import request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, Sequence
+from sqlalchemy.orm import relation
+from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint
 
-app = Flask(__name__)
-db = db_init(app)
+db = SQLAlchemy()
 
 class University(db.Model):
     __tablename__ = 'university'
     univ_id = db.Column(db.Integer, primary_key=True)
-    univ_name = db.Column(db.String(128), unique=True, nullable=False)
+    univ_name = db.Column(db.String(255), nullable=False)
+    alias = db.Column(db.String(256), nullable=True)
     rank = db.Column(db.Integer, nullable=True)
-    city = db.Column(db.String(128), nullable=False)
+    city = db.Column(db.String(64), nullable=False)
     state = db.Column(db.String(2), nullable=False)
-    num_student = db.Column(db.Integer, nullable=False)
-    is_private = db.Column(db.Boolean)
-    mascot_name = db.Column(db.String(255), nullable=True)
-    acceptance_rate = db.Column(db.Float, nullable=False)
-    graduation_rate = db.Column(db.Float, nullable=False)
-    tuition_in_st = db.Column(db.Float, nullable=False)
-    tuition_out_st = db.Column(db.Float, nullable=False)
-    avg_fin_aid = db.Column(db.Float, nullable=True)
+    zip_code = db.Column(db.String(32), nullable=True)
+    school_url = db.Column(db.String(128), nullable=True)
+    locale = db.Column(db.Integer, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+    latitude = db.Column(db.Float, nullable=True)
+    carnegie_undergrad = db.Column(db.Integer, nullable=True)
+    num_undergrad = db.Column(db.Integer, nullable=True)
+    num_graduate = db.Column(db.Integer, nullable=True)
+    ownership_id = db.Column(db.String(128), nullable=False)
+    mascot_name = db.Column(db.String(128), nullable=True)
+    acceptance_rate = db.Column(db.Float, nullable=True)
+    graduation_rate = db.Column(db.Float, nullable=True)
+    tuition_in_st = db.Column(db.Integer, nullable=True)
+    tuition_out_st = db.Column(db.Integer, nullable=True)
+    avg_sat = db.Column(db.Float, nullable=True)
+    avg_cost_attendance = db.Column(db.Float, nullable=True)
     
     def __repr__(self):
         return '<University %r>' %self.univ_name
 
-    def __init__(self, univ_id = 0, univ_name = "NaN", rank = 0, city = "NaN", state = "N", num_student = 0, is_private = None,
-    mascot_name = "NaN", acceptance_rate = 0, graduation_rate = 0, tuition_in_st = 0, tuition_out_st = 0, avg_fin_aid = 0):
+    def __init__(self, univ_id = 0, univ_name = "NaN", alias = "NaN", rank = 0, city = "NaN", state = "N", zip_code = "NaN", school_url = "NaN", locale = 0, longitude = 0, latitude = 0, carnegie_undergrad = 0, num_undergrad = 0, num_graduate = 0, ownership_id = "NaN",
+    mascot_name = "NaN", acceptance_rate = 0, graduation_rate = 0, tuition_in_st = 0, tuition_out_st = 0, avg_sat = 0, avg_cost_attendance = 0):
         self.univ_id = univ_id
         self.univ_name = univ_name
+        self.alias = alias
         self.rank = rank
         self.city = city
         self.state = state
-        self.num_student = num_student
-        self.is_private = is_private
+        self.zip_code = zip_code
+        self.school_url = school_url
+        self.locale = locale
+        self.carnegie_undergrad = carnegie_undergrad
+        self.num_undergrad = num_undergrad
+        self.num_graduate = num_graduate
+        self.ownership_id = ownership_id
         self.mascot_name = mascot_name
         self.acceptance_rate = acceptance_rate
         self.graduation_rate = graduation_rate
         self.tuition_in_st = tuition_in_st
         self.tuition_out_st = tuition_out_st
-        self.avg_fin_aid = avg_fin_aid
+        self.avg_sat = avg_sat
+        self.avg_cost_attendance = avg_cost_attendance
+        self.longitude = longitude
+        self.latitude = latitude
 
 class Housing(db.Model):
     __tablename__ = 'housing'
-    property_id = db.Column(db.Integer, primary_key=True)
-    property_name = db.Column(db.String(128), unique=True, nullable=False)
-    property_type = db.Column(db.String(128), unique=True, nullable=False)
+    property_id = db.Column(db.String, primary_key=True)
+    property_name = db.Column(db.String, nullable=False)
+    property_type = db.Column(db.String(32), primary_key=True)
+    address = db.Column(db.String, nullable=False)
+    neighborhood = db.Column(db.String, nullable=False)
     city = db.Column(db.String(128), nullable=False)
     state = db.Column(db.String(2), nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
+    zip_code = db.Column(db.String, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
     min_rent = db.Column(db.Integer, nullable=True)
     max_rent = db.Column(db.Integer, nullable=True)
     min_bed = db.Column(db.Integer, nullable=True)
@@ -58,27 +79,34 @@ class Housing(db.Model):
     max_bath = db.Column(db.Integer, nullable=True)
     min_sqft = db.Column(db.Integer, nullable=True)
     max_sqft = db.Column(db.Integer, nullable=True)
+    walk_score = db.Column(db.Integer, nullable=True)
+    transit_score = db.Column(db.Integer, nullable=True)
     dog_allow = db.Column(db.Boolean)
     cat_allow = db.Column(db.Boolean)
     max_num_dog = db.Column(db.Integer, nullable=True)
     max_num_cat = db.Column(db.Integer, nullable=True)
     dog_weight = db.Column(db.Integer, nullable=True)
     cat_weight = db.Column(db.Integer, nullable=True)
-    #create another table and link to it here for lists
+    building_amenities = db.Column(db.String, nullable=True)
+    util_included = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         return '<Housing %r>' %self.property_name
 
-    def __init__(self, property_id = 0, property_name = "NaN", property_type = "NaN", city = "NaN", state = "N", longitude = 0, latitude = 0, 
-    min_rent = 0, max_rent = 0, min_bed = 0, max_bed = 0, min_bath = 0, max_bath = 0, min_sqft = 0, max_sqft = 0, dog_allow = None, 
-    cat_allow = None, max_num_dog = 0, max_num_cat = 0, dog_weight = 0, cat_weight = 0):
+    def __init__(self, property_id = '', property_name = "NaN", property_type = "NaN", address = "NaN", neighborhood = "NaN", city = "NaN", state = "N", zip_code = "NaN", 
+    rating = 0.0, min_rent = 0, max_rent = 0, min_bed = None, max_bed = None, min_bath = None, max_bath = None, min_sqft = None, max_sqft = None, walk_score = 0, transit_score = 0,
+    dog_allow = False, cat_allow = False, max_num_dog = None, max_num_cat = None, dog_weight = None, cat_weight = None, building_amenities = "NaN", util_included = "NaN"):
         self.property_id = property_id
         self.property_name = property_name
         self.property_type = property_type
+        self.address = address
+        self.neighborhood = neighborhood
         self.city = city
         self.state = state
-        self.longitude = longitude
-        self.latitude = latitude
+        self.zip_code = zip_code
+        self.rating = rating
+        self.walk_score = walk_score
+        self.transit_score = transit_score
         self.min_rent = min_rent
         self.max_rent = max_rent
         self.min_bed = min_bed
@@ -93,40 +121,106 @@ class Housing(db.Model):
         self.max_num_cat = max_num_cat
         self.dog_weight = dog_weight
         self.cat_weight = cat_weight
+        self.building_amenities = building_amenities
+        self.util_included = util_included
+    
+    def get_id(self):
+        return str(self.property_id)
+    
+    def get_type(self):
+        return str(self.property_type)
+
+class HousingImages(db.Model):
+    __tablename__ = 'housingImages'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    property_id = db.Column(db.String, nullable=False)
+    property_type = db.Column(db.String(32), nullable=False)
+    image_url = db.Column(db.String)
+    __table_args__ = (ForeignKeyConstraint(['property_id', 'property_type'],['housing.property_id', 'housing.property_type']),)
+
+    def __init__(self, property_id = 0, property_type = '', image_url = ''):
+        self.property_id = property_id
+        self.property_type = property_type
+        self.image_url = image_url
 
 class Amenities(db.Model):
     __tablename__ = 'amenities'
-    amen_id = db.Column(db.Integer, primary_key=True)
-    amen_name = db.Column(db.String(128), unique=True, nullable=False)
-    category = db.Column(db.String(128), unique=True, nullable=False)
+    amen_id = db.Column(db.Integer, unique=True, primary_key=True)
+    amen_name = db.Column(db.String(128), nullable=False)
+    amen_alias = db.Column(db.String(128), nullable=False)
+    yelp_id = db.Column(db.String(128), unique=True, nullable=False)
     rating = db.Column(db.Float, nullable=False)
-    num_review = db.Column(db.Integer, primary_key=True)
+    num_review = db.Column(db.Integer)
+    address = db.Column(db.String(128), nullable=False)
     city = db.Column(db.String(128), nullable=False)
     state = db.Column(db.String(2), nullable=False)
+    zip_code = db.Column(db.String(16), nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
-    age = db.Column(db.Integer, primary_key=True)
-    pricing = db.Column(db.String(128), nullable=False)
-    deliver = db.Column(db.Boolean)
-    takeout = db.Column(db.Boolean)
-    hours = db.Column(db.String(128), nullable=False)
+    pricing = db.Column(db.String(8))
+    deliver = db.Column(db.Boolean, nullable=False)
+    takeout = db.Column(db.Boolean, nullable=False)
+    hours = db.Column(db.String(512), nullable=False)
+    images = db.relationship('AmenitiesImages', cascade='all, delete-orphan', passive_deletes=True)
+    categories = db.relationship('AmenitiesCategories', cascade='all, delete-orphan', passive_deletes=True)
+    reviews = db.relationship('AmenitiesReviews', cascade='all, delete-orphan', passive_deletes=True)
 
     def __repr__(self):
         return '<Amenity %r>' %self.amen_name
 
-    def __init__(self, amen_id = 0, amen_name = "NaN", category = "NaN", rating = 0, num_review = 0, city = "NaN", state = "N", longitude = 0,
-    latitude = 0, age = 0, pricing = "NaN", deliver = None, takeout = None, hours = "NaN"):
+    def __init__(self, amen_id = 0, amen_name = "NaN", amen_alias = "NaN", yelp_id = "NaN", rating = 0, num_review = 0, address = "NaN", city = "NaN", state = "N", zip_code = "NaN", longitude = 0,
+    latitude = 0, pricing = "NaN", deliver = None, takeout = None, hours = "NaN"):
         self.amen_id = amen_id
         self.amen_name = amen_name
-        self.category = category
+        self.amen_alias = amen_alias
+        self.yelp_id = yelp_id
         self.rating = rating
         self.num_review = num_review
+        self.address = address
         self.city = city
         self.state = state
+        self.zip_code = zip_code
         self.longitude = longitude
         self.latitude = latitude
-        self.age = age
         self.pricing = pricing
         self.deliver = deliver
         self.takeout = takeout
         self.hours = hours
+
+class AmenitiesImages(db.Model):
+    __tablename__ = "amenitiesImages"
+    id = db.Column(db.Integer, primary_key=True)
+    amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
+    url = db.Column(db.String(256), nullable=False)
+
+    def __init__(self, id = 0, amen_id = 0, url = "NaN"):
+        self.id = id
+        self.amen_id = amen_id
+        self.url = url
+
+class AmenitiesCategories(db.Model):
+    __tablename__ = "amenitiesCategories"
+    id = db.Column(db.Integer, primary_key=True)
+    amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
+    category = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, id = 0, amen_id = 0, category = "NaN"):
+        self.id = id
+        self.amen_id = amen_id
+        self.category = category
+
+class AmenitiesReviews(db.Model):
+    __tablename__ = "amenitiesReviews"
+    id = db.Column(db.Integer, primary_key=True)
+    amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
+    review_id = db.Column(db.String(128), nullable=False)
+    user_id = db.Column(db.String(128), nullable=False)
+    user_name = db.Column(db.String(128), nullable=False)
+
+    def __init__(self, id = 0, amen_id = 0, review_id = "NaN", user_id = "NaN", user_name = "NaN"):
+        self.id = id
+        self.amen_id = amen_id
+        self.review_id = review_id
+        self.user_id = user_id
+        self.user_name = user_name
+  
