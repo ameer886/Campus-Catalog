@@ -10,32 +10,32 @@ db = db_init(app)
 class University(db.Model):
     __tablename__ = 'university'
     univ_id = db.Column(db.Integer, primary_key=True)
-    univ_name = db.Column(db.String(128), unique=True, nullable=False)
-    alias = db.Column(db.String(128), nullable=True)
+    univ_name = db.Column(db.String(255), nullable=False)
+    alias = db.Column(db.String(256), nullable=True)
     rank = db.Column(db.Integer, nullable=True)
-    city = db.Column(db.String(128), nullable=False)
+    city = db.Column(db.String(64), nullable=False)
     state = db.Column(db.String(2), nullable=False)
-    zip_code = db.Column(db.String(16), nullable=False)
-    school_url = db.Column(db.String(128), nullable=False)
-    locale = db.Column(db.Integer, nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
-    carnegie_undergrad = db.Column(db.Integer, nullable=False)
-    num_undergrad = db.Column(db.Integer, nullable=False)
-    num_graduate = db.Column(db.Integer, nullable=False)
-    is_private = db.Column(db.Boolean)
-    mascot_name = db.Column(db.String(255), nullable=True)
-    acceptance_rate = db.Column(db.Float, nullable=False)
-    graduation_rate = db.Column(db.Float, nullable=False)
-    tuition_in_st = db.Column(db.Float, nullable=False)
-    tuition_out_st = db.Column(db.Float, nullable=False)
+    zip_code = db.Column(db.String(32), nullable=True)
+    school_url = db.Column(db.String(128), nullable=True)
+    locale = db.Column(db.Integer, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
+    latitude = db.Column(db.Float, nullable=True)
+    carnegie_undergrad = db.Column(db.Integer, nullable=True)
+    num_undergrad = db.Column(db.Integer, nullable=True)
+    num_graduate = db.Column(db.Integer, nullable=True)
+    ownership_id = db.Column(db.String(128), nullable=False)
+    mascot_name = db.Column(db.String(128), nullable=True)
+    acceptance_rate = db.Column(db.Float, nullable=True)
+    graduation_rate = db.Column(db.Float, nullable=True)
+    tuition_in_st = db.Column(db.Integer, nullable=True)
+    tuition_out_st = db.Column(db.Integer, nullable=True)
     avg_sat = db.Column(db.Float, nullable=True)
     avg_cost_attendance = db.Column(db.Float, nullable=True)
     
     def __repr__(self):
         return '<University %r>' %self.univ_name
 
-    def __init__(self, univ_id = 0, univ_name = "NaN", alias = "NaN", rank = 0, city = "NaN", state = "N", zip_code = "NaN", school_url = "NaN", locale = 0, longitude = 0, latitude = 0, carnegie_undergrad = 0, num_undergrad = 0, num_graduate = 0, is_private = None,
+    def __init__(self, univ_id = 0, univ_name = "NaN", alias = "NaN", rank = 0, city = "NaN", state = "N", zip_code = "NaN", school_url = "NaN", locale = 0, longitude = 0, latitude = 0, carnegie_undergrad = 0, num_undergrad = 0, num_graduate = 0, ownership_id = "NaN",
     mascot_name = "NaN", acceptance_rate = 0, graduation_rate = 0, tuition_in_st = 0, tuition_out_st = 0, avg_sat = 0, avg_cost_attendance = 0):
         self.univ_id = univ_id
         self.univ_name = univ_name
@@ -49,7 +49,7 @@ class University(db.Model):
         self.carnegie_undergrad = carnegie_undergrad
         self.num_undergrad = num_undergrad
         self.num_graduate = num_graduate
-        self.is_private = is_private
+        self.ownership_id = ownership_id
         self.mascot_name = mascot_name
         self.acceptance_rate = acceptance_rate
         self.graduation_rate = graduation_rate
@@ -57,6 +57,8 @@ class University(db.Model):
         self.tuition_out_st = tuition_out_st
         self.avg_sat = avg_sat
         self.avg_cost_attendance = avg_cost_attendance
+        self.longitude = longitude
+        self.latitude = latitude
 
 class Housing(db.Model):
     __tablename__ = 'housing'
@@ -118,7 +120,7 @@ class Housing(db.Model):
 class Amenities(db.Model):
     __tablename__ = 'amenities'
     amen_id = db.Column(db.Integer, unique=True, primary_key=True)
-    amen_name = db.Column(db.String(128), unique=True, nullable=False)
+    amen_name = db.Column(db.String(128), nullable=False)
     amen_alias = db.Column(db.String(128), nullable=False)
     yelp_id = db.Column(db.String(128), unique=True, nullable=False)
     rating = db.Column(db.Float, nullable=False)
@@ -132,7 +134,7 @@ class Amenities(db.Model):
     pricing = db.Column(db.String(8))
     deliver = db.Column(db.Boolean, nullable=False)
     takeout = db.Column(db.Boolean, nullable=False)
-    hours = db.Column(db.String(256), nullable=False)
+    hours = db.Column(db.String(512), nullable=False)
     images = db.relationship('AmenitiesImages', cascade='all, delete-orphan', passive_deletes=True)
     categories = db.relationship('AmenitiesCategories', cascade='all, delete-orphan', passive_deletes=True)
     reviews = db.relationship('AmenitiesReviews', cascade='all, delete-orphan', passive_deletes=True)
