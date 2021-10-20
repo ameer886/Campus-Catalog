@@ -1,12 +1,15 @@
 from enum import unique
 from flask import request
+from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, Sequence
 from sqlalchemy.orm import relation
 from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint
+from marshmallow import fields
+
 
 db = SQLAlchemy()
-
+ma = Marshmallow()
 class University(db.Model):
     __tablename__ = 'university'
     univ_id = db.Column(db.Integer, primary_key=True)
@@ -222,5 +225,42 @@ class AmenitiesReviews(db.Model):
         self.amen_id = amen_id
         self.review_id = review_id
         self.user_id = user_id
-        self.user_name = user_name
-  
+        self.user_name = user_name   
+
+class AmenitiesImagesSchema(ma.Schema):
+    id = fields.Int(required=True)
+    amen_id = fields.Int(required=True)
+    url = fields.Str(required=True)
+class AmenitiesReviewsSchema(ma.Schema):
+    id = fields.Int(required=True)
+    amen_id = fields.Int(required=True)
+    review_id = fields.Str(required=True)
+    user_id = fields.Str(required=True)
+    user_name = fields.Str(required=True)
+
+class AmenitiesCategoriesSchema(ma.Schema):
+    id = fields.Int(required=True)
+    amen_id = fields.Int(required=True)
+    category = fields.Str(required=True)
+class AmenitiesSchema(ma.Schema):
+    amen_id = fields.Int(required=True)    
+    amen_name = fields.Str(required=True)
+    amen_alias = fields.Str(required=True)
+    yelp_id = fields.Str(required=True)
+    rating = fields.Float(required=False)
+    num_review = fields.Int(required=False)  
+    address = fields.Str(required=True)
+    city = fields.Str(required=True)
+    state = fields.Str(required=True)
+    zip_code = fields.Str(required=True)
+    longitude = fields.Float(required=True)
+    latitude = fields.Float(required=True)
+    pricing = fields.Str(required=False)
+    deliver = fields.Boolean(required=False)
+    takeout = fields.Boolean(required=False)
+    hours = fields.Str(required=False)
+    images = fields.List(fields.Nested(AmenitiesImagesSchema(only=['url'])))
+    categories = fields.List(fields.Nested(AmenitiesCategoriesSchema(only=['category'])))
+    reviews = fields.List(fields.Nested(AmenitiesReviewsSchema(only=['review_id', 'user_id', 'user_name'])))
+
+amenities_schema = AmenitiesSchema()
