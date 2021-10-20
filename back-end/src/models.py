@@ -1,11 +1,11 @@
 from enum import unique
-from flask import Flask, request
-from sqlalchemy import Column, Integer
-from sqlalchemy.sql.schema import ForeignKey
-from db import db_init
+from flask import request
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import Column, Integer, Sequence
+from sqlalchemy.orm import relation
+from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint
 
-app = Flask(__name__)
-db = db_init(app)
+db = SQLAlchemy()
 
 class University(db.Model):
     __tablename__ = 'university'
@@ -62,15 +62,15 @@ class University(db.Model):
 
 class Housing(db.Model):
     __tablename__ = 'housing'
-    property_id = db.Column(db.String(128), primary_key=True)
-    property_name = db.Column(db.String(128), nullable=False)
-    property_type = db.Column(db.String(128), nullable=False)
-    address = db.Column(db.String(128), nullable=False)
-    neighborhood = db.Column(db.String(128), nullable=False)
+    property_id = db.Column(db.String, primary_key=True)
+    property_name = db.Column(db.String, nullable=False)
+    property_type = db.Column(db.String(32), primary_key=True)
+    address = db.Column(db.String, nullable=False)
+    neighborhood = db.Column(db.String, nullable=False)
     city = db.Column(db.String(128), nullable=False)
     state = db.Column(db.String(2), nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
+    zip_code = db.Column(db.String, nullable=False)
+    rating = db.Column(db.Float, nullable=False)
     min_rent = db.Column(db.Integer, nullable=True)
     max_rent = db.Column(db.Integer, nullable=True)
     min_bed = db.Column(db.Integer, nullable=True)
@@ -79,24 +79,23 @@ class Housing(db.Model):
     max_bath = db.Column(db.Integer, nullable=True)
     min_sqft = db.Column(db.Integer, nullable=True)
     max_sqft = db.Column(db.Integer, nullable=True)
+    walk_score = db.Column(db.Integer, nullable=True)
+    transit_score = db.Column(db.Integer, nullable=True)
     dog_allow = db.Column(db.Boolean)
     cat_allow = db.Column(db.Boolean)
     max_num_dog = db.Column(db.Integer, nullable=True)
     max_num_cat = db.Column(db.Integer, nullable=True)
     dog_weight = db.Column(db.Integer, nullable=True)
     cat_weight = db.Column(db.Integer, nullable=True)
-    building_amenity = db.Column(db.String(128), nullable=False)
-    included_util = db.Column(db.String(128), nullable=False)
-    accessibility = db.Column(db.String(128), nullable=False)
-    #create another table and link to it here for lists
+    building_amenities = db.Column(db.String, nullable=True)
+    util_included = db.Column(db.String, nullable=True)
 
     def __repr__(self):
         return '<Housing %r>' %self.property_name
 
-    def __init__(self, property_id = "NaN", property_name = "NaN", property_type = "NaN", address = "NaN", neighborhood = "NaN", city = "NaN", state = "N", longitude = 0, latitude = 0, 
-    min_rent = 0, max_rent = 0, min_bed = 0, max_bed = 0, min_bath = 0, max_bath = 0, min_sqft = 0, max_sqft = 0, dog_allow = None, 
-    cat_allow = None, max_num_dog = 0, max_num_cat = 0, dog_weight = 0, cat_weight = 0, building_amenity = "NaN", included_util = "NaN",
-    accessibility = "NaN"):
+    def __init__(self, property_id = '', property_name = "NaN", property_type = "NaN", address = "NaN", neighborhood = "NaN", city = "NaN", state = "N", zip_code = "NaN", 
+    rating = 0.0, min_rent = 0, max_rent = 0, min_bed = None, max_bed = None, min_bath = None, max_bath = None, min_sqft = None, max_sqft = None, walk_score = 0, transit_score = 0,
+    dog_allow = False, cat_allow = False, max_num_dog = None, max_num_cat = None, dog_weight = None, cat_weight = None, building_amenities = "NaN", util_included = "NaN"):
         self.property_id = property_id
         self.property_name = property_name
         self.property_type = property_type
@@ -104,8 +103,10 @@ class Housing(db.Model):
         self.neighborhood = neighborhood
         self.city = city
         self.state = state
-        self.longitude = longitude
-        self.latitude = latitude
+        self.zip_code = zip_code
+        self.rating = rating
+        self.walk_score = walk_score
+        self.transit_score = transit_score
         self.min_rent = min_rent
         self.max_rent = max_rent
         self.min_bed = min_bed
@@ -120,9 +121,27 @@ class Housing(db.Model):
         self.max_num_cat = max_num_cat
         self.dog_weight = dog_weight
         self.cat_weight = cat_weight
-        self.building_amenity = building_amenity
-        self.included_util = included_util
-        self.accessibility = accessibility
+        self.building_amenities = building_amenities
+        self.util_included = util_included
+    
+    def get_id(self):
+        return str(self.property_id)
+    
+    def get_type(self):
+        return str(self.property_type)
+
+class HousingImages(db.Model):
+    __tablename__ = 'housingImages'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    property_id = db.Column(db.String, nullable=False)
+    property_type = db.Column(db.String(32), nullable=False)
+    image_url = db.Column(db.String)
+    __table_args__ = (ForeignKeyConstraint(['property_id', 'property_type'],['housing.property_id', 'housing.property_type']),)
+
+    def __init__(self, property_id = 0, property_type = '', image_url = ''):
+        self.property_id = property_id
+        self.property_type = property_type
+        self.image_url = image_url
 
 class Amenities(db.Model):
     __tablename__ = 'amenities'
@@ -203,4 +222,5 @@ class AmenitiesReviews(db.Model):
         self.amen_id = amen_id
         self.review_id = review_id
         self.user_id = user_id
-        self.user_name = user_name       
+        self.user_name = user_name
+  

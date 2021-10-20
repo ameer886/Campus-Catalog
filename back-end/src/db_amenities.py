@@ -1,5 +1,6 @@
 from db import db_init
-from models import Amenities, AmenitiesImages, AmenitiesCategories, AmenitiesReviews, University, db
+from models import Amenities, AmenitiesImages, AmenitiesCategories, AmenitiesReviews, University
+from main import db
 from flask import Flask
 from dotenv import load_dotenv, find_dotenv
 from yelpapi import YelpAPI
