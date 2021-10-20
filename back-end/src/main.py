@@ -32,6 +32,8 @@ class HousingSchema(ma.Schema):
     max_rent = fields.Function(lambda obj: obj.min_rent if obj.max_rent is None else obj.max_rent)
     bed = fields.Method('format_bedroom')
     bath = fields.Method('format_bathroom')
+    min_sqft = fields.Float()
+    max_sqft = fields.Float()
     sqft = fields.Method('format_space')
     dog_allow = fields.Boolean()
     cat_allow = fields.Boolean()
@@ -62,7 +64,7 @@ class HousingSchema(ma.Schema):
 single_housing_schema = HousingSchema()
 
 # table view 
-table_columns = ('property_name','property_id', 'property_type','rating','walk_score','transit_score','min_rent','max_rent','sqft')
+table_columns = ('property_name','property_id', 'property_type', 'city', 'state', 'rating', 'walk_score', 'transit_score', 'max_rent', 'max_sqft')
 all_housing_schema = HousingSchema(only=table_columns, many=True)
 
 @app.route('/housing', methods=['GET'])
