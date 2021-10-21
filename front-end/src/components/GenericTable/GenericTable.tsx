@@ -15,7 +15,7 @@ import Table from 'react-bootstrap/Table';
  * to be as detailed as I possibly can
  */
 
-interface RowWithIndex {
+export interface RowWithIndex {
   id: number;
 }
 
@@ -53,7 +53,10 @@ export type ColumnDefinitionType<
  * columnDefinitions tells the table what the columns should look like
  * data is the data actually being displayed
  */
-type GenericTableProps<T extends RowWithIndex, K extends keyof T> = {
+export type GenericTableProps<
+  T extends RowWithIndex,
+  K extends keyof T,
+> = {
   columnDefinitions: Array<ColumnDefinitionType<T, K>>;
   data: Array<T>;
 };
