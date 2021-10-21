@@ -7,6 +7,9 @@ import UniversityGrid from '../../components/UniversityGrid/UniversityGrid';
 import { university1 } from '../HardInstances/University1';
 import { university2 } from '../HardInstances/University2';
 import { university3 } from '../HardInstances/University3';
+import PaginationRelay from '../../components/Pagination/PaginationRelay';
+
+const PAGE_SIZE = 9;
 
 // Type of a single university
 export type UniversityType = {
@@ -121,11 +124,16 @@ function sortCards(cards: UniversityType[], sortOrder: string) {
  */
 const UniversitiesPage: React.FunctionComponent = () => {
   const [sortOrder, setSortOrder] = useState('none');
+  const [page, setPage] = useState(0);
   const cards = [university1, university2, university3];
+  for (let i = 0; i < 200; i++) {
+    cards.push(university1);
+  }
 
   // wrapper to change the sort order of the cards
   const updateSort = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSortOrder(e.target.value);
+    setPage(0);
   };
 
   // Memoize card sorting because the calculation could get expensive
@@ -134,16 +142,26 @@ const UniversitiesPage: React.FunctionComponent = () => {
     return sortCards(cards, sortOrder);
   }, [cards, sortOrder]);
 
+  const cardSlice = useMemo(() => {
+    return sortedCards.slice(
+      page * PAGE_SIZE,
+      (page + 1) * PAGE_SIZE,
+    );
+  }, [sortedCards, page]);
+
   return (
     <div className={styles.Universities}>
       <h1>Universities</h1>
       <div className={styles.UniversitySplitter}>
         {/* Build the grid on the left */}
         <div className={styles.SplitterGrid}>
-          <p style={{ marginBottom: '0px' }}>
-            Found a total of {sortedCards.length} universities.
-          </p>
-          <UniversityGrid cards={sortedCards} />
+          <UniversityGrid cards={cardSlice} />
+          <PaginationRelay
+            curPage={page}
+            setPage={setPage}
+            pageSize={PAGE_SIZE}
+            totalElements={cards.length}
+          />
         </div>
 
         {/* Build the inputs on the right */}

@@ -1,8 +1,7 @@
 import React from 'react';
 
-import GenericTable, {
-  ColumnDefinitionType,
-} from '../../components/GenericTable/GenericTable';
+import { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
+import PaginatedTable from '../../components/Pagination/PaginatedTable';
 import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
 
 import './EntertainmentTable.css';
@@ -58,7 +57,7 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableProps> =
   ({ rows }: EntertainmentTableProps) => {
     return (
       <div className="EntertainmentTable">
-        <GenericTable
+        <PaginatedTable
           columnDefinitions={entertainmentTableHeaders}
           data={rows}
         />
