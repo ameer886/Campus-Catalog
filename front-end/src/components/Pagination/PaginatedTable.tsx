@@ -8,9 +8,15 @@ import type {
   GenericTableProps,
   RowWithIndex,
 } from '../GenericTable/GenericTable';
+import PaginationRelay from './PaginationRelay';
 
 const PAGE_SIZE = 10;
 
+/*
+ * Wrapper class for the generic table that also adds pagination
+ * Pages are currently set to be 10 rows long
+ * You should be able to at least move forward and backward one page
+ */
 const PaginatedTable = <T extends RowWithIndex, K extends keyof T>({
   columnDefinitions,
   data,
@@ -31,7 +37,13 @@ const PaginatedTable = <T extends RowWithIndex, K extends keyof T>({
         columnDefinitions={columnDefinitions}
         data={pageData}
       />
-      <button onClick={() => setPage(page + 1)}>Click me!</button>
+
+      <PaginationRelay
+        curPage={page}
+        setPage={setPage}
+        pageSize={PAGE_SIZE}
+        totalElements={data.length}
+      />
     </div>
   );
 };

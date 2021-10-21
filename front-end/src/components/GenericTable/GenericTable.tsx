@@ -189,7 +189,6 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
           data={sortedData}
         />
       </Table>
-      <p>Found a total of {sortedData.length} elements.</p>
     </>
   );
 };
