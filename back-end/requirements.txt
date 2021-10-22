@@ -1,3 +1,5 @@
+Flask==1.1.2
+uWSGI==2.0.19.1
 flask
 flask-restful
 SQLAlchemy
@@ -8,7 +10,6 @@ flask-marshmallow
 flask-restless
 marshmallow-sqlalchemy
 python-dotenv
-psycopg2
 gunicorn
 black
 selenium
