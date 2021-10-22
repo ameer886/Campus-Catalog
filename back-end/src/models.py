@@ -60,6 +60,16 @@ class University(db.Model):
         self.longitude = longitude
         self.latitude = latitude
 
+class UniversityImages(db.Model):
+    __tablename__ = "universityImages"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    univ_id = db.Column(db.String, nullable=False)
+    url = db.Column(db.String(256), nullable=False)
+
+    def __init__(self, univ_id = 0, url = "NaN"):
+        self.univ_id = univ_id
+        self.url = url
+
 class Housing(db.Model):
     __tablename__ = 'housing'
     property_id = db.Column(db.String, primary_key=True)
