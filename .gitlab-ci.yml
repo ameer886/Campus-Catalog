@@ -21,6 +21,14 @@ test:
     - npm install --legacy-peer-deps
     - yarn test
 
+<<<<<<< HEAD
+=======
+  image: node:latest
+
+stages:
+  - deploy
+
+>>>>>>> removed Pages
 deploy_develop:
   image: python:3.6-stretch
   only:
@@ -46,4 +54,4 @@ deploy_production:
   script:
     - cd back-end
     - /root/.local/bin/eb deploy environment-name
-  
+
