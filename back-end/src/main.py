@@ -6,6 +6,7 @@ from db import db_init
 from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, validate
+import queries
 
 app = Flask(__name__)
 db = db_init(app)
@@ -29,14 +30,21 @@ class HousingSchema(ma.Schema):
     walk_score = fields.Int()
     transit_score = fields.Int()
     min_rent = fields.Int(required=True)
-    max_rent = fields.Function(lambda obj: obj.min_rent if obj.max_rent is None else obj.max_rent)
+    max_rent = fields.Int()
     bed = fields.Method('format_bedroom')
     bath = fields.Method('format_bathroom')
     min_sqft = fields.Float()
     max_sqft = fields.Float()
     sqft = fields.Method('format_space')
     dog_allow = fields.Boolean()
+    max_num_dog = fields.Int()
+    dog_weight = fields.Int()
     cat_allow = fields.Boolean()
+    max_num_cat = fields.Int()
+    cat_weight = fields.Int() 
+    images = fields.List(fields.Url)
+    amenities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
+    universities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
 
     def format_bedroom(self, property):
         if property.max_bed is None:
@@ -55,13 +63,14 @@ class HousingSchema(ma.Schema):
                 'max': property.max_sqft}
 
     def format_location(self, property):
-        return {'address': property.address,
+        return {'street address': property.address,
                 'neighborhood': property.neighborhood,
                 'city': property.city,
                 'state': property.state,
                 'zipcode': property.zip_code}
 
-single_housing_schema = HousingSchema()
+exclude_columns = ('address', 'city', 'state', 'min_sqft', 'max_sqft')
+single_housing_schema = HousingSchema(exclude=exclude_columns)
 
 # table view 
 table_columns = ('property_name','property_id', 'property_type', 'city', 'state', 'rating', 'walk_score', 'transit_score', 'max_rent', 'max_sqft')
@@ -73,9 +82,19 @@ def get_all_housing():
     result = all_housing_schema.dump(all_housing)
     return jsonify({'properties': result})
 
-@app.route('/housing/<string:typ>/<string:id>', methods=['GET'])
-def get_housing_by_id(id, typ):
-    housing = Housing.query.get((id,typ))
+@app.route('/housing/<string:id>', methods=['GET'])
+def get_housing_by_id(id):
+    sql = queries.query_images(id)
+    result = db.session.execute(sql)
+    housing = Housing.build_obj_from_args(*result)
+    amen_sql = queries.query_amen(id)
+    amen_nearby = db.session.execute(amen_sql)
+    univ_sql = queries.query_univ(id)
+    univ_nearby = db.session.execute(univ_sql)
+    amenities = tuple(amen_nearby)
+    universities = tuple(univ_nearby)
+    housing.set_amen_nearby(amenities)
+    housing.set_univ_nearby(universities)
     if housing is None:
         err = flask.Response(
             json.dump({'error': id + ' not found'}),
