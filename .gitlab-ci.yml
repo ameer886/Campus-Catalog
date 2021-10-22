@@ -25,14 +25,14 @@ deploy_develop:
   image: python:3.6-stretch
   only:
     variables:
-      - $CI_COMMIT_BRANCH == "back-end"
+      - $CI_COMMIT_BRANCH == "deploy"
   stage: deploy
   before_script:
     - pip install awsebcli --upgrade --user
-    - git checkout back-end
+    - git checkout deploy
   script:
     - cd back-end
-    - /root/.local/bin/eb deploy Campuscatalog-dev
+    - /root/.local/bin/eb deploy environment-name
 
 deploy_production:
   image: python:3.6-stretch
@@ -45,5 +45,5 @@ deploy_production:
     - git checkout main
   script:
     - cd back-end
-    - /root/.local/bin/eb deploy Campuscatalog-prod
+    - /root/.local/bin/eb deploy environment-name
   
