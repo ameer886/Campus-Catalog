@@ -14,7 +14,7 @@ ma = Marshmallow(app)
 
 @app.route('/')
 def home():
-    return 'hello world'
+    return '<h1> hello world </h1>'
 
 class HousingSchema(ma.Schema):
 
@@ -43,6 +43,8 @@ class HousingSchema(ma.Schema):
     max_num_cat = fields.Int()
     cat_weight = fields.Int() 
     images = fields.List(fields.Url)
+    util_included = fields.List(fields.Str())
+    building_amenities = fields.List(fields.Str())
     amenities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     universities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
 

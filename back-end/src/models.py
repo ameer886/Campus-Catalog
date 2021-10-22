@@ -94,7 +94,7 @@ class Housing(db.Model):
         return '<Housing %r>' %self.property_name
 
     def __init__(self, property_id = '', property_name = "NaN", property_type = "NaN", address = "NaN", neighborhood = "NaN", city = "NaN", state = "N", zip_code = "NaN", 
-    rating = 0.0, min_rent = 0, max_rent = 0, min_bed = None, max_bed = None, min_bath = None, max_bath = None, min_sqft = None, max_sqft = None, walk_score = 0, transit_score = 0,
+    rating = 0.0, min_rent = 0, max_rent = None, min_bed = None, max_bed = None, min_bath = None, max_bath = None, min_sqft = None, max_sqft = None, walk_score = 0, transit_score = 0,
     dog_allow = False, cat_allow = False, max_num_dog = None, max_num_cat = None, dog_weight = None, cat_weight = None, building_amenities = "NaN", util_included = "NaN",
     amenities_nearby = None, universities_nearby = None, image_id = None, images = None):
         self.property_id = property_id
@@ -128,7 +128,7 @@ class Housing(db.Model):
         self.universities_nearby = universities_nearby
         self.image_id = image_id
         self.images = images
-        if self.max_rent is None:
+        if self.max_rent is None and self.min_rent is not None:
             self.max_rent = self.min_rent
         if self.dog_allow == False:
             self.max_num_dog = 0
@@ -144,6 +144,8 @@ class Housing(db.Model):
                 'max_sqft', 'dog_allow', 'cat_allow', 'max_num_dog', 'max_num_cat', 'dog_weight', 'cat_weight',
                 'rating', 'building_amenities', 'walk_score', 'transit_score', 'util_included', 'image_id', 'images')
         kwargs = dict(zip(columns,args))
+        kwargs['util_included'] = kwargs['util_included'].split(',') if kwargs['util_included'] is not None else None
+        kwargs['building_amenities'] = kwargs['building_amenities'].split(',') if kwargs['building_amenities'] is not None else None
         kwargs['images'] = kwargs['images'].split('@@@')
         return cls(**kwargs)
 
