@@ -28,9 +28,9 @@ describe('Splash Page Test Suite', () => {
   it('links have correct href', () => {
     render(<CampCatSplashPage />);
 
-    const aptLink = screen.getByRole('link', { name: /Apartments/i });
+    const aptLink = screen.getByRole('link', { name: /Housing/i });
     expect(aptLink).not.toBeNull();
-    expect(aptLink.getAttribute('href')).toBe('/apartments');
+    expect(aptLink.getAttribute('href')).toBe('/housing');
 
     const uniLink = screen.getByRole('link', {
       name: /University/i,

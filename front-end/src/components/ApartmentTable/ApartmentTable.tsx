@@ -37,11 +37,16 @@ const apartmentTableHeaders: ColumnDefinitionType<
       if (!b.rating) return 1;
       return a.rating - b.rating;
     },
+    printFunc: (a) => {
+      if (a.rating === 0) return 'N/A';
+      return a.rating.toString();
+    },
   },
   {
     key: 'max_rent',
-    header: 'Bedrooms',
+    header: 'Maximum Rent',
     sortFunc: (a, b) => a.max_rent - b.max_rent,
+    printFunc: (a) => a.max_rent.toLocaleString('en-US'),
   },
   {
     key: 'walk_score',

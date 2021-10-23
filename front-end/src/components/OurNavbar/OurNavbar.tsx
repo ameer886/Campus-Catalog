@@ -1,7 +1,7 @@
 import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import './OurNavbar.css'
+import './OurNavbar.css';
 
 const OurNavbar: React.FunctionComponent = () => {
   const links = [
@@ -11,8 +11,8 @@ const OurNavbar: React.FunctionComponent = () => {
       key: 0,
     },
     {
-      href: '/apartments',
-      name: 'Apartments',
+      href: '/housing',
+      name: 'Housing',
       key: 1,
     },
     {
@@ -29,7 +29,9 @@ const OurNavbar: React.FunctionComponent = () => {
 
   return (
     <Navbar sticky="top" bg="dark" variant="dark">
-      <Navbar.Brand className="brand" href="/">Campus Catalog</Navbar.Brand>
+      <Navbar.Brand className="brand" href="/">
+        Campus Catalog
+      </Navbar.Brand>
       <Nav className="mr-auto">
         {links.map((link) => (
           <Nav.Link href={link.href} key={link.key}>

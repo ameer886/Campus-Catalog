@@ -41,11 +41,11 @@ ReactDOM.render(
         <Route path="/about" exact component={AboutPage} />
 
         {/* Apartments Page */}
-        <Route path="/apartments" exact component={ApartmentsPage} />
+        <Route path="/housing" exact component={ApartmentsPage} />
 
         {/* Apartment instance based on id */}
         <Route
-          path="/apartments/id=:id"
+          path="/housing/:id"
           render={(props) => <Apartment id={props.match.params.id} />}
         />
 
@@ -65,35 +65,23 @@ ReactDOM.render(
 
         {/* Terrible hard coded instances */}
         <Route
-          path="/entertainments/id=1"
+          path="/entertainments/1"
           exact
           component={Entertainment1}
         />
         <Route
-          path="/entertainments/id=2"
+          path="/entertainments/2"
           exact
           component={Entertainment2}
         />
         <Route
-          path="/entertainments/id=3"
+          path="/entertainments/3"
           exact
           component={Entertainment3}
         />
-        <Route
-          path="/universities/id=1"
-          exact
-          component={University1}
-        />
-        <Route
-          path="/universities/id=2"
-          exact
-          component={University2}
-        />
-        <Route
-          path="/universities/id=3"
-          exact
-          component={University3}
-        />
+        <Route path="/universities/1" exact component={University1} />
+        <Route path="/universities/2" exact component={University2} />
+        <Route path="/universities/3" exact component={University3} />
 
         {/* Invalid Page for missing links */}
         <Route path="/404" component={InvalidPage} />
