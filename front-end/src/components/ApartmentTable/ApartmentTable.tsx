@@ -2,17 +2,17 @@ import React from 'react';
 
 import { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
 import PaginatedTable from '../../components/Pagination/PaginatedTable';
-import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
+import { ApartmentRowType } from '../../views/Apartments/ApartmentsPage';
 
 import './ApartmentTable.css';
 
 type ApartmentTableProps = {
-  rows: Array<ApartmentType>;
+  rows: Array<ApartmentRowType>;
 };
 
 const apartmentTableHeaders: ColumnDefinitionType<
-  ApartmentType,
-  keyof ApartmentType
+  ApartmentRowType,
+  keyof ApartmentRowType
 >[] = [
   {
     key: 'property_name',

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import './ApartmentsPage.css';
 
 import type {
@@ -8,10 +9,9 @@ import type {
   UniversityKey,
 } from '../../universalTypes';
 import { getAPI } from '../../APIClient';
+import { IntentionallyAny } from '../../utilities';
 
 import ApartmentTable from '../../components/ApartmentTable/ApartmentTable';
-
-import { apartment1 } from '../HardInstances/Apartment1';
 
 export type ApartmentType = {
   bath: MinMaxPair;
@@ -43,18 +43,59 @@ export type ApartmentType = {
   id: string;
 };
 
+export type ApartmentRowType = {
+  city: string;
+  max_rent: number;
+  max_sqft: number;
+  property_id: string;
+  property_name: string;
+  property_type: string;
+  rating: number;
+  state: string;
+  transit_score: number;
+  walk_score: number;
+
+  id: string;
+};
+
 /*
  * The Apartments page
  * One of the three main model collection pages
  * Should contain a list of apartments in a sortable table/grid
  */
 const ApartmentsPage: React.FunctionComponent = () => {
-  const rows = [];
-  for (let i = 0; i < 200; i++) {
-    rows.push(apartment1);
-  }
+  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<Array<ApartmentRowType>>([]);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({ model: 'housing' });
+        const responseRows = data.properties.map(
+          (apt: IntentionallyAny) => {
+            return {
+              id: apt.property_id,
+              ...apt,
+            };
+          },
+        );
+        setRows(responseRows);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, []);
 
   getAPI({ model: 'housing' }).then(console.log);
+
+  if (loading)
+    return (
+      <div>
+        <p>Loading responses, please be patient.</p>
+      </div>
+    );
 
   return (
     <div className="Apartments">

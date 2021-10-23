@@ -10,7 +10,7 @@ import {
 import { Nav } from 'react-bootstrap';
 
 type ApartmentProps = {
-  aptQuery: ApartmentType;
+  id: string;
 };
 
 /*
@@ -19,14 +19,14 @@ type ApartmentProps = {
  * Any attribute information should be passed in as a property
  */
 const Apartment: React.FunctionComponent<ApartmentProps> = ({
-  aptQuery,
+  id,
 }: ApartmentProps) => {
+  /*
   const nbd = aptQuery.neighborhood;
   const state = formatAddressState(aptQuery.location);
 
   return (
     <div className={styles.Apartment}>
-      {/* I do not have time to do pretty CSS for everything atm */}
       <h1 className={styles.Name}>{aptQuery.property_name}</h1>
       {nbd && <h3 className={styles.Location}>{nbd}</h3>}
       <h3 className={styles.Location}>{state}</h3>
@@ -160,6 +160,12 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
       {aptQuery.images.map((image, index) => (
         <img src={image} key={index} />
       ))}
+    </div>
+  );
+  */
+  return (
+    <div>
+      <p>Eventually will be apartment with id {id}.</p>
     </div>
   );
 };

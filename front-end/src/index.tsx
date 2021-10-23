@@ -17,7 +17,6 @@ import EntertainmentsPage from './views/Entertainments/EntertainmentsPage';
 import UniversitiesPage from './views/Universities/UniversitiesPage';
 import InvalidPage from './views/Invalid/InvalidPage';
 
-import Apartment1 from './views/HardInstances/Apartment1';
 import Entertainment1 from './views/HardInstances/Entertainment1';
 import Entertainment2 from './views/HardInstances/Entertainment2';
 import Entertainment3 from './views/HardInstances/Entertainment3';
@@ -26,6 +25,7 @@ import University2 from './views/HardInstances/University2';
 import University3 from './views/HardInstances/University3';
 
 import reportWebVitals from './reportWebVitals';
+import Apartment from './components/Apartment/Apartment';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -43,6 +43,12 @@ ReactDOM.render(
         {/* Apartments Page */}
         <Route path="/apartments" exact component={ApartmentsPage} />
 
+        {/* Apartment instance based on id */}
+        <Route
+          path="/apartments/id=:id"
+          render={(props) => <Apartment id={props.match.params.id} />}
+        />
+
         {/* Entertainments Page */}
         <Route
           path="/entertainments"
@@ -58,11 +64,6 @@ ReactDOM.render(
         />
 
         {/* Terrible hard coded instances */}
-        <Route
-          path="/apartments/id=35erbsf"
-          exact
-          component={Apartment1}
-        />
         <Route
           path="/entertainments/id=1"
           exact
