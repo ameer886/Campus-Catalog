@@ -21,23 +21,15 @@ test:
     - npm install --legacy-peer-deps
     - yarn test
 
-<<<<<<< HEAD
-=======
-  image: node:latest
-
-stages:
-  - deploy
-
->>>>>>> removed Pages
 deploy_develop:
   image: python:3.6-stretch
   only:
     variables:
-      - $CI_COMMIT_BRANCH == "deploy"
+      - $CI_COMMIT_BRANCH == "back-end"
   stage: deploy
   before_script:
     - pip install awsebcli --upgrade --user
-    - git checkout deploy
+    - git checkout back-end
   script:
     - cd back-end
     - /root/.local/bin/eb deploy environment-name

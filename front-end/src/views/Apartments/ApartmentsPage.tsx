@@ -88,8 +88,6 @@ const ApartmentsPage: React.FunctionComponent = () => {
     fetchDataAsync();
   }, []);
 
-  getAPI({ model: 'housing' }).then(console.log);
-
   if (loading)
     return (
       <div>

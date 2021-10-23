@@ -1,8 +1,10 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
 
 import styles from './Apartment.module.css';
 
+import { getAPI } from '../../APIClient';
 import {
   formatAddressState,
   formatNumberToMoney,
@@ -21,7 +23,27 @@ type ApartmentProps = {
 const Apartment: React.FunctionComponent<ApartmentProps> = ({
   id,
 }: ApartmentProps) => {
-  /*
+  const [aptQuery, setQuery] = useState<ApartmentType | null>(null);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({ model: 'housing', id: id });
+        setQuery({ ...data });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, [id]);
+
+  if (aptQuery == null)
+    return (
+      <div>
+        <p>Loading, please be patient.</p>
+      </div>
+    );
+
   const nbd = aptQuery.neighborhood;
   const state = formatAddressState(aptQuery.location);
 
@@ -160,12 +182,6 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
       {aptQuery.images.map((image, index) => (
         <img src={image} key={index} />
       ))}
-    </div>
-  );
-  */
-  return (
-    <div>
-      <p>Eventually will be apartment with id {id}.</p>
     </div>
   );
 };
