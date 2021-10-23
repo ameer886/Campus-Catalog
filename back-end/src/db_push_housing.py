@@ -8,6 +8,7 @@ import requests
 import us
 from requests.exceptions import HTTPError
 from apify_client import ApifyClient
+import googlemaps
 
 # load existing tables
 metadata = MetaData(db.engine)
@@ -16,6 +17,22 @@ university = metadata.tables['university']
 housing = metadata.tables['housing']
 housingImages = metadata.tables['housingImages']
 
+gmaps = googlemaps.Client(key=os.getenv('GOOGLE_GEOCODE_API_KEY'))
+
+# find longitude and latitude for all properties
+def populate_geocode():
+    results = db.session.query(housing.c.property_id, housing.c.address, housing.c.city, housing.c.state).all()
+    for location in results:
+        property_id = location[0]
+        full_address = ', '.join(location[1:])
+        geocode = gmaps.geocode(full_address)
+        if len(geocode) < 1:
+            continue
+        lat = geocode[0]['geometry']['location']['lat']
+        lon = geocode[0]['geometry']['location']['lng']
+        print(f"{property_id}: {lat} {lon}")
+        db.session.query(housing).filter(housing.c.property_id == property_id).update({housing.c.lat: lat, housing.c.lon: lon})
+        db.session.commit()
 
 # populate all type of housing using APIFY and their api
 def populate_housing():
@@ -220,4 +237,5 @@ def split_range(range):
         return [0, float(min_max[1])] if min_max[0].find('Studio') != -1 else [float(min_max[0]), float(min_max[1])]
 
 if __name__ == '__main__':
-    populate_housing()
+    populate_geocode()
+    #populate_housing()
