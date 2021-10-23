@@ -269,7 +269,7 @@ def get_all_universities():
 def get_univ_by_id(id):
     sql = queries.query_univ_images(id)
     result = db.session.execute(sql)
-    univ = University.build_obj_from_args(*result)
+    univ = University.build_univ_from_args(*result)
     amen_sql = queries.query_univ_amen(id)
     amen_nearby = db.session.execute(amen_sql)
     hous_sql = queries.query_univ_housing(id)
