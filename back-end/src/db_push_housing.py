@@ -237,5 +237,5 @@ def split_range(range):
         return [0, float(min_max[1])] if min_max[0].find('Studio') != -1 else [float(min_max[0]), float(min_max[1])]
 
 if __name__ == '__main__':
+    populate_housing()
     populate_geocode()
-    #populate_housing()
