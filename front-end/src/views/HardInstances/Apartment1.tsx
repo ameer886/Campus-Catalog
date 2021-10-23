@@ -2,7 +2,6 @@ import React from 'react';
 import Apartment from '../../components/Apartment/Apartment';
 
 import { ApartmentType } from '../Apartments/ApartmentsPage';
-import Logo from '../Media/ParksidePlaceImage.png';
 
 export const apartment1: ApartmentType = {
   amenities_nearby: [
@@ -118,20 +117,7 @@ export const apartment1: ApartmentType = {
  * Hard-code a university here
  */
 const Apartment1: React.FunctionComponent = () => {
-  return (
-    <>
-      <Apartment aptQuery={apartment1} />
-
-      <img src={Logo} width="300" alt="Logo" />
-      <iframe
-        id="HarvardMap"
-        title="HarvardMap"
-        width="600"
-        height="400"
-        src="https://www.mapquest.com/search/result?slug=%2Fus%2Fmassachusetts%2Fcambridge%2F02138-4586%2F700-huron-ave-42.380934,-71.154215&query=700%20Huron%20Ave,%20Cambridge,%20MA%2002138-4586&page=0&index=0"
-      ></iframe>
-    </>
-  );
+  return <Apartment aptQuery={apartment1} />;
 };
 
 export default Apartment1;

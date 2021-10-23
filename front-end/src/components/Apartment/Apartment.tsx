@@ -1,6 +1,13 @@
 import React from 'react';
-import './Apartment.css';
 import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
+
+import styles from './Apartment.module.css';
+
+import {
+  formatAddressState,
+  formatNumberToMoney,
+} from '../../utilities';
+import { Nav } from 'react-bootstrap';
 
 type ApartmentProps = {
   aptQuery: ApartmentType;
@@ -14,9 +21,145 @@ type ApartmentProps = {
 const Apartment: React.FunctionComponent<ApartmentProps> = ({
   aptQuery,
 }: ApartmentProps) => {
+  const nbd = aptQuery.neighborhood;
+  const state = formatAddressState(aptQuery.location);
+
   return (
-    <div className="Apartment">
-      <h1>{aptQuery.property_name}</h1>
+    <div className={styles.Apartment}>
+      {/* I do not have time to do pretty CSS for everything atm */}
+      <h1 className={styles.Name}>{aptQuery.property_name}</h1>
+      {nbd && <h3 className={styles.Location}>{nbd}</h3>}
+      <h3 className={styles.Location}>{state}</h3>
+
+      <p>
+        This location is a {aptQuery.property_type} with a rating of{' '}
+        {aptQuery.rating}.
+      </p>
+
+      <p>
+        The price of this location ranges from{' '}
+        {formatNumberToMoney(aptQuery.min_rent)} to{' '}
+        {formatNumberToMoney(aptQuery.max_rent)}. Utilities are{' '}
+        {aptQuery.util_included ? '' : 'not'} included.
+      </p>
+
+      <p>
+        The available beds range from {aptQuery.bed.min} to{' '}
+        {aptQuery.bed.max}.
+      </p>
+      <p>
+        The available baths range from {aptQuery.bath.min} to{' '}
+        {aptQuery.bath.max}.
+      </p>
+      <p>
+        The square footage available ranges from {aptQuery.sqft.min}{' '}
+        to {aptQuery.sqft.max}.
+      </p>
+
+      <p>
+        This location has a transit score of {aptQuery.transit_score}{' '}
+        and a walk score of {aptQuery.walk_score}.
+      </p>
+
+      <p>
+        We found {aptQuery.building_amenities.length} amenities at
+        this location.
+      </p>
+      {aptQuery.building_amenities.length > 0 && (
+        <div className={styles.ListContainer}>
+          <ul>
+            {aptQuery.building_amenities.map((amenity, index) => (
+              <li key={index}>{amenity}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <p>
+        <span>
+          This location does {aptQuery.cat_allow ? '' : 'not'} allow
+          cats.
+        </span>
+        {aptQuery.cat_allow && aptQuery.max_num_cat !== 0 && (
+          <span>You can have up to {aptQuery.max_num_cat} cats.</span>
+        )}
+        {aptQuery.cat_weight != null && aptQuery.cat_allow && (
+          <span>
+            The maximum weight of a cat is{' '}
+            {aptQuery.cat_weight || 'any weight'}.
+          </span>
+        )}
+      </p>
+
+      <p>
+        <span>
+          This location does {aptQuery.dog_allow ? '' : 'not'} allow
+          dogs.
+        </span>
+        {aptQuery.dog_allow && aptQuery.max_num_dog !== 0 && (
+          <span>You can have up to {aptQuery.max_num_dog} cats.</span>
+        )}
+        {aptQuery.dog_weight != null && aptQuery.dog_allow && (
+          <span>
+            The maximum weight of a dog is{' '}
+            {aptQuery.dog_weight || 'any weight'}.
+          </span>
+        )}
+      </p>
+
+      <div className={styles.Splitter}>
+        <div className={styles.SplitSide}>
+          <p>
+            We found {aptQuery.amenities_nearby.length} nearby
+            entertainment amenities.
+          </p>
+          {aptQuery.amenities_nearby.length > 0 && (
+            <div>
+              <ul style={{ width: '100%', textAlign: 'center' }}>
+                {aptQuery.amenities_nearby.map((amenity, index) => (
+                  <li key={index}>
+                    <Nav.Link
+                      href={`/entertainments/${amenity.amenity_id}`}
+                    >
+                      {amenity.amenity_name}
+                    </Nav.Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.SplitSide}>
+          <p>
+            We found {aptQuery.universities_nearby.length} nearby
+            universit
+            {aptQuery.universities_nearby.length === 1 ? 'y' : 'ies'}.
+          </p>
+          {aptQuery.universities_nearby.length > 0 && (
+            <div>
+              <ul style={{ width: '100%', textAlign: 'center' }}>
+                {aptQuery.universities_nearby.map(
+                  (university, index) => (
+                    <li key={index}>
+                      <Nav.Link
+                        href={`/entertainments/${university.university_id}`}
+                      >
+                        {university.university_name}
+                      </Nav.Link>
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <p>We found these images:</p>
+      {aptQuery.images.map((image, index) => (
+        <img src={image} key={index} />
+      ))}
     </div>
   );
 };
