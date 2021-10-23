@@ -106,5 +106,76 @@ def get_housing_by_id(id):
         return err
     return jsonify(single_housing_schema.dump(housing))
 
+class UniversitySchema(ma.Schema):
+
+    univ_id = fields.Str(required=True)
+    univ_name = fields.Str(required=True)
+    alias = fields.Str()
+    location = fields.Method('format_location')
+    city = fields.Str(required=True)
+    state = fields.Str(required=True)
+    rank = fields.Float(missing=0.0)
+    zip_code = fields.Str()
+    school_url = fields.Str()
+    locale = fields.Int()
+    longitude = fields.Float(missing=0.0)
+    latitude = fields.Float(missing=0.0)
+    carnegie_undergrad = fields.Int()
+    num_undergrad = fields.Int()
+    num_graduate = fields.Int()
+    ownership_id = fields.Str()
+    mascot_name = fields.Str()
+    acceptance_rate = fields.Float(missing=0.0)
+    graduation_rate = fields.Float(missing=0.0)
+    tuition_in_st = fields.Int()
+    tuition_out_st = fields.Int()
+    avg_sat = fields.Float(missing=0.0)
+    avg_cost_attendance = fields.Float(missing=0.0)
+
+
+    def format_location(self, property):
+        return {'city': property.city,
+                'state': property.state,
+                'zipcode': property.zip_code}
+
+exclude_columns = ('city', 'state', 'mascot_name', 'carnegie_undergrad')
+single_univ_schema = UniversitySchema(exclude=exclude_columns)
+
+univ_columns = ('univ_id', 'univ_name', 'alias', 'rank', 'city', 'state',
+                'zip_code', 'school_url', 'locale', 'carnegie_undergrad', 'num_undergrad', 'num_graduate', 'ownership_id',
+                'mascot_name', 'acceptance_rate', 'graduation_rate', 'tuition_in_st', 'tuition_out_st', 'avg_sat', 'avg_cost_attendance',
+                'longitude', 'latitude')
+all_univ_schema = UniversitySchema(only=univ_columns, many=True)
+
+@app.route('/universities', methods=['GET'])
+def get_all_universities():
+    all_univ = University.query.all()
+    result = all_univ_schema.dump(all_univ)
+    return jsonify({'properties': result})
+
+
+@app.route('/universities/<string:id>', methods=['GET'])
+def get_univ_by_id(id):
+    sql = queries.query_univ_images(id)
+    result = db.session.execute(sql)
+    univ = University.build_obj_from_args(*result)
+    amen_sql = queries.query_univ_amen(id)
+    amen_nearby = db.session.execute(amen_sql)
+    hous_sql = queries.query_univ_housing(id)
+    hous_nearby = db.session.execute(hous_sql)
+    amenities = tuple(amen_nearby)
+    housing = tuple(hous_nearby)
+    univ.set_amen_nearby(amenities)
+    univ.set_housing_nearby(housing)
+    if univ is None:
+        err = flask.Response(
+            json.dump({'error': id + ' not found'}),
+            mimetype='application/json'
+        )
+        err.status_code = 404
+        return err
+    return jsonify(single_univ_schema.dump(univ))
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

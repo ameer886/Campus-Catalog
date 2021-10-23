@@ -36,7 +36,7 @@ class University(db.Model):
         return '<University %r>' %self.univ_name
 
     def __init__(self, univ_id = 0, univ_name = "NaN", alias = "NaN", rank = 0, city = "NaN", state = "N", zip_code = "NaN", school_url = "NaN", locale = 0, longitude = 0, latitude = 0, carnegie_undergrad = 0, num_undergrad = 0, num_graduate = 0, ownership_id = "NaN",
-    mascot_name = "NaN", acceptance_rate = 0, graduation_rate = 0, tuition_in_st = 0, tuition_out_st = 0, avg_sat = 0, avg_cost_attendance = 0):
+    mascot_name = "NaN", acceptance_rate = 0, graduation_rate = 0, tuition_in_st = 0, tuition_out_st = 0, avg_sat = 0, avg_cost_attendance = 0, amenities_nearby = None, housing_nearby = None):
         self.univ_id = univ_id
         self.univ_name = univ_name
         self.alias = alias
@@ -59,11 +59,38 @@ class University(db.Model):
         self.avg_cost_attendance = avg_cost_attendance
         self.longitude = longitude
         self.latitude = latitude
+        self.amenities_nearby = amenities_nearby
+        self.housing_nearby = housing_nearby
+
+    @classmethod
+    def build_univ_from_args(cls, args):
+        columns = ('univ_id', 'univ_name', 'alias', 'rank', 'city', 'state',
+                'zip_code', 'school_url', 'locale', 'longitude', 'latitude', 
+                'carnegie_undergrad', 'num_undergrad', 'num_graduate', 'ownership_id',
+                'mascot_name', 'acceptance_rate', 'graduation_rate', 'tuition_in_st', 
+                'tuition_out_st', 'avg_sat', 'avg_cost_attendance', 'image_id', 'image')
+        kwargs = dict(zip(columns,args))
+        return cls(**kwargs)
+    
+    def set_amen_nearby(self, args):
+        self.amenities_nearby = []
+        for x, y in args:
+            amen = {'amenity_id': x, 'amenity_name': y}
+            self.amenities_nearby.append(amen)
+    
+    def set_housing_nearby(self, args):
+        self.housing_nearby = []
+        for x, y in args:
+            house = {'property_id': x, 'property_name': y}
+            self.housing_nearby.append(house)
+
+    def get_id(self):
+        return str(self.univ_id)
 
 class UniversityImages(db.Model):
     __tablename__ = "universityImages"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    univ_id = db.Column(db.String, nullable=False)
+    univ_id = db.Column(db.String, ForeignKey("universities.univ_id"))
     url = db.Column(db.String(256), nullable=False)
 
     def __init__(self, univ_id = 0, url = "NaN"):
