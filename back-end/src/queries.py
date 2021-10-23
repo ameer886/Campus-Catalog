@@ -9,7 +9,6 @@ def query_images(id):
     WHERE house.property_id = '{id}'
     '''
 
-
 def query_amen(id):
     return f'''
     WITH cte AS (
@@ -30,7 +29,6 @@ def query_amen(id):
     FROM cte
     WHERE cte.property_id = '{id}'
     '''
-
 
 def query_univ(id):
     return f'''
