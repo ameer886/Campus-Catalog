@@ -2,30 +2,31 @@ import React from 'react';
 
 import { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
 import PaginatedTable from '../../components/Pagination/PaginatedTable';
-import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
+import { ApartmentRowType } from '../../views/Apartments/ApartmentsPage';
 
 import './ApartmentTable.css';
 
 type ApartmentTableProps = {
-  rows: Array<ApartmentType>;
+  rows: Array<ApartmentRowType>;
 };
 
 const apartmentTableHeaders: ColumnDefinitionType<
-  ApartmentType,
-  keyof ApartmentType
+  ApartmentRowType,
+  keyof ApartmentRowType
 >[] = [
   {
-    key: 'propertyName',
+    key: 'property_name',
     header: 'Property Name',
-    sortFunc: (a, b) => a.propertyName.localeCompare(b.propertyName),
+    sortFunc: (a, b) =>
+      a.property_name.localeCompare(b.property_name),
   },
   {
-    key: 'transitScore',
+    key: 'transit_score',
     header: 'Transit Score',
     sortFunc: (a, b) => {
-      if (!a.transitScore) return -1;
-      if (!b.transitScore) return 1;
-      return a.transitScore - b.transitScore;
+      if (!a.transit_score) return -1;
+      if (!b.transit_score) return 1;
+      return a.transit_score - b.transit_score;
     },
   },
   {
@@ -36,19 +37,24 @@ const apartmentTableHeaders: ColumnDefinitionType<
       if (!b.rating) return 1;
       return a.rating - b.rating;
     },
+    printFunc: (a) => {
+      if (a.rating === 0) return 'N/A';
+      return a.rating.toString();
+    },
   },
   {
-    key: 'beds',
-    header: 'Bedrooms',
-    sortFunc: (a, b) => a.propertyName.localeCompare(b.propertyName),
+    key: 'max_rent',
+    header: 'Maximum Rent',
+    sortFunc: (a, b) => a.max_rent - b.max_rent,
+    printFunc: (a) => a.max_rent.toLocaleString('en-US'),
   },
   {
-    key: 'walkScore',
+    key: 'walk_score',
     header: 'Walk Score',
     sortFunc: (a, b) => {
-      if (!a.walkScore) return -1;
-      if (!b.walkScore) return 1;
-      return a.walkScore - b.walkScore;
+      if (!a.walk_score) return -1;
+      if (!b.walk_score) return 1;
+      return a.walk_score - b.walk_score;
     },
   },
 ];

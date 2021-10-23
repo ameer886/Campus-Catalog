@@ -17,7 +17,7 @@ import { PAGE_SIZE } from '../Pagination/PaginatedTable';
  */
 
 export interface RowWithIndex {
-  id: number;
+  id: number | string;
 }
 
 /*
@@ -86,7 +86,7 @@ const GenericRows = <T extends RowWithIndex, K extends keyof T>({
               // Special return: make a link on first column
               return (
                 <td key={`cell${index2}`}>
-                  <Nav.Link href={curPath + '/id=' + row.id}>
+                  <Nav.Link href={curPath + '/' + row.id}>
                     {cellStr}
                   </Nav.Link>
                 </td>

@@ -3,6 +3,7 @@ image: node:latest
 stages:
   - build
   - test
+  - deploy
 
 build:
   stage: build
@@ -19,3 +20,30 @@ test:
     - cd front-end
     - npm install --legacy-peer-deps
     - yarn test
+
+deploy_develop:
+  image: python:3.6-stretch
+  only:
+    variables:
+      - $CI_COMMIT_BRANCH == "back-end"
+  stage: deploy
+  before_script:
+    - pip install awsebcli --upgrade --user
+    - git checkout back-end
+  script:
+    - cd back-end
+    - /root/.local/bin/eb deploy environment-name
+
+deploy_production:
+  image: python:3.6-stretch
+  only:
+    variables:
+      - $CI_COMMIT_BRANCH == "main"
+  stage: deploy
+  before_script:
+    - pip install awsebcli --upgrade --user
+    - git checkout main
+  script:
+    - cd back-end
+    - /root/.local/bin/eb deploy environment-name
+

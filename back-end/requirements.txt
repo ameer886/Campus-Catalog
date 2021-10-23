@@ -1,14 +1,15 @@
+uWSGI==2.0.19.1
 flask
 flask-restful
 SQLAlchemy
 requests
 flask-cors
 flask-SQLAlchemy
+flask_sqlalchemy
 flask-marshmallow
 flask-restless
 marshmallow-sqlalchemy
 python-dotenv
-psycopg2
 gunicorn
 black
 selenium
@@ -16,3 +17,4 @@ yelpapi
 googlemaps
 us
 apify-client
+psycopg2-binary
