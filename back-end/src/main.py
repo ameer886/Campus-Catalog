@@ -71,7 +71,7 @@ class HousingSchema(ma.Schema):
                 'state': property.state,
                 'zipcode': property.zip_code}
 
-exclude_columns = ('address', 'city', 'state', 'min_sqft', 'max_sqft')
+exclude_columns = ('address', 'city', 'state', 'min_sqft', 'max_sqft', 'neighborhood')
 single_housing_schema = HousingSchema(exclude=exclude_columns)
 
 # table view 
@@ -108,3 +108,4 @@ def get_housing_by_id(id):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+    
