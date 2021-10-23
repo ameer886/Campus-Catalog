@@ -1,5 +1,6 @@
 import React from 'react';
 import './ApartmentsPage.css';
+import axios from 'axios';
 
 import ApartmentTable from '../../components/ApartmentTable/ApartmentTable';
 
@@ -34,6 +35,12 @@ const ApartmentsPage: React.FunctionComponent = () => {
   for (let i = 0; i < 200; i++) {
     rows.push(apartment1);
   }
+
+  const client = axios.create({
+    baseURL:
+      process.env.REACT_APP_API_URL ?? 'https://api.campuscatalog.me',
+  });
+  client.get('/housing').then(console.log);
 
   return (
     <div className="Apartments">

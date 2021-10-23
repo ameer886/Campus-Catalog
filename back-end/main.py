@@ -2,6 +2,7 @@ import flask
 import json
 from flask import Flask, jsonify, request
 from flask.templating import render_template
+from flask_cors import CORS
 from db import db_init
 from models import University, Housing, Amenities, UniversityImages
 from flask_marshmallow import Marshmallow
@@ -9,6 +10,7 @@ from marshmallow import fields, validate
 import queries
 
 app = Flask(__name__)
+CORS(app)
 db = db_init(app)
 ma = Marshmallow(app)
 
