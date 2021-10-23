@@ -15,6 +15,84 @@ ma = Marshmallow(app)
 @app.route('/')
 def home():
     return '<h1> hello world </h1>'
+    
+class AmenitiesImagesSchema(ma.Schema):
+    id = fields.Int(required=True)
+    amen_id = fields.Int(required=True)
+    url = fields.Str(required=True)
+
+
+class AmenitiesReviewsSchema(ma.Schema):
+    id = fields.Int(required=True)
+    amen_id = fields.Int(required=True)
+    review_id = fields.Str(required=True)
+    user_id = fields.Str(required=True)
+    user_name = fields.Str(required=True)
+
+
+class AmenitiesCategoriesSchema(ma.Schema):
+    id = fields.Int(required=True)
+    amen_id = fields.Int(required=True)
+    category = fields.Str(required=True)
+
+
+class AmenitiesSchema(ma.Schema):
+    amen_id = fields.Int(required=True)
+    amen_name = fields.Str(required=True)
+    amen_alias = fields.Str(required=True)
+    yelp_id = fields.Str(required=True)
+    rating = fields.Float(required=False)
+    num_review = fields.Int(required=False)
+    address = fields.Str(required=True)
+    city = fields.Str(required=True)
+    state = fields.Str(required=True)
+    zip_code = fields.Str(required=True)
+    longitude = fields.Float(required=True)
+    latitude = fields.Float(required=True)
+    pricing = fields.Method("format_pricing")
+    deliver = fields.Boolean(required=False)
+    takeout = fields.Boolean(required=False)
+    hours = fields.Method("format_hours")
+    images = fields.List(fields.Nested(AmenitiesImagesSchema(only=["url"])))
+    categories = fields.List(
+        fields.Nested(AmenitiesCategoriesSchema(only=["category"]))
+    )
+    reviews = fields.List(
+        fields.Nested(
+            AmenitiesReviewsSchema(only=["review_id", "user_id", "user_name"])
+        )
+    )
+    housing_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
+    universities_nearby = fields.List(
+        fields.Dict(keys=fields.Str(), values=fields.Str())
+    )
+
+    def format_pricing(self, amenity):
+        if amenity.pricing == "NaN":
+            amenity.pricing = "N/A"
+        return amenity.pricing
+
+    def format_hours(self, amenity):
+        if amenity.hours == "NaN":
+            amenity.hours = "N/A"
+        return amenity.hours
+
+
+amenities_schema = AmenitiesSchema()
+all_amenities_schema = AmenitiesSchema(
+    only=[
+        "amen_id",
+        "amen_name",
+        "pricing",
+        "city",
+        "state",
+        "num_review",
+        "deliver",
+        "takeout",
+    ],
+    many=True,
+)
+
 
 class HousingSchema(ma.Schema):
 
@@ -136,6 +214,7 @@ def amenities_id(amen_id):
     amenity.set_housing_nearby(housing)
     amenity.set_univ_nearby(universities)
     return amenities_schema.jsonify(amenity)
+
 class UniversitySchema(ma.Schema):
 
     univ_id = fields.Str(required=True)
@@ -162,7 +241,7 @@ class UniversitySchema(ma.Schema):
     avg_sat = fields.Float(missing=0.0)
     avg_cost_attendance = fields.Float(missing=0.0)
     amenities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
-    universities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
+    housing_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     image = fields.Url()
 
     def map_ownership (self, univ):
