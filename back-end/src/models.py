@@ -221,9 +221,8 @@ class HousingImages(db.Model):
         self.property_type = property_type
         self.image_url = image_url
 
-
 class Amenities(db.Model):
-    __tablename__ = "amenities"
+    __tablename__ = 'amenities'
     amen_id = db.Column(db.Integer, unique=True, primary_key=True)
     amen_name = db.Column(db.String(128), nullable=False)
     amen_alias = db.Column(db.String(128), nullable=False)
@@ -240,40 +239,15 @@ class Amenities(db.Model):
     deliver = db.Column(db.Boolean, nullable=False)
     takeout = db.Column(db.Boolean, nullable=False)
     hours = db.Column(db.String(512), nullable=False)
-    images = db.relationship(
-        "AmenitiesImages", cascade="all, delete-orphan", passive_deletes=True
-    )
-    categories = db.relationship(
-        "AmenitiesCategories", cascade="all, delete-orphan", passive_deletes=True
-    )
-    reviews = db.relationship(
-        "AmenitiesReviews", cascade="all, delete-orphan", passive_deletes=True
-    )
+    images = db.relationship('AmenitiesImages', cascade='all, delete-orphan', passive_deletes=True)
+    categories = db.relationship('AmenitiesCategories', cascade='all, delete-orphan', passive_deletes=True)
+    reviews = db.relationship('AmenitiesReviews', cascade='all, delete-orphan', passive_deletes=True)
 
     def __repr__(self):
-        return "<Amenity %r>" % self.amen_name
+        return '<Amenity %r>' %self.amen_name
 
-    def __init__(
-        self,
-        amen_id=0,
-        amen_name="NaN",
-        amen_alias="NaN",
-        yelp_id="NaN",
-        rating=0,
-        num_review=0,
-        address="NaN",
-        city="NaN",
-        state="N",
-        zip_code="NaN",
-        longitude=0,
-        latitude=0,
-        pricing="NaN",
-        deliver=None,
-        takeout=None,
-        hours="NaN",
-        housing_nearby=None,
-        universities_nearby=None,
-    ):
+    def __init__(self, amen_id = 0, amen_name = "NaN", amen_alias = "NaN", yelp_id = "NaN", rating = 0, num_review = 0, address = "NaN", city = "NaN", state = "N", zip_code = "NaN", longitude = 0,
+    latitude = 0, pricing = "NaN", deliver = None, takeout = None, hours = "NaN"):
         self.amen_id = amen_id
         self.amen_name = amen_name
         self.amen_alias = amen_alias
@@ -290,21 +264,6 @@ class Amenities(db.Model):
         self.deliver = deliver
         self.takeout = takeout
         self.hours = hours
-        self.housing_nearby = housing_nearby
-        self.universities_nearby = universities_nearby
-
-    def set_housing_nearby(self, args):
-        self.housing_nearby = []
-        for x, y in args:
-            amen = {"property_id": x, "property_name": y}
-            self.housing_nearby.append(amen)
-
-    def set_univ_nearby(self, args):
-        self.universities_nearby = []
-        for x, y in args:
-            univ = {"university_id": x, "university_name": y}
-            self.universities_nearby.append(univ)
-
 
 class AmenitiesImages(db.Model):
     __tablename__ = "amenitiesImages"
@@ -312,11 +271,10 @@ class AmenitiesImages(db.Model):
     amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
     url = db.Column(db.String(256), nullable=False)
 
-    def __init__(self, id=0, amen_id=0, url="NaN"):
+    def __init__(self, id = 0, amen_id = 0, url = "NaN"):
         self.id = id
         self.amen_id = amen_id
         self.url = url
-
 
 class AmenitiesCategories(db.Model):
     __tablename__ = "amenitiesCategories"
@@ -324,11 +282,10 @@ class AmenitiesCategories(db.Model):
     amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
     category = db.Column(db.String(128), nullable=False)
 
-    def __init__(self, id=0, amen_id=0, category="NaN"):
+    def __init__(self, id = 0, amen_id = 0, category = "NaN"):
         self.id = id
         self.amen_id = amen_id
         self.category = category
-
 
 class AmenitiesReviews(db.Model):
     __tablename__ = "amenitiesReviews"
@@ -338,11 +295,10 @@ class AmenitiesReviews(db.Model):
     user_id = db.Column(db.String(128), nullable=False)
     user_name = db.Column(db.String(128), nullable=False)
 
-    def __init__(
-        self, id=0, amen_id=0, review_id="NaN", user_id="NaN", user_name="NaN"
-    ):
+    def __init__(self, id = 0, amen_id = 0, review_id = "NaN", user_id = "NaN", user_name = "NaN"):
         self.id = id
         self.amen_id = amen_id
         self.review_id = review_id
         self.user_id = user_id
         self.user_name = user_name
+  
