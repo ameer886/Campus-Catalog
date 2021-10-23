@@ -103,7 +103,7 @@ class Housing(db.Model):
     def __repr__(self):
         return '<Housing %r>' %self.property_name
 
-    def __init__(self, property_id = '', property_name = "NaN", property_type = "NaN", address = "NaN", neighborhood = "NaN", city = "NaN", state = "N", zip_code = "NaN", 
+    def __init__(self, property_id = '', property_name = "NaN", property_type = "NaN", address = "NaN", neighborhood = "NaN", city = "NaN", state = "N", zip_code = "NaN", lat = 0.0, lon = 0.0,
     rating = 0.0, min_rent = 0, max_rent = None, min_bed = None, max_bed = None, min_bath = None, max_bath = None, min_sqft = None, max_sqft = None, walk_score = 0, transit_score = 0,
     dog_allow = False, cat_allow = False, max_num_dog = None, max_num_cat = None, dog_weight = None, cat_weight = None, building_amenities = "NaN", util_included = "NaN",
     amenities_nearby = None, universities_nearby = None, image_id = None, images = None):
@@ -118,6 +118,8 @@ class Housing(db.Model):
         self.rating = rating
         self.walk_score = walk_score
         self.transit_score = transit_score
+        self.lat = lat
+        self.lon = lon
         self.min_rent = min_rent
         self.max_rent = max_rent
         self.min_bed = min_bed
@@ -152,7 +154,7 @@ class Housing(db.Model):
         columns = ('property_id', 'property_name', 'property_type', 'address', 'neighborhood', 'city', 'state',
                 'zip_code', 'min_rent', 'max_rent', 'min_bed', 'max_bed', 'min_bath', 'max_bath', 'min_sqft',
                 'max_sqft', 'dog_allow', 'cat_allow', 'max_num_dog', 'max_num_cat', 'dog_weight', 'cat_weight',
-                'rating', 'building_amenities', 'walk_score', 'transit_score', 'util_included', 'image_id', 'images')
+                'rating', 'building_amenities', 'walk_score', 'transit_score', 'util_included', 'lat', 'lon', 'image_id', 'images')
         kwargs = dict(zip(columns,args))
         kwargs['util_included'] = kwargs['util_included'].split(',') if kwargs['util_included'] is not None else None
         kwargs['building_amenities'] = kwargs['building_amenities'].split(',') if kwargs['building_amenities'] is not None else None

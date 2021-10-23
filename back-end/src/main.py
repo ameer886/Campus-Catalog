@@ -26,6 +26,8 @@ class HousingSchema(ma.Schema):
     neighborhood = fields.Str(required=True)
     city = fields.Str(required=True)
     state = fields.Str(required=True)
+    lat = fields.Decimal(required=True)
+    lon = fields.Decimal(required=True)
     rating = fields.Float(missing=0.0)
     walk_score = fields.Int()
     transit_score = fields.Int()
@@ -69,9 +71,11 @@ class HousingSchema(ma.Schema):
                 'neighborhood': property.neighborhood,
                 'city': property.city,
                 'state': property.state,
-                'zipcode': property.zip_code}
+                'zipcode': property.zip_code,
+                'lat': property.lat,
+                'lon': property.lon}
 
-exclude_columns = ('address', 'city', 'state', 'min_sqft', 'max_sqft', 'neighborhood')
+exclude_columns = ('address', 'city', 'state', 'min_sqft', 'max_sqft', 'neighborhood', 'lat', 'lon')
 single_housing_schema = HousingSchema(exclude=exclude_columns)
 
 # table view 
