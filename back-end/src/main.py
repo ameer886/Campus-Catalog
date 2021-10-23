@@ -118,16 +118,16 @@ class UniversitySchema(ma.Schema):
     location = fields.Method('format_location')
     city = fields.Str(required=True)
     state = fields.Str(required=True)
-    rank = fields.Float(missing=0.0)
+    rank = fields.Int()
     zip_code = fields.Str()
     school_url = fields.Str()
-    locale = fields.Int()
+    locale = fields.Method('map_locale')
     longitude = fields.Float(missing=0.0)
     latitude = fields.Float(missing=0.0)
-    carnegie_undergrad = fields.Int()
+    carnegie_undergrad = fields.Method('map_carnegie')
     num_undergrad = fields.Int()
     num_graduate = fields.Int()
-    ownership_id = fields.Str()
+    ownership_id = fields.Method('map_ownership')
     mascot_name = fields.Str()
     acceptance_rate = fields.Float(missing=0.0)
     graduation_rate = fields.Float(missing=0.0)
@@ -135,20 +135,101 @@ class UniversitySchema(ma.Schema):
     tuition_out_st = fields.Int()
     avg_sat = fields.Float(missing=0.0)
     avg_cost_attendance = fields.Float(missing=0.0)
+    amenities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
+    universities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
+    image = fields.Url()
 
+    def map_ownership (self, univ):
+        num = univ.ownership_id
+        if num == 1:
+            return "Public"
+        elif num == 2:
+            return "Private Non-Profit"
+        elif num == 3:
+            return "Private For-Profit"
+        else:
+            return "Unknown"
 
-    def format_location(self, property):
-        return {'city': property.city,
-                'state': property.state,
-                'zipcode': property.zip_code}
+    def map_carnegie (self, univ):
+        num = univ.carnegie_undergrad
+        if num == -2:
+            return
+        if num == 0:
+            return "Not Classified"
+        if num == 1:
+            return "Two-year, higher part time"
+        if num == 2:
+            return "Two-year, mixed part/full-time"
+        if num == 3:
+            return "Two-year, medium full-time"
+        if num == 4:
+            return "Two-year, higher full-time"
+        if num == 5:
+            return "Four-year, higher part-time"
+        if num == 6:
+            return "Four year, medium full-time, inclusive, lower transfer-in"
+        if num == 7:
+            return  "Four-year, medium full-time, inclusive, higher transfer-in"
+        if num == 8:
+            return "Four-year, medium full-time, selective, lower transfer-in"
+        if num == 9:
+            return "Four-year, medium full-time, selective, higher transfer-in"
+        if num == 10:
+            return "Four year, full-time, inclusive, lower transfer-in"
+        if num == 11:
+            return  "Four-year, full-time, inclusive, higher transfer-in"
+        if num == 12:
+            return "Four-year, full-time, selective, lower transfer-in"
+        if num == 13:
+            return "Four-year, full-time, selective, higher transfer-in"
+        if num == 14:
+            return "Four-year, full-time, more selective, lower transfer-in"
+        if num == 15:
+            return "Four year, full-time, more selective, higher transfer-in"
 
-exclude_columns = ('city', 'state', 'mascot_name', 'carnegie_undergrad')
+    def map_locale (self, univ):
+        num = univ.locale if univ.locale is not None else 0
+        dist = num % 10
+        size = num // 10
+        ret = ''
+        if size == 1:
+            ret += "City: "
+        elif size == 2:
+            ret += "Suburb: "
+        elif size == 3:
+            ret += "Town: "
+        elif size == 4:
+            ret += "Rural: "
+
+        if dist == 1:
+            if size >= 3:
+                ret += "Fringe"
+            else:
+                ret += "Large"
+        elif dist == 2:
+            if size >= 3:
+                ret += "Distant"
+            else:
+                ret += "Midsize"
+        elif dist == 3:
+            if size >= 3:
+                ret += "Remote"
+            else:
+                ret += "Small"
+        return ret
+
+    def format_location(self, university):
+        return {'city': university.city,
+                'state': university.state,
+                'zipcode': university.zip_code}
+
+exclude_columns = ('city', 'state', 'mascot_name')
 single_univ_schema = UniversitySchema(exclude=exclude_columns)
 
 univ_columns = ('univ_id', 'univ_name', 'alias', 'rank', 'city', 'state',
                 'zip_code', 'school_url', 'locale', 'carnegie_undergrad', 'num_undergrad', 'num_graduate', 'ownership_id',
                 'mascot_name', 'acceptance_rate', 'graduation_rate', 'tuition_in_st', 'tuition_out_st', 'avg_sat', 'avg_cost_attendance',
-                'longitude', 'latitude')
+                'longitude', 'latitude', 'image')
 all_univ_schema = UniversitySchema(only=univ_columns, many=True)
 
 @app.route('/universities', methods=['GET'])
@@ -162,7 +243,7 @@ def get_all_universities():
 def get_univ_by_id(id):
     sql = queries.query_univ_images(id)
     result = db.session.execute(sql)
-    univ = University.build_obj_from_args(*result)
+    univ = University.build_univ_from_args(*result)
     amen_sql = queries.query_univ_amen(id)
     amen_nearby = db.session.execute(amen_sql)
     hous_sql = queries.query_univ_housing(id)
