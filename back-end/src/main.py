@@ -3,7 +3,7 @@ import json
 from flask import Flask, jsonify, request
 from flask.templating import render_template
 from db import db_init
-from models import University, Housing, Amenities
+from models import University, Housing, Amenities, UniversityImages
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, validate
 import queries
@@ -304,18 +304,15 @@ class UniversitySchema(ma.Schema):
 exclude_columns = ('city', 'state', 'mascot_name')
 single_univ_schema = UniversitySchema(exclude=exclude_columns)
 
-univ_columns = ('univ_id', 'univ_name', 'alias', 'rank', 'city', 'state',
-                'zip_code', 'school_url', 'locale', 'carnegie_undergrad', 'num_undergrad', 'num_graduate', 'ownership_id',
-                'mascot_name', 'acceptance_rate', 'graduation_rate', 'tuition_in_st', 'tuition_out_st', 'avg_sat', 'avg_cost_attendance',
-                'longitude', 'latitude', 'image')
+univ_columns = ('univ_id', 'univ_name', 'rank', 'city', 'state', 'ownership_id',
+                'acceptance_rate', 'tuition_in_st', 'tuition_out_st', 'avg_cost_attendance', 'image')
 all_univ_schema = UniversitySchema(only=univ_columns, many=True)
 
 @app.route('/universities', methods=['GET'])
 def get_all_universities():
     all_univ = University.query.all()
     result = all_univ_schema.dump(all_univ)
-    return jsonify({'properties': result})
-
+    return jsonify({'universities': result})
 
 @app.route('/universities/<string:id>', methods=['GET'])
 def get_univ_by_id(id):
@@ -342,7 +339,7 @@ def get_univ_by_id(id):
 @app.route("/amenities", methods=["GET"])
 def amenities():
     amenities = Amenities.query.all()
-    return all_amenities_schema.jsonify(amenities)
+    return jsonify({'amenities': all_amenities_schema.dump(amenities)})
 
 
 @app.route("/amenities/<int:amen_id>", methods=["GET"])

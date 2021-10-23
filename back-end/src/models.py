@@ -72,6 +72,7 @@ class University(db.Model):
                 'mascot_name', 'acceptance_rate', 'graduation_rate', 'tuition_in_st', 
                 'tuition_out_st', 'avg_sat', 'avg_cost_attendance', 'image_id', 'image')
         kwargs = dict(zip(columns,args))
+        
         return cls(**kwargs)
     
     def set_amen_nearby(self, args):
@@ -92,7 +93,7 @@ class University(db.Model):
 class UniversityImages(db.Model):
     __tablename__ = "universityImages"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    univ_id = db.Column(db.String, ForeignKey("universities.univ_id"))
+    univ_id = db.Column(db.String, ForeignKey(University.univ_id))
     url = db.Column(db.String(256), nullable=False)
 
     def __init__(self, univ_id = 0, url = "NaN"):
