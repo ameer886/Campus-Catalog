@@ -1,4 +1,3 @@
-Flask==1.1.2
 uWSGI==2.0.19.1
 flask
 flask-restful
@@ -6,6 +5,7 @@ SQLAlchemy
 requests
 flask-cors
 flask-SQLAlchemy
+flask_sqlalchemy
 flask-marshmallow
 flask-restless
 marshmallow-sqlalchemy
@@ -17,3 +17,4 @@ yelpapi
 googlemaps
 us
 apify-client
+psycopg2-binary
