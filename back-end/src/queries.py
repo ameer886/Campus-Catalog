@@ -9,6 +9,7 @@ def query_images(id):
     WHERE house.property_id = '{id}'
     '''
 
+
 def query_amen(id):
     return f'''
     WITH cte AS (
@@ -29,6 +30,7 @@ def query_amen(id):
     FROM cte
     WHERE cte.property_id = '{id}'
     '''
+
 
 def query_univ(id):
     return f'''
@@ -91,4 +93,38 @@ def query_univ_housing(id):
     SELECT property_id, property_name
     FROM cte
     WHERE cte.univ_id = '{id}'
+    '''
+
+
+def query_univ_from_amen(id):
+    return f'''
+    WITH cte AS (
+        SELECT amen_id, amen_name, univ.univ_id, univ.univ_name FROM \"amenities\" amenity
+        LEFT JOIN(
+            SELECT univ_id, univ_name, city, state
+            FROM \"university\" u
+            GROUP BY univ_id, city, state
+        ) AS univ
+        ON univ.city = amenity.city AND univ.state = amenity.state
+    )
+    SELECT univ_id, univ_name
+    FROM cte
+    WHERE cte.amen_id = '{id}'
+    '''
+
+
+def query_housing_from_amen(id):
+    return f'''
+    WITH cte AS (
+        SELECT amen_id, amen_name, house.property_id, house.property_name FROM amenities amenity
+        LEFT JOIN(
+            SELECT property_id, property_name, city, state
+            FROM housing h
+            GROUP BY property_id, city, property_name, state
+        ) AS house
+        ON house.city = amenity.city AND house.state = amenity.state
+    )
+    SELECT property_id, property_name
+    FROM cte
+    WHERE cte.amen_id = '{id}'
     '''
