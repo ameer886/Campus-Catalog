@@ -30,10 +30,15 @@ export type ApartmentType = {
  * Should contain a list of apartments in a sortable table/grid
  */
 const ApartmentsPage: React.FunctionComponent = () => {
+  const rows = [apartment1, apartment2, apartment3];
+  for (let i = 0; i < 200; i++) {
+    rows.push(apartment1);
+  }
+
   return (
     <div className="Apartments">
       <h1>Apartments</h1>
-      <ApartmentTable rows={[apartment1, apartment2, apartment3]} />
+      <ApartmentTable rows={rows} />
     </div>
   );
 };

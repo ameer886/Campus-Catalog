@@ -1,8 +1,7 @@
 import React from 'react';
 
-import GenericTable, {
-  ColumnDefinitionType,
-} from '../../components/GenericTable/GenericTable';
+import { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
+import PaginatedTable from '../../components/Pagination/PaginatedTable';
 import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
 
 import './ApartmentTable.css';
@@ -58,7 +57,7 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableProps> =
   ({ rows }: ApartmentTableProps) => {
     return (
       <div className="ApartmentTable">
-        <GenericTable
+        <PaginatedTable
           columnDefinitions={apartmentTableHeaders}
           data={rows}
         />
