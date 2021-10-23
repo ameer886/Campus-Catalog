@@ -264,6 +264,18 @@ class Amenities(db.Model):
         self.deliver = deliver
         self.takeout = takeout
         self.hours = hours
+        
+    def set_housing_nearby(self, args):
+        self.housing_nearby = []
+        for x, y in args:
+            amen = {"property_id": x, "property_name": y}
+            self.housing_nearby.append(amen)
+
+    def set_univ_nearby(self, args):
+        self.universities_nearby = []
+        for x, y in args:
+            univ = {"university_id": x, "university_name": y}
+            self.universities_nearby.append(univ)
 
 class AmenitiesImages(db.Model):
     __tablename__ = "amenitiesImages"

@@ -58,42 +58,38 @@ def query_univ_images(id):
     '''    
 
 def query_univ_from_amen(id):
-    return f'''
+    return f"""
     WITH cte AS (
-        SELECT univ_id, univ_name, amenity.amen_id, amenity.amen_name FROM "university" univ
+        SELECT amen_id, amen_name, univ.univ_id, univ.univ_name FROM \"amenities\" amenity
         LEFT JOIN(
-            SELECT amen_id, amen_name, city, state, categories
-            FROM "amenities" a
-            LEFT JOIN (
-                SELECT amen_id AS amenity, STRING_AGG(category, '@@@') AS categories
-                FROM "amenitiesCategories"
-                GROUP BY amen_id
-            ) AS c
-            ON a.amen_id = c.amenity
-        ) AS amenity
+            SELECT univ_id, univ_name, city, state
+            FROM \"university\" u
+            GROUP BY univ_id, city, state
+        ) AS univ
         ON univ.city = amenity.city AND univ.state = amenity.state
     )
-    SELECT Distinct(amen_id), amen_name
+    SELECT univ_id, univ_name
     FROM cte
     WHERE cte.amen_id = '{id}'
-    '''
+    """
 
 
 def query_housing_from_amen(id):
-    return f'''
+    return f"""
     WITH cte AS (
-        SELECT univ_id, univ_name, house.property_id, house.property_name FROM "university" univ
+        SELECT amen_id, amen_name, house.property_id, house.property_name FROM amenities amenity
         LEFT JOIN(
             SELECT property_id, property_name, city, state
-            FROM "housing" h
-            GROUP BY property_id, city, state, property_name
+            FROM housing h
+            GROUP BY property_id, city, property_name, state
         ) AS house
-        ON house.city = univ.city AND house.state = univ.state
+        ON house.city = amenity.city AND house.state = amenity.state
     )
     SELECT property_id, property_name
     FROM cte
     WHERE cte.amen_id = '{id}'
-    '''
+    """
+
 
 def query_univ_images(id):
     return f'''
