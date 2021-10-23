@@ -17,7 +17,7 @@ import { PAGE_SIZE } from '../Pagination/PaginatedTable';
  */
 
 export interface RowWithIndex {
-  id: number;
+  id: number | string;
 }
 
 /*

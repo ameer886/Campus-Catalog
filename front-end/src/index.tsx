@@ -9,7 +9,7 @@ import {
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Navbar from './components/OurNavbar/OurNavbar'
+import Navbar from './components/OurNavbar/OurNavbar';
 import CampCatSplashPage from './views/SplashPage/CampCatSplashPage';
 import AboutPage from './views/About/AboutPage';
 import ApartmentsPage from './views/Apartments/ApartmentsPage';
@@ -18,8 +18,6 @@ import UniversitiesPage from './views/Universities/UniversitiesPage';
 import InvalidPage from './views/Invalid/InvalidPage';
 
 import Apartment1 from './views/HardInstances/Apartment1';
-import Apartment2 from './views/HardInstances/Apartment2';
-import Apartment3 from './views/HardInstances/Apartment3';
 import Entertainment1 from './views/HardInstances/Entertainment1';
 import Entertainment2 from './views/HardInstances/Entertainment2';
 import Entertainment3 from './views/HardInstances/Entertainment3';
@@ -60,9 +58,11 @@ ReactDOM.render(
         />
 
         {/* Terrible hard coded instances */}
-        <Route path="/apartments/id=1" exact component={Apartment1} />
-        <Route path="/apartments/id=2" exact component={Apartment2} />
-        <Route path="/apartments/id=3" exact component={Apartment3} />
+        <Route
+          path="/apartments/id=35erbsf"
+          exact
+          component={Apartment1}
+        />
         <Route
           path="/entertainments/id=1"
           exact

@@ -2,27 +2,45 @@ import React from 'react';
 import './ApartmentsPage.css';
 import axios from 'axios';
 
+import type {
+  AmenityKey,
+  MinMaxPair,
+  Address,
+  UniversityKey,
+} from '../../universalTypes';
+
 import ApartmentTable from '../../components/ApartmentTable/ApartmentTable';
 
 import { apartment1 } from '../HardInstances/Apartment1';
-import { apartment2 } from '../HardInstances/Apartment2';
-import { apartment3 } from '../HardInstances/Apartment3';
 
 export type ApartmentType = {
-  id: number;
-  propertyName: string;
-  location: Array<string>;
-  minRent?: number;
-  maxRent?: number;
-  beds?: string;
-  baths?: string;
-  sqft?: string;
-  petFriendly?: 'true' | 'false';
-  schools: Array<string>;
-  amenities?: Array<string>;
-  rating?: number;
-  walkScore?: number;
-  transitScore?: number;
+  bath: MinMaxPair;
+  bed: MinMaxPair;
+  building_amenities: Array<string>;
+  cat_allow: boolean;
+  cat_weight?: number | null;
+  dog_allow: boolean;
+  dog_weight?: number | null;
+  location: Address;
+  images: Array<string>;
+  max_num_cat: number;
+  max_num_dog: number;
+  max_rent: number;
+  min_rent: number;
+  neighborhood: string;
+  property_id: string;
+  property_name: string;
+  property_type: string;
+  rating: number;
+  sqft: MinMaxPair;
+  transit_score: number;
+  util_included?: boolean | null;
+  walk_score: number;
+
+  amenities_nearby: Array<AmenityKey>;
+  universities_nearby: Array<UniversityKey>;
+
+  id: string;
 };
 
 /*
@@ -31,7 +49,7 @@ export type ApartmentType = {
  * Should contain a list of apartments in a sortable table/grid
  */
 const ApartmentsPage: React.FunctionComponent = () => {
-  const rows = [apartment1, apartment2, apartment3];
+  const rows = [];
   for (let i = 0; i < 200; i++) {
     rows.push(apartment1);
   }
