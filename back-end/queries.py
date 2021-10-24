@@ -1,5 +1,5 @@
 def query_images(id):
-    return f'''
+    return f"""
     SELECT * FROM "housing" house
     LEFT JOIN (
         SELECT property_id AS image_id, STRING_AGG(image_url, \'@@@\') AS images 
@@ -7,10 +7,11 @@ def query_images(id):
         GROUP BY property_id) AS image
     ON house.property_id = image.image_id
     WHERE house.property_id = '{id}'
-    '''
+    """
+
 
 def query_amen(id):
-    return f'''
+    return f"""
     WITH cte AS (
         SELECT property_id, property_name, amenity.amen_id, amenity.amen_name FROM "housing" house
         LEFT JOIN(
@@ -28,10 +29,11 @@ def query_amen(id):
     SELECT Distinct(amen_id), amen_name
     FROM cte
     WHERE cte.property_id = '{id}'
-    '''
+    """
+
 
 def query_univ(id):
-    return f'''
+    return f"""
     WITH cte AS (
         SELECT property_id, property_name, univ.univ_id, univ.univ_name FROM \"housing\" house
         LEFT JOIN(
@@ -44,10 +46,11 @@ def query_univ(id):
     SELECT univ_id, univ_name
     FROM cte
     WHERE cte.property_id = '{id}'
-    '''
+    """
+
 
 def query_univ_images(id):
-    return f'''
+    return f"""
     SELECT * FROM "university" univ
     LEFT JOIN (
         SELECT univ_id AS image_id, url AS image
@@ -55,7 +58,8 @@ def query_univ_images(id):
         GROUP BY univ_id, url) AS image
     ON univ.univ_id = image.image_id
     WHERE univ.univ_id = '{id}'
-    '''    
+    """
+
 
 def query_univ_from_amen(id):
     return f"""
@@ -92,7 +96,7 @@ def query_housing_from_amen(id):
 
 
 def query_univ_images(id):
-    return f'''
+    return f"""
     SELECT * FROM "university" univ
     LEFT JOIN (
         SELECT univ_id AS image_id, url AS image
@@ -100,10 +104,11 @@ def query_univ_images(id):
         GROUP BY univ_id, url) AS image
     ON univ.univ_id = image.image_id
     WHERE univ.univ_id = '{id}'
-    '''    
+    """
+
 
 def query_univ_amen(id):
-    return f'''
+    return f"""
     WITH cte AS (
         SELECT univ_id, univ_name, amenity.amen_id, amenity.amen_name FROM "university" univ
         LEFT JOIN(
@@ -121,9 +126,11 @@ def query_univ_amen(id):
     SELECT Distinct(amen_id), amen_name
     FROM cte
     WHERE cte.univ_id = '{id}'
-    '''
+    """
+
+
 def query_univ_housing(id):
-    return f'''
+    return f"""
     WITH cte AS (
         SELECT univ_id, univ_name, house.property_id, house.property_name FROM "university" univ
         LEFT JOIN(
@@ -136,4 +143,4 @@ def query_univ_housing(id):
     SELECT property_id, property_name
     FROM cte
     WHERE cte.univ_id = '{id}'
-    '''
+    """
