@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import './EntertainmentsPage.css';
 
 import type {
@@ -6,6 +7,8 @@ import type {
   UniversityKey,
 } from '../../universalTypes';
 import EntertainmentTable from '../../components/EntertainmentTable/EntertainmentTable';
+import { getAPI } from '../../APIClient';
+import { IntentionallyAny } from '../../utilities';
 
 export type EntertainmentType = {
   address: string;
@@ -54,10 +57,41 @@ export type EntertainmentRowType = {
  * Should contain a list of entertainments in a sortable table/grid
  */
 const EntertainmentsPage: React.FunctionComponent = () => {
+  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<Array<EntertainmentRowType>>([]);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({ model: 'amenities' });
+        const responseRows = data.amenities.map(
+          (amenity: IntentionallyAny) => {
+            return {
+              id: amenity.amen_id,
+              ...amenity,
+            };
+          },
+        );
+        setRows(responseRows);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, []);
+
+  if (loading)
+    return (
+      <div>
+        <p>Loading responses, please be patient.</p>
+      </div>
+    );
+
   return (
     <div className="Entertainment">
       <h1>Amenities</h1>
-      <EntertainmentTable rows={[]} />
+      <EntertainmentTable rows={rows} />
     </div>
   );
 };
