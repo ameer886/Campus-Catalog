@@ -2,54 +2,46 @@ import React from 'react';
 
 import { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
 import PaginatedTable from '../../components/Pagination/PaginatedTable';
-import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
+import { EntertainmentRowType } from '../../views/Entertainments/EntertainmentsPage';
 
 import './EntertainmentTable.css';
 
 type EntertainmentTableProps = {
-  rows: Array<EntertainmentType>;
+  rows: Array<EntertainmentRowType>;
 };
 
 const entertainmentTableHeaders: ColumnDefinitionType<
-  EntertainmentType,
-  keyof EntertainmentType
+  EntertainmentRowType,
+  keyof EntertainmentRowType
 >[] = [
   {
-    key: 'businessName',
-    header: 'Business Name',
-    sortFunc: (a, b) => a.businessName.localeCompare(b.businessName),
+    key: 'amen_name',
+    header: 'Amenity Name',
+    sortFunc: (a, b) => a.amen_name.localeCompare(b.amen_name),
   },
   {
-    key: 'category',
-    header: 'Category',
-    sortFunc: (a, b) => a.category.localeCompare(b.category),
+    key: 'city',
+    header: 'City',
+    sortFunc: (a, b) => a.city.localeCompare(b.city),
   },
   {
-    key: 'rating',
-    header: 'Rating',
+    key: 'state',
+    header: 'State',
+    sortFunc: (a, b) => a.state.localeCompare(b.state),
+  },
+  {
+    key: 'num_review',
+    header: 'Reviews',
     sortFunc: (a, b) => {
-      if (!a.rating) return 1;
-      if (!b.rating) return -1;
-      return a.rating - b.rating;
+      if (!a.num_review) return 1;
+      if (!b.num_review) return -1;
+      return a.num_review - b.num_review;
     },
   },
   {
-    key: 'price',
+    key: 'pricing',
     header: 'Price',
-    sortFunc: (a, b) => a.price.localeCompare(b.price),
-  },
-  {
-    key: 'ageRestriction',
-    header: 'Age Restriction',
-    sortFunc: (a, b) => {
-      if (!a.ageRestriction) return 1;
-      if (!b.ageRestriction) return -1;
-      return a.ageRestriction - b.ageRestriction;
-    },
-    printFunc: (a) => {
-      if (a.ageRestriction === 0) return 'None';
-      else return a.ageRestriction.toString();
-    },
+    sortFunc: (a, b) => a.pricing.localeCompare(b.pricing),
   },
 ];
 

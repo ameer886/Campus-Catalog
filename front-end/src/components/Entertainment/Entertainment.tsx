@@ -22,6 +22,7 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
   image,
   position,
 }: EntertainmentProps) => {
+  /*
   return (
     <div className="Entertainment">
       <h1>{entQuery.businessName}</h1>
@@ -62,6 +63,8 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
       <Location position={position} />
     </div>
   );
+  */
+  return <div />;
 };
 
 export default Entertainment;

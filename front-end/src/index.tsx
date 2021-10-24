@@ -17,9 +17,6 @@ import EntertainmentsPage from './views/Entertainments/EntertainmentsPage';
 import UniversitiesPage from './views/Universities/UniversitiesPage';
 import InvalidPage from './views/Invalid/InvalidPage';
 
-import Entertainment1 from './views/HardInstances/Entertainment1';
-import Entertainment2 from './views/HardInstances/Entertainment2';
-import Entertainment3 from './views/HardInstances/Entertainment3';
 import University1 from './views/HardInstances/University1';
 import University2 from './views/HardInstances/University2';
 import University3 from './views/HardInstances/University3';
@@ -64,9 +61,6 @@ ReactDOM.render(
         />
 
         {/* Terrible hard coded instances */}
-        <Route path="/amenities/1" exact component={Entertainment1} />
-        <Route path="/amenities/2" exact component={Entertainment2} />
-        <Route path="/amenities/3" exact component={Entertainment3} />
         <Route path="/universities/1" exact component={University1} />
         <Route path="/universities/2" exact component={University2} />
         <Route path="/universities/3" exact component={University3} />
