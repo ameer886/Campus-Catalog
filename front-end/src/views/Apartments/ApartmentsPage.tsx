@@ -38,8 +38,6 @@ export type ApartmentType = {
 
   amenities_nearby: Array<AmenityKey>;
   universities_nearby: Array<UniversityKey>;
-
-  id: string;
 };
 
 export type ApartmentRowType = {

@@ -17,11 +17,8 @@ import Apartment from './components/Apartment/Apartment';
 import EntertainmentsPage from './views/Entertainments/EntertainmentsPage';
 import Entertainment from './components/Entertainment/Entertainment';
 import UniversitiesPage from './views/Universities/UniversitiesPage';
+import University from './components/University/University';
 import InvalidPage from './views/Invalid/InvalidPage';
-
-import University1 from './views/HardInstances/University1';
-import University2 from './views/HardInstances/University2';
-import University3 from './views/HardInstances/University3';
 
 import reportWebVitals from './reportWebVitals';
 
@@ -58,7 +55,7 @@ ReactDOM.render(
         <Route
           path="/amenities/:id"
           render={(props) => (
-            <Entertainment id={parseInt(props.match.params.id)} />
+            <Entertainment id={props.match.params.id} />
           )}
         />
 
@@ -69,10 +66,13 @@ ReactDOM.render(
           component={UniversitiesPage}
         />
 
-        {/* Terrible hard coded instances */}
-        <Route path="/universities/1" exact component={University1} />
-        <Route path="/universities/2" exact component={University2} />
-        <Route path="/universities/3" exact component={University3} />
+        {/* University instance based on id */}
+        <Route
+          path="/universities/:id"
+          render={(props) => (
+            <University id={props.match.params.id} />
+          )}
+        />
 
         {/* Invalid Page for missing links */}
         <Route path="/404" component={InvalidPage} />

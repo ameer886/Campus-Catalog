@@ -2,32 +2,58 @@ import React from 'react';
 import { useMemo, useState } from 'react';
 import styles from './UniversitiesPage.module.css';
 
+import type {
+  Address,
+  AmenityKey,
+  PropertyKey,
+} from '../../universalTypes';
 import UniversityGrid from '../../components/UniversityGrid/UniversityGrid';
 
-import { university1 } from '../HardInstances/University1';
-import { university2 } from '../HardInstances/University2';
-import { university3 } from '../HardInstances/University3';
 import PaginationRelay from '../../components/Pagination/PaginationRelay';
 
 const PAGE_SIZE = 9;
 
 // Type of a single university
 export type UniversityType = {
-  id: number;
-  schoolName: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
-  type?: 'Public' | 'Private';
-  ranking?: number;
-  undergradEnrollment?: number;
-  graduateEnrollment?: number;
-  inStateTuition?: number;
-  outStateTuition?: number;
-  mascot?: string;
-  avgFinancialAid?: number;
-  graduationRate?: number;
-  acceptanceRate?: number;
+  acceptance_rate: number;
+  alias: string | null;
+  avg_cost_attendance: number;
+  avg_sat: number;
+  carnegie_undergrad: string;
+  graduation_rate: number;
+  image: string;
+  latitude: number;
+  locale: string;
+  location: Address;
+  longitude: number;
+  num_graduate: number;
+  num_undergrad: number;
+  ownership_id: string;
+  rank: number;
+  school_url: string;
+  tuition_in_st: number;
+  tuition_out_st: number;
+  univ_id: string;
+  univ_name: string;
+  zip_code: string;
+
+  amenities_nearby: Array<AmenityKey>;
+  housing_nearby: Array<PropertyKey>;
+};
+
+export type UniversityRowType = {
+  acceptance_rate: number;
+  avg_cost_attendance: number;
+  city: string;
+  ownership_id: string;
+  rank: number;
+  state: string;
+  tuition_in_st: number;
+  tuition_out_st: number;
+  univ_id: string;
+  univ_name: string;
+
+  id: string;
 };
 
 /*
@@ -79,8 +105,11 @@ const UniversityInput: React.FunctionComponent<UniversityInputProps> =
  * Otherwise, try to use key_asc or key_desc (it's not required)
  * Definitely make sure each sortOrder has an _ and that desc ends in _desc
  */
-function sortCards(cards: UniversityType[], sortOrder: string) {
-  let sortFunc: (a: UniversityType, b: UniversityType) => number;
+function sortCards(cards: UniversityRowType[], sortOrder: string) {
+  let sortFunc: (
+    a: UniversityRowType,
+    b: UniversityRowType,
+  ) => number;
   switch (sortOrder.slice(0, sortOrder.indexOf('_'))) {
     case 'state':
       sortFunc = (a, b) => {
@@ -90,20 +119,16 @@ function sortCards(cards: UniversityType[], sortOrder: string) {
       };
       break;
     case 'schoolName':
-      sortFunc = (a, b) => a.schoolName.localeCompare(b.schoolName);
+      sortFunc = (a, b) => a.univ_name.localeCompare(b.univ_name);
       break;
     case 'inStateTuition':
       sortFunc = (a, b) => {
-        if (!a.inStateTuition) return -1;
-        if (!b.inStateTuition) return 1;
-        return a.inStateTuition - b.inStateTuition;
+        return a.tuition_in_st - b.tuition_in_st;
       };
       break;
     case 'outStateTuition':
       sortFunc = (a, b) => {
-        if (!a.outStateTuition) return -1;
-        if (!b.outStateTuition) return 1;
-        return a.outStateTuition - b.outStateTuition;
+        return a.tuition_out_st - b.tuition_out_st;
       };
       break;
     default:
@@ -125,10 +150,7 @@ function sortCards(cards: UniversityType[], sortOrder: string) {
 const UniversitiesPage: React.FunctionComponent = () => {
   const [sortOrder, setSortOrder] = useState('none');
   const [page, setPage] = useState(0);
-  const cards = [university1, university2, university3];
-  for (let i = 0; i < 200; i++) {
-    cards.push(university1);
-  }
+  const cards: UniversityRowType[] = [];
 
   // wrapper to change the sort order of the cards
   const updateSort = (e: React.ChangeEvent<HTMLInputElement>) => {

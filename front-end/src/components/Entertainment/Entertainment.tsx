@@ -10,7 +10,7 @@ import { getAPI } from '../../APIClient';
 import { formatAddressState } from '../../utilities';
 
 type EntertainmentProps = {
-  id: number;
+  id: string;
 };
 
 /*
@@ -30,7 +30,7 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
       try {
         const data = await getAPI({
           model: 'amenities',
-          id: id.toString(),
+          id: id,
         });
         console.log(data);
         setQuery({ ...data });
