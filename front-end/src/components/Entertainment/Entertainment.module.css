@@ -23,3 +23,8 @@
 .SplitSide {
   width: 45%;
 }
+
+.InlineLink {
+  display: inline;
+  padding: 0;
+}

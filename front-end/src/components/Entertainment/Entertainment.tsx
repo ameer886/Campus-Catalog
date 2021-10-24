@@ -98,8 +98,57 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
       )}
 
       <p>We found {entQuery.num_review} reviews for this location.</p>
+      {entQuery.reviews.map((review, index) => {
+        console.log(review);
+        return (
+          <span
+            className="yelp-review"
+            data-review-id={review.review_id}
+            data-hostname="www.yelp.com"
+            key={index}
+          >
+            Read{' '}
+            <Nav.Link
+              className={styles.InlineLink}
+              href={`https://www.yelp.com/user_details?userid=${review.user_id}`}
+              rel="nofollow noopener"
+            >
+              {review.user_name}
+            </Nav.Link>
+            &#39;s{' '}
+            <Nav.Link
+              className={styles.InlineLink}
+              href={`https://www.yelp.com/biz/${entQuery.yelp_id}?hrid=${review.review_id}`}
+              rel="nofollow noopener"
+            >
+              review
+            </Nav.Link>{' '}
+            of{' '}
+            <Nav.Link
+              className={styles.InlineLink}
+              href={`https://www.yelp.com/biz/${entQuery.yelp_id}`}
+              rel="nofollow noopener"
+            >
+              {entQuery.amen_name}
+            </Nav.Link>{' '}
+            on{' '}
+            <Nav.Link
+              className={styles.InlineLink}
+              href="https://www.yelp.com"
+              rel="nofollow noopener"
+            >
+              Yelp
+            </Nav.Link>
+            <script
+              src="https://www.yelp.com/embed/widgets.js"
+              type="text/javascript"
+              async
+            ></script>
+          </span>
+        );
+      })}
 
-      <div className={styles.Splitter}>
+      <div className={styles.Splitter} style={{ marginTop: '8px' }}>
         <div className={styles.SplitSide}>
           <p>
             We found {entQuery.housing_nearby.length} nearby housing
