@@ -1,15 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
+import { Nav } from 'react-bootstrap';
 
 import styles from './Apartment.module.css';
 
+import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
 import { getAPI } from '../../APIClient';
 import {
   formatAddressState,
   formatNumberToMoney,
 } from '../../utilities';
-import { Nav } from 'react-bootstrap';
+import Location from '../Location/Location';
 
 type ApartmentProps = {
   id: string;
@@ -44,7 +45,7 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
       </div>
     );
 
-  const nbd = aptQuery.neighborhood;
+  const nbd = aptQuery.location.neighborhood;
   const state = formatAddressState(aptQuery.location);
 
   return (
@@ -182,6 +183,14 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
       {aptQuery.images.map((image, index) => (
         <img src={image} key={index} />
       ))}
+
+      <p>A map of the location:</p>
+      <Location
+        position={{
+          lat: parseFloat(aptQuery.location.lat),
+          lng: parseFloat(aptQuery.location.lon),
+        }}
+      />
     </div>
   );
 };

@@ -14,8 +14,8 @@ type CardProps = {
 
 const allCards: CardProps[] = [
   {
-    href: '/entertainments',
-    title: 'Entertainment',
+    href: '/amenities',
+    title: 'Amenities',
     img: EntertainmentImg,
   },
   {

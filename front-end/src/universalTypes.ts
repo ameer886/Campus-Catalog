@@ -9,6 +9,8 @@ export type Address = {
   state: string;
   'street address': string;
   zipcode: string;
+  lat: string;
+  lon: string;
 };
 
 export type UniversityKey = {

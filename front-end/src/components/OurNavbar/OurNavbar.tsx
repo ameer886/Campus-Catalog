@@ -16,8 +16,8 @@ const OurNavbar: React.FunctionComponent = () => {
       key: 1,
     },
     {
-      href: '/entertainments',
-      name: 'Entertainment',
+      href: '/amenities',
+      name: 'Amenities',
       key: 2,
     },
     {

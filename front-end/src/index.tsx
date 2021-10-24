@@ -51,7 +51,7 @@ ReactDOM.render(
 
         {/* Entertainments Page */}
         <Route
-          path="/entertainments"
+          path="/amenities"
           exact
           component={EntertainmentsPage}
         />
@@ -64,21 +64,9 @@ ReactDOM.render(
         />
 
         {/* Terrible hard coded instances */}
-        <Route
-          path="/entertainments/1"
-          exact
-          component={Entertainment1}
-        />
-        <Route
-          path="/entertainments/2"
-          exact
-          component={Entertainment2}
-        />
-        <Route
-          path="/entertainments/3"
-          exact
-          component={Entertainment3}
-        />
+        <Route path="/amenities/1" exact component={Entertainment1} />
+        <Route path="/amenities/2" exact component={Entertainment2} />
+        <Route path="/amenities/3" exact component={Entertainment3} />
         <Route path="/universities/1" exact component={University1} />
         <Route path="/universities/2" exact component={University2} />
         <Route path="/universities/3" exact component={University3} />

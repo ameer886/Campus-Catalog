@@ -26,7 +26,7 @@ export type EntertainmentType = {
 const EntertainmentsPage: React.FunctionComponent = () => {
   return (
     <div className="Entertainment">
-      <h1>Entertainments</h1>
+      <h1>Amenities</h1>
       <EntertainmentTable
         rows={[entertainment1, entertainment2, entertainment3]}
       />
