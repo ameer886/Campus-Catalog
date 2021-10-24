@@ -20,7 +20,7 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
   return (
     <Nav.Link
       className={styles.CardLink}
-      href={curPath + '/id=' + university.id}
+      href={curPath + '/' + university.id}
     >
       <div className={styles.UniversityCard}>
         <h2 className={styles.UniversityName}>
@@ -33,7 +33,9 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
             In-State Tuition:
           </p>
           <p className={styles.Tuition}>
-            {formatNumberToMoney(university.tuition_in_st)}
+            {university.tuition_in_st === 0
+              ? 'N/A'
+              : formatNumberToMoney(university.tuition_in_st)}
           </p>
         </div>
         <div className={styles.LeftRightPair}>
@@ -41,7 +43,9 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
             Out-of-State Tuition:
           </p>
           <p className={styles.Tuition}>
-            {formatNumberToMoney(university.tuition_out_st)}
+            {university.tuition_out_st === 0
+              ? 'N/A'
+              : formatNumberToMoney(university.tuition_out_st)}
           </p>
         </div>
 

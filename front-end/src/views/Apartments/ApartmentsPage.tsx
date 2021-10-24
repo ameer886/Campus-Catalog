@@ -87,7 +87,7 @@ const ApartmentsPage: React.FunctionComponent = () => {
 
   if (loading)
     return (
-      <div>
+      <div className="Apartments">
         <p>Loading responses, please be patient.</p>
       </div>
     );
