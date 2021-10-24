@@ -1,15 +1,16 @@
 import React from 'react';
-import './Entertainment.css';
+import { useState, useEffect } from 'react';
+import { Nav } from 'react-bootstrap';
+
+import styles from './Entertainment.module.css';
+
 import { EntertainmentType } from '../../views/Entertainments/EntertainmentsPage';
-import { NavLink } from 'react-router-dom';
-import Image from 'react-bootstrap/Image';
-import { Position } from '../Location/Location';
 import Location from '../Location/Location';
+import { getAPI } from '../../APIClient';
+import { formatAddressState } from '../../utilities';
 
 type EntertainmentProps = {
-  entQuery: EntertainmentType;
-  image: string;
-  position: Position;
+  id: number;
 };
 
 /*
@@ -18,48 +19,189 @@ type EntertainmentProps = {
  * Any attribute information should be passed in as a property
  */
 const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
-  entQuery,
-  image,
-  position,
+  id,
 }: EntertainmentProps) => {
+  const [entQuery, setQuery] = useState<EntertainmentType | null>(
+    null,
+  );
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({
+          model: 'amenities',
+          id: id.toString(),
+        });
+        console.log(data);
+        setQuery({ ...data });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, [id]);
+
+  if (entQuery == null)
+    return (
+      <div className={styles.Entertainment}>
+        <p>Loading, please be patient.</p>
+      </div>
+    );
+
+  const state = formatAddressState({
+    city: entQuery.city,
+    state: entQuery.state,
+    zipcode: entQuery.zip_code,
+  });
+  const hoursList = entQuery.hours.split('\n');
+
   return (
-    <div className="Entertainment">
-      <h1>{entQuery.businessName}</h1>
+    <div className={styles.Entertainment}>
+      <h1 className={styles.Name}>{entQuery.amen_name}</h1>
+      <h3 className={styles.Location}>{entQuery.address}</h3>
+      <h3 className={styles.Location}>{state}</h3>
+
       <p>
-        Welcome to the page for {entQuery.businessName}. It is a{' '}
-        {entQuery.category} business.{' '}
-      </p>
-      <p>
-        {' '}
-        {entQuery.businessName} is located on {entQuery.location[0]},
-        {entQuery.location[1]} {entQuery.location[2]}{' '}
-        {entQuery.location[3]}. The age restriction is{' '}
-        {entQuery.ageRestriction} and the price is {entQuery.price}.
-        Is there delivery? The answer is{' '}
-        {entQuery.delivery ?? 'there may or may not be delivery'}.
-        Some universities that are close to this business are{' '}
-        <NavLink to="/universities/id=1">Harvard University</NavLink>,{' '}
-        <NavLink to="/universities/id=3">
-          Princeton University
-        </NavLink>
-        , and{' '}
-        <NavLink to="/universities/id=2">
-          The University of Texas at Austin
-        </NavLink>
-        . Apartments that are located near this business include{' '}
-        <NavLink to="/apartments/id=1">Parkside Place</NavLink>,{' '}
-        <NavLink to="/apartments/id=3">3401 at Red River</NavLink>,
-        and{' '}
-        <NavLink to="/apartments/id=2">
-          Barclay Square at Princeton Forrestal
-        </NavLink>
+        This location has a rating of {entQuery.rating} across{' '}
+        {entQuery.num_review} reviews. The pricing of this location on
+        Yelp is{' '}
+        {entQuery.pricing === 'N/A' ? 'not listed' : entQuery.pricing}
         .
       </p>
-      <Image
-        src={image}
-        style={{ width: '25vm', height: '25vh' }}
-      ></Image>
-      <Location position={position} />
+
+      <p>
+        This location does {entQuery.deliver ? '' : 'not '}have
+        delivery. Furthermore, it does{' '}
+        {entQuery.takeout ? '' : 'not '}have takeout.
+      </p>
+
+      {entQuery.categories.length > 0 && (
+        <>
+          <p>This location has the following categories:</p>
+          <ul>
+            {entQuery.categories.map((cat, index) => (
+              <li key={index}>{cat}</li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {hoursList.length > 0 && (
+        <>
+          <p>The hours for this location are:</p>
+          <ul>
+            {hoursList.map((time, index) => (
+              <li key={index}>{time}</li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      <p>We found {entQuery.num_review} reviews for this location.</p>
+      {entQuery.reviews.map((review, index) => {
+        console.log(review);
+        return (
+          <span
+            className="yelp-review"
+            data-review-id={review.review_id}
+            data-hostname="www.yelp.com"
+            key={index}
+          >
+            Read{' '}
+            <Nav.Link
+              className={styles.InlineLink}
+              href={`https://www.yelp.com/user_details?userid=${review.user_id}`}
+              rel="nofollow noopener"
+            >
+              {review.user_name}
+            </Nav.Link>
+            &#39;s{' '}
+            <Nav.Link
+              className={styles.InlineLink}
+              href={`https://www.yelp.com/biz/${entQuery.yelp_id}?hrid=${review.review_id}`}
+              rel="nofollow noopener"
+            >
+              review
+            </Nav.Link>{' '}
+            of{' '}
+            <Nav.Link
+              className={styles.InlineLink}
+              href={`https://www.yelp.com/biz/${entQuery.yelp_id}`}
+              rel="nofollow noopener"
+            >
+              {entQuery.amen_name}
+            </Nav.Link>{' '}
+            on{' '}
+            <Nav.Link
+              className={styles.InlineLink}
+              href="https://www.yelp.com"
+              rel="nofollow noopener"
+            >
+              Yelp
+            </Nav.Link>
+            <script
+              src="https://www.yelp.com/embed/widgets.js"
+              type="text/javascript"
+              async
+            ></script>
+          </span>
+        );
+      })}
+
+      <div className={styles.Splitter} style={{ marginTop: '8px' }}>
+        <div className={styles.SplitSide}>
+          <p>
+            We found {entQuery.housing_nearby.length} nearby housing
+            location
+            {entQuery.housing_nearby.length === 1 ? '' : 's'}.
+          </p>
+          <ul>
+            {entQuery.housing_nearby.map((house, index) => (
+              <li key={index}>
+                <Nav.Link href={`/housing/${house.property_id}`}>
+                  {house.property_name}
+                </Nav.Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className={styles.SplitSide}>
+          <p>
+            We found {entQuery.universities_nearby.length} nearby
+            universit
+            {entQuery.universities_nearby.length === 1 ? 'y' : 'ies'}.
+          </p>
+          <ul>
+            {entQuery.universities_nearby.map((university, index) => (
+              <li key={index}>
+                <Nav.Link
+                  href={`/universities/${university.university_id}`}
+                >
+                  {university.university_name}
+                </Nav.Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {entQuery.images.length > 0 && (
+        <>
+          <p>We found the following images:</p>
+          {entQuery.images.map((image, index) => (
+            <img src={image} key={index} />
+          ))}
+        </>
+      )}
+
+      <p>A map of the location:</p>
+      <Location
+        position={{
+          lat: entQuery.latitude,
+          lng: entQuery.longitude,
+        }}
+      />
     </div>
   );
 };

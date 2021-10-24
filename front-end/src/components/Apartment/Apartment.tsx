@@ -1,15 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
+import { Nav } from 'react-bootstrap';
 
 import styles from './Apartment.module.css';
 
+import { ApartmentType } from '../../views/Apartments/ApartmentsPage';
 import { getAPI } from '../../APIClient';
 import {
   formatAddressState,
   formatNumberToMoney,
 } from '../../utilities';
-import { Nav } from 'react-bootstrap';
+import Location from '../Location/Location';
 
 type ApartmentProps = {
   id: string;
@@ -39,18 +40,21 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
 
   if (aptQuery == null)
     return (
-      <div>
+      <div className={styles.Apartment}>
         <p>Loading, please be patient.</p>
       </div>
     );
 
-  const nbd = aptQuery.neighborhood;
+  const nbd = `${aptQuery.location.neighborhood}, ${aptQuery.location['street address']}`;
   const state = formatAddressState(aptQuery.location);
 
   return (
     <div className={styles.Apartment}>
       <h1 className={styles.Name}>{aptQuery.property_name}</h1>
-      {nbd && <h3 className={styles.Location}>{nbd}</h3>}
+      {aptQuery.location.neighborhood &&
+        aptQuery.location['street address'] && (
+          <h3 className={styles.Location}>{nbd}</h3>
+        )}
       <h3 className={styles.Location}>{state}</h3>
 
       <p>
@@ -61,8 +65,8 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
       <p>
         The price of this location ranges from{' '}
         {formatNumberToMoney(aptQuery.min_rent)} to{' '}
-        {formatNumberToMoney(aptQuery.max_rent)}. Utilities are{' '}
-        {aptQuery.util_included ? '' : 'not'} included.
+        {formatNumberToMoney(aptQuery.max_rent)}. Utilities are
+        {aptQuery.util_included ? '' : ' not'} included.
       </p>
 
       <p>
@@ -99,7 +103,7 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
 
       <p>
         <span>
-          This location does {aptQuery.cat_allow ? '' : 'not'} allow
+          This location does {aptQuery.cat_allow ? '' : 'not '}allow
           cats.
         </span>
         {aptQuery.cat_allow && aptQuery.max_num_cat !== 0 && (
@@ -115,7 +119,7 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
 
       <p>
         <span>
-          This location does {aptQuery.dog_allow ? '' : 'not'} allow
+          This location does {aptQuery.dog_allow ? '' : 'not '}allow
           dogs.
         </span>
         {aptQuery.dog_allow && aptQuery.max_num_dog !== 0 && (
@@ -133,7 +137,8 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
         <div className={styles.SplitSide}>
           <p>
             We found {aptQuery.amenities_nearby.length} nearby
-            entertainment amenities.
+            entertainment amenit
+            {aptQuery.amenities_nearby.length === 1 ? 'y' : 'ies'}.
           </p>
           {aptQuery.amenities_nearby.length > 0 && (
             <div>
@@ -182,6 +187,18 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
       {aptQuery.images.map((image, index) => (
         <img src={image} key={index} />
       ))}
+
+      {aptQuery.location.lat && aptQuery.location.lon && (
+        <>
+          <p>A map of the location:</p>
+          <Location
+            position={{
+              lat: parseFloat(aptQuery.location.lat),
+              lng: parseFloat(aptQuery.location.lon),
+            }}
+          />
+        </>
+      )}
     </div>
   );
 };

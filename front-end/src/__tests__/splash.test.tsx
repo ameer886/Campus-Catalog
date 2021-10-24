@@ -39,10 +39,10 @@ describe('Splash Page Test Suite', () => {
     expect(uniLink.getAttribute('href')).toBe('/universities');
 
     const entLink = screen.getByRole('link', {
-      name: /Entertainment/i,
+      name: /Amenities/i,
     });
     expect(entLink).not.toBeNull();
-    expect(entLink.getAttribute('href')).toBe('/entertainments');
+    expect(entLink.getAttribute('href')).toBe('/amenities');
   });
 
   // You can also mock functions using jest.mock, but

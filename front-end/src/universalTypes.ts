@@ -7,8 +7,10 @@ export type Address = {
   city: string;
   neighborhood?: string;
   state: string;
-  'street address': string;
+  'street address'?: string;
   zipcode: string;
+  lat?: string;
+  lon?: string;
 };
 
 export type UniversityKey = {

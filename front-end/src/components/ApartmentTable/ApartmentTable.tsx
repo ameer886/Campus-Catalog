@@ -4,6 +4,8 @@ import { ColumnDefinitionType } from '../../components/GenericTable/GenericTable
 import PaginatedTable from '../../components/Pagination/PaginatedTable';
 import { ApartmentRowType } from '../../views/Apartments/ApartmentsPage';
 
+import { formatNumberToMoney } from '../../utilities';
+
 import './ApartmentTable.css';
 
 type ApartmentTableProps = {
@@ -46,7 +48,7 @@ const apartmentTableHeaders: ColumnDefinitionType<
     key: 'max_rent',
     header: 'Maximum Rent',
     sortFunc: (a, b) => a.max_rent - b.max_rent,
-    printFunc: (a) => a.max_rent.toLocaleString('en-US'),
+    printFunc: (a) => formatNumberToMoney(a.max_rent),
   },
   {
     key: 'walk_score',

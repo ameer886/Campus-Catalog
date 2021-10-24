@@ -183,7 +183,7 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
   // This is a useful wrapper on how to change our sort order
   const changeSortFunc = (key: string) => {
     if (setPage) setPage(0);
-    if (!curSort) {
+    if (curSort == null || !curSort.includes(`${key}`)) {
       setSort(`${key}asc`);
     } else if (curSort.includes(`${key}asc`)) {
       setSort(`${key}desc`);

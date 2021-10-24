@@ -27,7 +27,6 @@ export type ApartmentType = {
   max_num_dog: number;
   max_rent: number;
   min_rent: number;
-  neighborhood: string;
   property_id: string;
   property_name: string;
   property_type: string;
