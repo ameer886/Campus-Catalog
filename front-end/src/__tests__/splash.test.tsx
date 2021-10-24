@@ -33,7 +33,7 @@ describe('Splash Page Test Suite', () => {
     expect(aptLink.getAttribute('href')).toBe('/housing');
 
     const uniLink = screen.getByRole('link', {
-      name: /University/i,
+      name: /Universities/i,
     });
     expect(uniLink).not.toBeNull();
     expect(uniLink.getAttribute('href')).toBe('/universities');

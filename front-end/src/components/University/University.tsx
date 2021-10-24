@@ -1,10 +1,12 @@
 import React from 'react';
-import styles from './University.module.css';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import styles from './University.module.css';
+import type { UniversityType } from '../../views/Universities/UniversitiesPage';
 import { formatNumberToMoney } from '../../utilities';
-
-import { UniversityType } from '../../views/Universities/UniversitiesPage';
+import { getAPI } from '../../APIClient';
+import Location from '../Location/Location';
 
 type UniversityProps = {
   id: string;
@@ -18,9 +20,30 @@ type UniversityProps = {
 const University: React.FunctionComponent<UniversityProps> = ({
   id,
 }: UniversityProps) => {
+  const [uniQuery, setQuery] = useState<UniversityType | null>(null);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({ model: 'universities', id: id });
+        setQuery({ ...data });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, [id]);
+
+  if (uniQuery == null)
+    return (
+      <div className={styles.Centering}>
+        <p>Loading, please be patient.</p>
+      </div>
+    );
+
   return (
     <div>
-      <p>Eventually will be university {id}.</p>
+      <p>Recieved response: {JSON.stringify(uniQuery)}.</p>
     </div>
   );
 };

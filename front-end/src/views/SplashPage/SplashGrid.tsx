@@ -20,7 +20,7 @@ const allCards: CardProps[] = [
   },
   {
     href: '/universities',
-    title: 'University',
+    title: 'Universities',
     img: HarvardImg,
   },
   {
