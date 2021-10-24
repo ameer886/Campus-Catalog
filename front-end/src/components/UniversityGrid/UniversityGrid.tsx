@@ -2,13 +2,13 @@ import React from 'react';
 // import './UniversityGrid.css';
 import styles from './UniversityGrid.module.css';
 
-import { UniversityType } from '../../views/Universities/UniversitiesPage';
+import type { UniversityRowType } from '../../views/Universities/UniversitiesPage';
 import { Nav } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { formatNumberToMoney } from '../../utilities';
 
 type CardProps = {
-  university: UniversityType;
+  university: UniversityRowType;
 };
 
 const UniversityCard: React.FunctionComponent<CardProps> = ({
@@ -20,11 +20,11 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
   return (
     <Nav.Link
       className={styles.CardLink}
-      href={curPath + '/id=' + university.id}
+      href={curPath + '/' + university.id}
     >
       <div className={styles.UniversityCard}>
         <h2 className={styles.UniversityName}>
-          {university.schoolName}
+          {university.univ_name}
         </h2>
         {university.state && <p>Located in {university.state}</p>}
 
@@ -33,7 +33,9 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
             In-State Tuition:
           </p>
           <p className={styles.Tuition}>
-            {formatNumberToMoney(university.inStateTuition)}
+            {university.tuition_in_st === 0
+              ? 'N/A'
+              : formatNumberToMoney(university.tuition_in_st)}
           </p>
         </div>
         <div className={styles.LeftRightPair}>
@@ -41,7 +43,9 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
             Out-of-State Tuition:
           </p>
           <p className={styles.Tuition}>
-            {formatNumberToMoney(university.outStateTuition)}
+            {university.tuition_out_st === 0
+              ? 'N/A'
+              : formatNumberToMoney(university.tuition_out_st)}
           </p>
         </div>
 
@@ -50,7 +54,7 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
             Ranking:
           </p>
           <p className={styles.Tuition + ' ' + styles.Ranking}>
-            {university.ranking ?? 'N/A'}
+            {university.rank}
           </p>
         </div>
       </div>
@@ -59,7 +63,7 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
 };
 
 type UniversityGridProps = {
-  cards: Array<UniversityType>;
+  cards: Array<UniversityRowType>;
 };
 
 /*

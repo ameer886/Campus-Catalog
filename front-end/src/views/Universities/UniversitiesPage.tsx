@@ -1,33 +1,60 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMemo, useState } from 'react';
 import styles from './UniversitiesPage.module.css';
 
+import type {
+  Address,
+  AmenityKey,
+  PropertyKey,
+} from '../../universalTypes';
+import type { IntentionallyAny } from '../../utilities';
 import UniversityGrid from '../../components/UniversityGrid/UniversityGrid';
-
-import { university1 } from '../HardInstances/University1';
-import { university2 } from '../HardInstances/University2';
-import { university3 } from '../HardInstances/University3';
 import PaginationRelay from '../../components/Pagination/PaginationRelay';
+import { getAPI } from '../../APIClient';
 
 const PAGE_SIZE = 9;
 
 // Type of a single university
 export type UniversityType = {
-  id: number;
-  schoolName: string;
-  city?: string;
-  state?: string;
-  zipCode?: string;
-  type?: 'Public' | 'Private';
-  ranking?: number;
-  undergradEnrollment?: number;
-  graduateEnrollment?: number;
-  inStateTuition?: number;
-  outStateTuition?: number;
-  mascot?: string;
-  avgFinancialAid?: number;
-  graduationRate?: number;
-  acceptanceRate?: number;
+  acceptance_rate: number;
+  alias: string | null;
+  avg_cost_attendance: number;
+  avg_sat: number;
+  carnegie_undergrad: string;
+  graduation_rate: number;
+  image: string;
+  latitude: number;
+  locale: string;
+  location: Address;
+  longitude: number;
+  num_graduate: number;
+  num_undergrad: number;
+  ownership_id: string;
+  rank: number;
+  school_url: string;
+  tuition_in_st: number;
+  tuition_out_st: number;
+  univ_id: string;
+  univ_name: string;
+  zip_code: string;
+
+  amenities_nearby: Array<AmenityKey>;
+  housing_nearby: Array<PropertyKey>;
+};
+
+export type UniversityRowType = {
+  acceptance_rate: number;
+  avg_cost_attendance: number;
+  city: string;
+  ownership_id: string;
+  rank: number;
+  state: string;
+  tuition_in_st: number;
+  tuition_out_st: number;
+  univ_id: string;
+  univ_name: string;
+
+  id: string;
 };
 
 /*
@@ -79,8 +106,11 @@ const UniversityInput: React.FunctionComponent<UniversityInputProps> =
  * Otherwise, try to use key_asc or key_desc (it's not required)
  * Definitely make sure each sortOrder has an _ and that desc ends in _desc
  */
-function sortCards(cards: UniversityType[], sortOrder: string) {
-  let sortFunc: (a: UniversityType, b: UniversityType) => number;
+function sortCards(cards: UniversityRowType[], sortOrder: string) {
+  let sortFunc: (
+    a: UniversityRowType,
+    b: UniversityRowType,
+  ) => number;
   switch (sortOrder.slice(0, sortOrder.indexOf('_'))) {
     case 'state':
       sortFunc = (a, b) => {
@@ -89,21 +119,20 @@ function sortCards(cards: UniversityType[], sortOrder: string) {
         return a.state.localeCompare(b.state);
       };
       break;
-    case 'schoolName':
-      sortFunc = (a, b) => a.schoolName.localeCompare(b.schoolName);
+    case 'univName':
+      sortFunc = (a, b) => a.univ_name.localeCompare(b.univ_name);
       break;
-    case 'inStateTuition':
+    case 'rank':
+      sortFunc = (a, b) => a.rank - b.rank;
+      break;
+    case 'tuitionInSt':
       sortFunc = (a, b) => {
-        if (!a.inStateTuition) return -1;
-        if (!b.inStateTuition) return 1;
-        return a.inStateTuition - b.inStateTuition;
+        return a.tuition_in_st - b.tuition_in_st;
       };
       break;
-    case 'outStateTuition':
+    case 'tuitionOutSt':
       sortFunc = (a, b) => {
-        if (!a.outStateTuition) return -1;
-        if (!b.outStateTuition) return 1;
-        return a.outStateTuition - b.outStateTuition;
+        return a.tuition_out_st - b.tuition_out_st;
       };
       break;
     default:
@@ -125,16 +154,31 @@ function sortCards(cards: UniversityType[], sortOrder: string) {
 const UniversitiesPage: React.FunctionComponent = () => {
   const [sortOrder, setSortOrder] = useState('none');
   const [page, setPage] = useState(0);
-  const cards = [university1, university2, university3];
-  for (let i = 0; i < 200; i++) {
-    cards.push(university1);
-  }
+  const [loading, setLoading] = useState(true);
+  const [cards, setCards] = useState<Array<UniversityRowType>>([]);
 
-  // wrapper to change the sort order of the cards
-  const updateSort = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSortOrder(e.target.value);
-    setPage(0);
-  };
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({ model: 'universities' });
+        const responseCards = data.universities
+          .map((university: IntentionallyAny) => {
+            return {
+              id: university.univ_id,
+              ...university,
+            };
+          })
+          .filter(
+            (university: IntentionallyAny) => university.rank != null,
+          );
+        setCards(responseCards);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, []);
 
   // Memoize card sorting because the calculation could get expensive
   const sortedCards = useMemo(() => {
@@ -147,7 +191,26 @@ const UniversitiesPage: React.FunctionComponent = () => {
       page * PAGE_SIZE,
       (page + 1) * PAGE_SIZE,
     );
-  }, [sortedCards, page]);
+  }, [sortedCards, page, sortOrder]);
+  // The above line is not immediately intuitive: we add a dependency
+  // on sortOrder but don't use it. The reason for this is that the
+  // sortedCards reference is not changing on sort, even if its values are.
+  // Thus we need to re-slice whenever page or sortOrder changes, and
+  // we need sortedCards to actually slice.
+
+  // Note: ALL HOOKS must come before a return
+  if (loading)
+    return (
+      <div style={{ textAlign: 'center' }}>
+        <p>Loading responses, please be patient.</p>
+      </div>
+    );
+
+  // wrapper to change the sort order of the cards
+  const updateSort = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSortOrder(e.target.value);
+    setPage(0);
+  };
 
   return (
     <div className={styles.Universities}>
@@ -178,6 +241,30 @@ const UniversitiesPage: React.FunctionComponent = () => {
               onChange={updateSort}
             />
 
+            {/* School Name inputs */}
+            <UniversityInput
+              displayStr="School Name (Ascending)"
+              sortOrder="univName_asc"
+              onChange={updateSort}
+            />
+            <UniversityInput
+              displayStr="School Name (Descending)"
+              sortOrder="univName_desc"
+              onChange={updateSort}
+            />
+
+            {/* Rank inputs */}
+            <UniversityInput
+              displayStr="Rank (Ascending)"
+              sortOrder="rank_asc"
+              onChange={updateSort}
+            />
+            <UniversityInput
+              displayStr="Rank (Descending)"
+              sortOrder="rank_desc"
+              onChange={updateSort}
+            />
+
             {/* State inputs */}
             <UniversityInput
               displayStr="State (Ascending)"
@@ -190,39 +277,27 @@ const UniversitiesPage: React.FunctionComponent = () => {
               onChange={updateSort}
             />
 
-            {/* School Name inputs */}
-            <UniversityInput
-              displayStr="School Name (Ascending)"
-              sortOrder="schoolName_asc"
-              onChange={updateSort}
-            />
-            <UniversityInput
-              displayStr="School Name (Descending)"
-              sortOrder="schoolName_desc"
-              onChange={updateSort}
-            />
-
             {/* In-State inputs */}
             <UniversityInput
               displayStr="In-State Tuition (Ascending)"
-              sortOrder="inStateTuition_asc"
+              sortOrder="tuitionInSt_asc"
               onChange={updateSort}
             />
             <UniversityInput
               displayStr="In-State Tuition (Descending)"
-              sortOrder="inStateTuition_desc"
+              sortOrder="tuitionInSt_desc"
               onChange={updateSort}
             />
 
             {/* Out-of-State inputs */}
             <UniversityInput
               displayStr="Out-of-State Tuition (Ascending)"
-              sortOrder="outStateTuition_asc"
+              sortOrder="tuitionOutSt_asc"
               onChange={updateSort}
             />
             <UniversityInput
               displayStr="Out-of-State Tuition (Descending)"
-              sortOrder="outStateTuition_desc"
+              sortOrder="tuitionOutSt_desc"
               onChange={updateSort}
             />
           </form>

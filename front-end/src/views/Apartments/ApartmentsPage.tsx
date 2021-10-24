@@ -38,8 +38,6 @@ export type ApartmentType = {
 
   amenities_nearby: Array<AmenityKey>;
   universities_nearby: Array<UniversityKey>;
-
-  id: string;
 };
 
 export type ApartmentRowType = {
@@ -89,7 +87,7 @@ const ApartmentsPage: React.FunctionComponent = () => {
 
   if (loading)
     return (
-      <div>
+      <div className="Apartments">
         <p>Loading responses, please be patient.</p>
       </div>
     );
