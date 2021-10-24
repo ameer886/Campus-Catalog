@@ -14,10 +14,12 @@ CORS(app)
 db = db_init(app)
 ma = Marshmallow(app)
 
-@app.route('/')
+
+@app.route("/")
 def home():
-    return '<h1> hello world </h1>'
-    
+    return "<h1> hello world </h1>"
+
+
 class AmenitiesImagesSchema(ma.Schema):
     id = fields.Int(required=True)
     amen_id = fields.Int(required=True)
@@ -91,16 +93,21 @@ all_amenities_schema = AmenitiesSchema(
         "num_review",
         "deliver",
         "takeout",
+        "rating",
     ],
     many=True,
 )
+
 
 class HousingSchema(ma.Schema):
 
     property_id = fields.Str(required=True)
     property_name = fields.Str(required=True)
-    property_type = fields.Str(required=True, validate=validate.OneOf(['apartment', 'condo', 'house','townhome']))
-    location = fields.Method('format_location')
+    property_type = fields.Str(
+        required=True,
+        validate=validate.OneOf(["apartment", "condo", "house", "townhome"]),
+    )
+    location = fields.Method("format_location")
     address = fields.Str(required=True)
     neighborhood = fields.Str(required=True)
     city = fields.Str(required=True)
@@ -112,62 +119,86 @@ class HousingSchema(ma.Schema):
     transit_score = fields.Int()
     min_rent = fields.Int(required=True)
     max_rent = fields.Int()
-    bed = fields.Method('format_bedroom')
-    bath = fields.Method('format_bathroom')
+    bed = fields.Method("format_bedroom")
+    bath = fields.Method("format_bathroom")
     min_sqft = fields.Float()
     max_sqft = fields.Float()
-    sqft = fields.Method('format_space')
+    sqft = fields.Method("format_space")
     dog_allow = fields.Boolean()
     max_num_dog = fields.Int()
     dog_weight = fields.Int()
     cat_allow = fields.Boolean()
     max_num_cat = fields.Int()
-    cat_weight = fields.Int() 
+    cat_weight = fields.Int()
     images = fields.List(fields.Url)
     util_included = fields.List(fields.Str())
     building_amenities = fields.List(fields.Str())
     amenities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
-    universities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
+    universities_nearby = fields.List(
+        fields.Dict(keys=fields.Str(), values=fields.Str())
+    )
 
     def format_bedroom(self, property):
         if property.max_bed is None:
             property.max_bed = property.min_bed
-        return {'min': property.min_bed,
-                'max': property.max_bed}
-    
+        return {"min": property.min_bed, "max": property.max_bed}
+
     def format_bathroom(self, property):
         if property.max_bath is None:
             property.max_bath = property.min_bath
-        return {'min': property.min_bath,
-                'max': property.max_bath}
+        return {"min": property.min_bath, "max": property.max_bath}
 
     def format_space(self, property):
-        return {'min': property.min_sqft,
-                'max': property.max_sqft}
+        return {"min": property.min_sqft, "max": property.max_sqft}
 
     def format_location(self, property):
-        return {'street address': property.address,
-                'neighborhood': property.neighborhood,
-                'city': property.city,
-                'state': property.state,
-                'zipcode': property.zip_code,
-                'lat': property.lat,
-                'lon': property.lon}
+        return {
+            "street address": property.address,
+            "neighborhood": property.neighborhood,
+            "city": property.city,
+            "state": property.state,
+            "zipcode": property.zip_code,
+            "lat": property.lat,
+            "lon": property.lon,
+        }
 
-exclude_columns = ('address', 'city', 'state', 'min_sqft', 'max_sqft', 'neighborhood', 'lat', 'lon')
+
+exclude_columns = (
+    "address",
+    "city",
+    "state",
+    "min_sqft",
+    "max_sqft",
+    "neighborhood",
+    "lat",
+    "lon",
+)
 single_housing_schema = HousingSchema(exclude=exclude_columns)
 
-# table view 
-table_columns = ('property_name','property_id', 'property_type', 'city', 'state', 'rating', 'walk_score', 'transit_score', 'max_rent', 'max_sqft')
+# table view
+table_columns = (
+    "property_name",
+    "property_id",
+    "property_type",
+    "city",
+    "state",
+    "rating",
+    "walk_score",
+    "transit_score",
+    "max_rent",
+    "max_sqft",
+)
 all_housing_schema = HousingSchema(only=table_columns, many=True)
 
-@app.route('/housing', methods=['GET'])
+
+@app.route("/housing", methods=["GET"])
 def get_all_housing():
     all_housing = Housing.query.all()
     result = all_housing_schema.dump(all_housing)
-    return jsonify({'properties': result})
+    return jsonify({"properties": result})
 
-@app.route('/housing/<string:id>', methods=['GET'])
+
+@app.route("/housing/<string:id>", methods=["GET"])
 def get_housing_by_id(id):
     sql = queries.query_images(id)
     result = db.session.execute(sql)
@@ -182,8 +213,7 @@ def get_housing_by_id(id):
     housing.set_univ_nearby(universities)
     if housing is None:
         err = flask.Response(
-            json.dump({'error': id + ' not found'}),
-            mimetype='application/json'
+            json.dump({"error": id + " not found"}), mimetype="application/json"
         )
         err.status_code = 404
         return err
@@ -195,19 +225,19 @@ class UniversitySchema(ma.Schema):
     univ_id = fields.Str(required=True)
     univ_name = fields.Str(required=True)
     alias = fields.Str()
-    location = fields.Method('format_location')
+    location = fields.Method("format_location")
     city = fields.Str(required=True)
     state = fields.Str(required=True)
     rank = fields.Int()
     zip_code = fields.Str()
     school_url = fields.Str()
-    locale = fields.Method('map_locale')
+    locale = fields.Method("map_locale")
     longitude = fields.Float(missing=0.0)
     latitude = fields.Float(missing=0.0)
-    carnegie_undergrad = fields.Method('map_carnegie')
+    carnegie_undergrad = fields.Method("map_carnegie")
     num_undergrad = fields.Int()
     num_graduate = fields.Int()
-    ownership_id = fields.Method('map_ownership')
+    ownership_id = fields.Method("map_ownership")
     mascot_name = fields.Str()
     acceptance_rate = fields.Float(missing=0.0)
     graduation_rate = fields.Float(missing=0.0)
@@ -219,7 +249,7 @@ class UniversitySchema(ma.Schema):
     housing_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     image = fields.Url()
 
-    def map_ownership (self, univ):
+    def map_ownership(self, univ):
         num = univ.ownership_id
         if num == 1:
             return "Public"
@@ -230,7 +260,7 @@ class UniversitySchema(ma.Schema):
         else:
             return "Unknown"
 
-    def map_carnegie (self, univ):
+    def map_carnegie(self, univ):
         num = univ.carnegie_undergrad
         if num == -2:
             return
@@ -249,7 +279,7 @@ class UniversitySchema(ma.Schema):
         if num == 6:
             return "Four year, medium full-time, inclusive, lower transfer-in"
         if num == 7:
-            return  "Four-year, medium full-time, inclusive, higher transfer-in"
+            return "Four-year, medium full-time, inclusive, higher transfer-in"
         if num == 8:
             return "Four-year, medium full-time, selective, lower transfer-in"
         if num == 9:
@@ -257,7 +287,7 @@ class UniversitySchema(ma.Schema):
         if num == 10:
             return "Four year, full-time, inclusive, lower transfer-in"
         if num == 11:
-            return  "Four-year, full-time, inclusive, higher transfer-in"
+            return "Four-year, full-time, inclusive, higher transfer-in"
         if num == 12:
             return "Four-year, full-time, selective, lower transfer-in"
         if num == 13:
@@ -267,11 +297,11 @@ class UniversitySchema(ma.Schema):
         if num == 15:
             return "Four year, full-time, more selective, higher transfer-in"
 
-    def map_locale (self, univ):
+    def map_locale(self, univ):
         num = univ.locale if univ.locale is not None else 0
         dist = num % 10
         size = num // 10
-        ret = ''
+        ret = ""
         if size == 1:
             ret += "City: "
         elif size == 2:
@@ -299,24 +329,40 @@ class UniversitySchema(ma.Schema):
         return ret
 
     def format_location(self, university):
-        return {'city': university.city,
-                'state': university.state,
-                'zipcode': university.zip_code}
+        return {
+            "city": university.city,
+            "state": university.state,
+            "zipcode": university.zip_code,
+        }
 
-exclude_columns = ('city', 'state', 'mascot_name')
+
+exclude_columns = ("city", "state", "mascot_name")
 single_univ_schema = UniversitySchema(exclude=exclude_columns)
 
-univ_columns = ('univ_id', 'univ_name', 'rank', 'city', 'state', 'ownership_id',
-                'acceptance_rate', 'tuition_in_st', 'tuition_out_st', 'avg_cost_attendance', 'image')
+univ_columns = (
+    "univ_id",
+    "univ_name",
+    "rank",
+    "city",
+    "state",
+    "ownership_id",
+    "acceptance_rate",
+    "tuition_in_st",
+    "tuition_out_st",
+    "avg_cost_attendance",
+    "image",
+)
 all_univ_schema = UniversitySchema(only=univ_columns, many=True)
 
-@app.route('/universities', methods=['GET'])
+
+@app.route("/universities", methods=["GET"])
 def get_all_universities():
     all_univ = University.query.all()
     result = all_univ_schema.dump(all_univ)
-    return jsonify({'universities': result})
+    return jsonify({"universities": result})
 
-@app.route('/universities/<string:id>', methods=['GET'])
+
+@app.route("/universities/<string:id>", methods=["GET"])
 def get_univ_by_id(id):
     sql = queries.query_univ_images(id)
     result = db.session.execute(sql)
@@ -331,17 +377,17 @@ def get_univ_by_id(id):
     univ.set_housing_nearby(housing)
     if univ is None:
         err = flask.Response(
-            json.dump({'error': id + ' not found'}),
-            mimetype='application/json'
+            json.dump({"error": id + " not found"}), mimetype="application/json"
         )
         err.status_code = 404
         return err
     return jsonify(single_univ_schema.dump(univ))
 
+
 @app.route("/amenities", methods=["GET"])
 def amenities():
     amenities = Amenities.query.all()
-    return jsonify({'amenities': all_amenities_schema.dump(amenities)})
+    return jsonify({"amenities": all_amenities_schema.dump(amenities)})
 
 
 @app.route("/amenities/<int:amen_id>", methods=["GET"])
@@ -362,8 +408,17 @@ def amenities_id(amen_id):
     universities = tuple(univ_nearby)
     amenity.set_housing_nearby(housing)
     amenity.set_univ_nearby(universities)
-    return amenities_schema.jsonify(amenity)
+    amenity = amenities_schema.dump(amenity)
+    images = []
+    categories = []
+    for image in amenity["images"]:
+        images.append(image["url"])
+    for category in amenity["categories"]:
+        categories.append(category["category"])
+    amenity["images"] = images
+    amenity["categories"] = categories
+    return jsonify(amenity)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-    

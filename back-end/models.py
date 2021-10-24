@@ -7,8 +7,9 @@ from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint
 
 db = SQLAlchemy()
 
+
 class University(db.Model):
-    __tablename__ = 'university'
+    __tablename__ = "university"
     univ_id = db.Column(db.Integer, primary_key=True)
     univ_name = db.Column(db.String(255), nullable=False)
     alias = db.Column(db.String(256), nullable=True)
@@ -31,12 +32,39 @@ class University(db.Model):
     tuition_out_st = db.Column(db.Integer, nullable=True)
     avg_sat = db.Column(db.Float, nullable=True)
     avg_cost_attendance = db.Column(db.Float, nullable=True)
-    
-    def __repr__(self):
-        return '<University %r>' %self.univ_name
 
-    def __init__(self, univ_id = 0, univ_name = "NaN", alias = "NaN", rank = 0, city = "NaN", state = "N", zip_code = "NaN", school_url = "NaN", locale = 0, longitude = 0, latitude = 0, carnegie_undergrad = 0, num_undergrad = 0, num_graduate = 0, ownership_id = "NaN",
-    mascot_name = "NaN", acceptance_rate = 0, graduation_rate = 0, tuition_in_st = 0, tuition_out_st = 0, avg_sat = 0, avg_cost_attendance = 0, amenities_nearby = None, housing_nearby = None, image_id = None, image = None):
+    def __repr__(self):
+        return "<University %r>" % self.univ_name
+
+    def __init__(
+        self,
+        univ_id=0,
+        univ_name="NaN",
+        alias="NaN",
+        rank=0,
+        city="NaN",
+        state="N",
+        zip_code="NaN",
+        school_url="NaN",
+        locale=0,
+        longitude=0,
+        latitude=0,
+        carnegie_undergrad=0,
+        num_undergrad=0,
+        num_graduate=0,
+        ownership_id="NaN",
+        mascot_name="NaN",
+        acceptance_rate=0,
+        graduation_rate=0,
+        tuition_in_st=0,
+        tuition_out_st=0,
+        avg_sat=0,
+        avg_cost_attendance=0,
+        amenities_nearby=None,
+        housing_nearby=None,
+        image_id=None,
+        image=None,
+    ):
         self.univ_id = univ_id
         self.univ_name = univ_name
         self.alias = alias
@@ -66,29 +94,51 @@ class University(db.Model):
 
     @classmethod
     def build_univ_from_args(cls, args):
-        columns = ('univ_id', 'univ_name', 'alias', 'rank', 'city', 'state',
-                'zip_code', 'school_url', 'locale', 'longitude', 'latitude', 
-                'carnegie_undergrad', 'num_undergrad', 'num_graduate', 'ownership_id',
-                'mascot_name', 'acceptance_rate', 'graduation_rate', 'tuition_in_st', 
-                'tuition_out_st', 'avg_sat', 'avg_cost_attendance', 'image_id', 'image')
-        kwargs = dict(zip(columns,args))
-        
+        columns = (
+            "univ_id",
+            "univ_name",
+            "alias",
+            "rank",
+            "city",
+            "state",
+            "zip_code",
+            "school_url",
+            "locale",
+            "longitude",
+            "latitude",
+            "carnegie_undergrad",
+            "num_undergrad",
+            "num_graduate",
+            "ownership_id",
+            "mascot_name",
+            "acceptance_rate",
+            "graduation_rate",
+            "tuition_in_st",
+            "tuition_out_st",
+            "avg_sat",
+            "avg_cost_attendance",
+            "image_id",
+            "image",
+        )
+        kwargs = dict(zip(columns, args))
+
         return cls(**kwargs)
-    
+
     def set_amen_nearby(self, args):
         self.amenities_nearby = []
         for x, y in args:
-            amen = {'amenity_id': x, 'amenity_name': y}
+            amen = {"amenity_id": x, "amenity_name": y}
             self.amenities_nearby.append(amen)
-    
+
     def set_housing_nearby(self, args):
         self.housing_nearby = []
         for x, y in args:
-            house = {'property_id': x, 'property_name': y}
+            house = {"property_id": x, "property_name": y}
             self.housing_nearby.append(house)
 
     def get_id(self):
         return str(self.univ_id)
+
 
 class UniversityImages(db.Model):
     __tablename__ = "universityImages"
@@ -96,12 +146,13 @@ class UniversityImages(db.Model):
     univ_id = db.Column(db.String, ForeignKey(University.univ_id))
     url = db.Column(db.String(256), nullable=False)
 
-    def __init__(self, univ_id = 0, url = "NaN"):
+    def __init__(self, univ_id=0, url="NaN"):
         self.univ_id = univ_id
         self.url = url
 
+
 class Housing(db.Model):
-    __tablename__ = 'housing'
+    __tablename__ = "housing"
     property_id = db.Column(db.String, primary_key=True)
     property_name = db.Column(db.String, nullable=False)
     property_type = db.Column(db.String(32))
@@ -131,12 +182,44 @@ class Housing(db.Model):
     util_included = db.Column(db.String, nullable=True)
 
     def __repr__(self):
-        return '<Housing %r>' %self.property_name
+        return "<Housing %r>" % self.property_name
 
-    def __init__(self, property_id = '', property_name = "NaN", property_type = "NaN", address = "NaN", neighborhood = "NaN", city = "NaN", state = "N", zip_code = "NaN", lat = 0.0, lon = 0.0,
-    rating = 0.0, min_rent = 0, max_rent = None, min_bed = None, max_bed = None, min_bath = None, max_bath = None, min_sqft = None, max_sqft = None, walk_score = 0, transit_score = 0,
-    dog_allow = False, cat_allow = False, max_num_dog = None, max_num_cat = None, dog_weight = None, cat_weight = None, building_amenities = "NaN", util_included = "NaN",
-    amenities_nearby = None, universities_nearby = None, image_id = None, images = None):
+    def __init__(
+        self,
+        property_id="",
+        property_name="NaN",
+        property_type="NaN",
+        address="NaN",
+        neighborhood="NaN",
+        city="NaN",
+        state="N",
+        zip_code="NaN",
+        lat=0.0,
+        lon=0.0,
+        rating=0.0,
+        min_rent=0,
+        max_rent=None,
+        min_bed=None,
+        max_bed=None,
+        min_bath=None,
+        max_bath=None,
+        min_sqft=None,
+        max_sqft=None,
+        walk_score=0,
+        transit_score=0,
+        dog_allow=False,
+        cat_allow=False,
+        max_num_dog=None,
+        max_num_cat=None,
+        dog_weight=None,
+        cat_weight=None,
+        building_amenities="NaN",
+        util_included="NaN",
+        amenities_nearby=None,
+        universities_nearby=None,
+        image_id=None,
+        images=None,
+    ):
         self.property_id = property_id
         self.property_name = property_name
         self.property_type = property_type
@@ -178,52 +261,96 @@ class Housing(db.Model):
         if self.cat_allow == False:
             self.max_num_cat = 0
             self.cat_weight = None
-    
+
     @classmethod
     def build_obj_from_args(cls, args):
-        columns = ('property_id', 'property_name', 'property_type', 'address', 'neighborhood', 'city', 'state',
-                'zip_code', 'min_rent', 'max_rent', 'min_bed', 'max_bed', 'min_bath', 'max_bath', 'min_sqft',
-                'max_sqft', 'dog_allow', 'cat_allow', 'max_num_dog', 'max_num_cat', 'dog_weight', 'cat_weight',
-                'rating', 'building_amenities', 'walk_score', 'transit_score', 'util_included', 'lat', 'lon', 'image_id', 'images')
-        kwargs = dict(zip(columns,args))
-        kwargs['util_included'] = kwargs['util_included'].split(',') if kwargs['util_included'] is not None else None
-        kwargs['building_amenities'] = kwargs['building_amenities'].split(',') if kwargs['building_amenities'] is not None else None
-        kwargs['images'] = kwargs['images'].split('@@@')
+        columns = (
+            "property_id",
+            "property_name",
+            "property_type",
+            "address",
+            "neighborhood",
+            "city",
+            "state",
+            "zip_code",
+            "min_rent",
+            "max_rent",
+            "min_bed",
+            "max_bed",
+            "min_bath",
+            "max_bath",
+            "min_sqft",
+            "max_sqft",
+            "dog_allow",
+            "cat_allow",
+            "max_num_dog",
+            "max_num_cat",
+            "dog_weight",
+            "cat_weight",
+            "rating",
+            "building_amenities",
+            "walk_score",
+            "transit_score",
+            "util_included",
+            "lat",
+            "lon",
+            "image_id",
+            "images",
+        )
+        kwargs = dict(zip(columns, args))
+        kwargs["util_included"] = (
+            kwargs["util_included"].split(",")
+            if kwargs["util_included"] is not None
+            else None
+        )
+        kwargs["building_amenities"] = (
+            kwargs["building_amenities"].split(",")
+            if kwargs["building_amenities"] is not None
+            else None
+        )
+        kwargs["images"] = kwargs["images"].split("@@@")
         return cls(**kwargs)
 
     def set_amen_nearby(self, args):
         self.amenities_nearby = []
         for x, y in args:
-            amen = {'amenity_id': x, 'amenity_name': y}
+            amen = {"amenity_id": x, "amenity_name": y}
             self.amenities_nearby.append(amen)
-    
+
     def set_univ_nearby(self, args):
         self.universities_nearby = []
         for x, y in args:
-            univ = {'university_id': x, 'university_name': y}
+            univ = {"university_id": x, "university_name": y}
             self.universities_nearby.append(univ)
 
     def get_id(self):
         return str(self.property_id)
-    
+
     def get_type(self):
         return str(self.property_type)
 
+
 class HousingImages(db.Model):
-    __tablename__ = 'housingImages'
+    __tablename__ = "housingImages"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     property_id = db.Column(db.String, nullable=False)
     property_type = db.Column(db.String(32), nullable=False)
     image_url = db.Column(db.String)
-    __table_args__ = (ForeignKeyConstraint(['property_id', 'property_type'],['housing.property_id', 'housing.property_type']),)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["property_id", "property_type"],
+            ["housing.property_id", "housing.property_type"],
+        ),
+    )
 
-    def __init__(self, property_id = 0, property_type = '', image_url = ''):
+    def __init__(self, property_id=0, property_type="", image_url=""):
         self.property_id = property_id
         self.property_type = property_type
         self.image_url = image_url
 
+
 class Amenities(db.Model):
-    __tablename__ = 'amenities'
+    __tablename__ = "amenities"
     amen_id = db.Column(db.Integer, unique=True, primary_key=True)
     amen_name = db.Column(db.String(128), nullable=False)
     amen_alias = db.Column(db.String(128), nullable=False)
@@ -240,15 +367,38 @@ class Amenities(db.Model):
     deliver = db.Column(db.Boolean, nullable=False)
     takeout = db.Column(db.Boolean, nullable=False)
     hours = db.Column(db.String(512), nullable=False)
-    images = db.relationship('AmenitiesImages', cascade='all, delete-orphan', passive_deletes=True)
-    categories = db.relationship('AmenitiesCategories', cascade='all, delete-orphan', passive_deletes=True)
-    reviews = db.relationship('AmenitiesReviews', cascade='all, delete-orphan', passive_deletes=True)
+    images = db.relationship(
+        "AmenitiesImages", cascade="all, delete-orphan", passive_deletes=True
+    )
+    categories = db.relationship(
+        "AmenitiesCategories", cascade="all, delete-orphan", passive_deletes=True
+    )
+    reviews = db.relationship(
+        "AmenitiesReviews", cascade="all, delete-orphan", passive_deletes=True
+    )
 
     def __repr__(self):
-        return '<Amenity %r>' %self.amen_name
+        return "<Amenity %r>" % self.amen_name
 
-    def __init__(self, amen_id = 0, amen_name = "NaN", amen_alias = "NaN", yelp_id = "NaN", rating = 0, num_review = 0, address = "NaN", city = "NaN", state = "N", zip_code = "NaN", longitude = 0,
-    latitude = 0, pricing = "NaN", deliver = None, takeout = None, hours = "NaN"):
+    def __init__(
+        self,
+        amen_id=0,
+        amen_name="NaN",
+        amen_alias="NaN",
+        yelp_id="NaN",
+        rating=0,
+        num_review=0,
+        address="NaN",
+        city="NaN",
+        state="N",
+        zip_code="NaN",
+        longitude=0,
+        latitude=0,
+        pricing="NaN",
+        deliver=None,
+        takeout=None,
+        hours="NaN",
+    ):
         self.amen_id = amen_id
         self.amen_name = amen_name
         self.amen_alias = amen_alias
@@ -265,7 +415,7 @@ class Amenities(db.Model):
         self.deliver = deliver
         self.takeout = takeout
         self.hours = hours
-        
+
     def set_housing_nearby(self, args):
         self.housing_nearby = []
         for x, y in args:
@@ -278,16 +428,18 @@ class Amenities(db.Model):
             univ = {"university_id": x, "university_name": y}
             self.universities_nearby.append(univ)
 
+
 class AmenitiesImages(db.Model):
     __tablename__ = "amenitiesImages"
     id = db.Column(db.Integer, primary_key=True)
     amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
     url = db.Column(db.String(256), nullable=False)
 
-    def __init__(self, id = 0, amen_id = 0, url = "NaN"):
+    def __init__(self, id=0, amen_id=0, url="NaN"):
         self.id = id
         self.amen_id = amen_id
         self.url = url
+
 
 class AmenitiesCategories(db.Model):
     __tablename__ = "amenitiesCategories"
@@ -295,10 +447,11 @@ class AmenitiesCategories(db.Model):
     amen_id = db.Column(db.Integer, ForeignKey("amenities.amen_id"))
     category = db.Column(db.String(128), nullable=False)
 
-    def __init__(self, id = 0, amen_id = 0, category = "NaN"):
+    def __init__(self, id=0, amen_id=0, category="NaN"):
         self.id = id
         self.amen_id = amen_id
         self.category = category
+
 
 class AmenitiesReviews(db.Model):
     __tablename__ = "amenitiesReviews"
@@ -308,10 +461,11 @@ class AmenitiesReviews(db.Model):
     user_id = db.Column(db.String(128), nullable=False)
     user_name = db.Column(db.String(128), nullable=False)
 
-    def __init__(self, id = 0, amen_id = 0, review_id = "NaN", user_id = "NaN", user_name = "NaN"):
+    def __init__(
+        self, id=0, amen_id=0, review_id="NaN", user_id="NaN", user_name="NaN"
+    ):
         self.id = id
         self.amen_id = amen_id
         self.review_id = review_id
         self.user_id = user_id
         self.user_name = user_name
-  
