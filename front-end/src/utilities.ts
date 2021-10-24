@@ -21,5 +21,5 @@ export function formatNumberToMoney(n?: number): string {
 }
 
 export function formatAddressState(address: Address): string {
-  return `${address['street address']}, ${address.state} ${address.zipcode}`;
+  return `${address.city}, ${address.state} ${address.zipcode}`;
 }
