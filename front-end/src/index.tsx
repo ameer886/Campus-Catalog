@@ -13,7 +13,9 @@ import Navbar from './components/OurNavbar/OurNavbar';
 import CampCatSplashPage from './views/SplashPage/CampCatSplashPage';
 import AboutPage from './views/About/AboutPage';
 import ApartmentsPage from './views/Apartments/ApartmentsPage';
+import Apartment from './components/Apartment/Apartment';
 import EntertainmentsPage from './views/Entertainments/EntertainmentsPage';
+import Entertainment from './components/Entertainment/Entertainment';
 import UniversitiesPage from './views/Universities/UniversitiesPage';
 import InvalidPage from './views/Invalid/InvalidPage';
 
@@ -22,7 +24,6 @@ import University2 from './views/HardInstances/University2';
 import University3 from './views/HardInstances/University3';
 
 import reportWebVitals from './reportWebVitals';
-import Apartment from './components/Apartment/Apartment';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -51,6 +52,14 @@ ReactDOM.render(
           path="/amenities"
           exact
           component={EntertainmentsPage}
+        />
+
+        {/* Entertainment instance based on id */}
+        <Route
+          path="/amenities/:id"
+          render={(props) => (
+            <Entertainment id={parseInt(props.match.params.id)} />
+          )}
         />
 
         {/* Universities Page */}
