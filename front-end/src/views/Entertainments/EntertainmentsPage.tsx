@@ -15,10 +15,11 @@ export type EntertainmentType = {
   amen_alias: string;
   amen_id: number;
   amen_name: string;
-  categories: Array<{ category: string }>;
+  categories: Array<string>;
   city: string;
   deliver: boolean;
   hours: string;
+  images: Array<string>;
   latitude: number;
   longitude: number;
   num_review: number;
@@ -45,6 +46,7 @@ export type EntertainmentRowType = {
   deliver: boolean;
   num_review: number;
   pricing: string;
+  rating: number;
   state: string;
   takeout: boolean;
 
@@ -89,7 +91,7 @@ const EntertainmentsPage: React.FunctionComponent = () => {
     );
 
   return (
-    <div className="Entertainment">
+    <div className="Entertainments">
       <h1>Amenities</h1>
       <EntertainmentTable rows={rows} />
     </div>

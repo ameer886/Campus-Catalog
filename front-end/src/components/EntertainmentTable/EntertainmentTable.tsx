@@ -41,7 +41,20 @@ const entertainmentTableHeaders: ColumnDefinitionType<
   {
     key: 'pricing',
     header: 'Price',
-    sortFunc: (a, b) => a.pricing.localeCompare(b.pricing),
+    sortFunc: (a, b) => {
+      if (a.pricing === 'N/A') return -1;
+      if (b.pricing === 'N/A') return 1;
+      return a.pricing.localeCompare(b.pricing);
+    },
+  },
+  {
+    key: 'rating',
+    header: 'Rating',
+    sortFunc: (a, b) => {
+      if (!a.rating) return 1;
+      if (!b.rating) return -1;
+      return a.rating - b.rating;
+    },
   },
 ];
 
