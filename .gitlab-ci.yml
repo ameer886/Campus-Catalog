@@ -16,10 +16,19 @@ build:
 test:
   stage: test
   script:
-    - echo "Testing"
     - cd front-end
     - npm install --legacy-peer-deps
     - yarn test
+
+postman_tests:
+  stage: test
+  image:
+    name: postman/newman_alpine33
+    entrypoint: [""]
+  script:
+    - newman --version
+    - newman run Postman.json
+
 
 deploy_develop:
   image: python:3.6-stretch
