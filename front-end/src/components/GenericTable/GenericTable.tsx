@@ -2,10 +2,11 @@ import React from 'react';
 import { useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
+import Table from 'react-bootstrap/Table';
 
 import './GenericTable.css';
 
-import Table from 'react-bootstrap/Table';
+import { PAGE_SIZE } from '../Pagination/PaginatedTable';
 
 /*
  * This component is a stylized table made to be as generic as I can
@@ -15,8 +16,8 @@ import Table from 'react-bootstrap/Table';
  * to be as detailed as I possibly can
  */
 
-interface RowWithIndex {
-  id: number;
+export interface RowWithIndex {
+  id: number | string;
 }
 
 /*
@@ -53,7 +54,10 @@ export type ColumnDefinitionType<
  * columnDefinitions tells the table what the columns should look like
  * data is the data actually being displayed
  */
-type GenericTableProps<T extends RowWithIndex, K extends keyof T> = {
+export type GenericTableProps<
+  T extends RowWithIndex,
+  K extends keyof T,
+> = {
   columnDefinitions: Array<ColumnDefinitionType<T, K>>;
   data: Array<T>;
 };
@@ -82,7 +86,7 @@ const GenericRows = <T extends RowWithIndex, K extends keyof T>({
               // Special return: make a link on first column
               return (
                 <td key={`cell${index2}`}>
-                  <Nav.Link href={curPath + '/id=' + row.id}>
+                  <Nav.Link href={curPath + '/' + row.id}>
                     {cellStr}
                   </Nav.Link>
                 </td>
@@ -103,6 +107,21 @@ const GenericRows = <T extends RowWithIndex, K extends keyof T>({
 };
 
 /*
+ * Optional addition of curPage and setPage allows for the pagination table
+ * to correctly slice while also maintaining sort functionality
+ * There's unfortunately no way to slice only in the pagination table while
+ * also maintaining sort in the generic table without making them somehow
+ * codependent, and this was the best solution I could find that allows
+ * both GenericTables and PaginationTables to function
+ */
+type PrivateTableProps<T extends RowWithIndex, K extends keyof T> = {
+  curPage?: number;
+  setPage?: React.Dispatch<React.SetStateAction<number>>;
+  columnDefinitions: Array<ColumnDefinitionType<T, K>>;
+  data: Array<T>;
+};
+
+/*
  * The data prop should just be an array of all the table values
  * The columnDefinitions prop is more complicated.
  * The columnDefinitions depends on the type T of the data you pass in.
@@ -116,7 +135,9 @@ const GenericRows = <T extends RowWithIndex, K extends keyof T>({
 const GenericTable = <T extends RowWithIndex, K extends keyof T>({
   columnDefinitions,
   data,
-}: GenericTableProps<T, K>): JSX.Element => {
+  curPage,
+  setPage,
+}: PrivateTableProps<T, K>): JSX.Element => {
   /*
    * This state allows us to track our current sort state
    * We know for certain that all keys K are unique, so the states are:
@@ -149,19 +170,26 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
         }
       });
     }
+
+    if (curPage !== undefined)
+      // Slice i.e. paginate your data whenever you sort or change
+      return copy.slice(
+        curPage * PAGE_SIZE,
+        (curPage + 1) * PAGE_SIZE,
+      );
     return copy;
-  }, [curSort, data, columnDefinitions]);
+  }, [curSort, data, columnDefinitions, curPage]);
 
   // This is a useful wrapper on how to change our sort order
   const changeSortFunc = (key: string) => {
-    if (!curSort) {
+    if (setPage) setPage(0);
+    if (curSort == null || !curSort.includes(`${key}`)) {
       setSort(`${key}asc`);
     } else if (curSort.includes(`${key}asc`)) {
       setSort(`${key}desc`);
     } else {
       setSort(null);
     }
-    console.log(curSort);
   };
 
   return (
@@ -186,7 +214,6 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
           data={sortedData}
         />
       </Table>
-      <p>Found a total of {sortedData.length} elements.</p>
     </>
   );
 };

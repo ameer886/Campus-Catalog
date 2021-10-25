@@ -1,3 +1,5 @@
+import { Address } from './universalTypes';
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type IntentionallyAny = any;
 
@@ -16,4 +18,8 @@ const moneyFormatter = new Intl.NumberFormat('en-US', {
 export function formatNumberToMoney(n?: number): string {
   if (n !== undefined) return moneyFormatter.format(n);
   return '---';
+}
+
+export function formatAddressState(address: Address): string {
+  return `${address.city}, ${address.state} ${address.zipcode}`;
 }

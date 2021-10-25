@@ -6,3 +6,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 yarn.lock
+
+# back-end
+back-end/__pycache__
+back-end/__pycache__/*
+
+# confidential info
+.env
+front-end/.env
+
+# python
+__pycache__

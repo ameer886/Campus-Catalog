@@ -1,0 +1,30 @@
+.Entertainment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Name {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.Location {
+  font-size: 24px;
+  color: #666;
+}
+
+.Splitter {
+  display: flex;
+  flex-direction: row;
+}
+
+.SplitSide {
+  width: 45%;
+}
+
+.InlineLink {
+  display: inline;
+  padding: 0;
+}

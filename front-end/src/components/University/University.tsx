@@ -1,195 +1,19 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import Nav from 'react-bootstrap/Nav';
+
 import styles from './University.module.css';
-import { NavLink } from 'react-router-dom';
-
-import { formatNumberToMoney } from '../../utilities';
-
-import { UniversityType } from '../../views/Universities/UniversitiesPage';
-
-const UNAVAILABLE = (
-  <p>We couldn&#39;t find any information on this topic.</p>
-);
+import type { UniversityType } from '../../views/Universities/UniversitiesPage';
+import {
+  formatAddressState,
+  formatNumberToMoney,
+} from '../../utilities';
+import { getAPI } from '../../APIClient';
+import Location from '../Location/Location';
 
 type UniversityProps = {
-  uniQuery: UniversityType;
+  id: string;
 };
-
-// Function to print out a readable location
-function formatLocation(
-  state?: string,
-  city?: string,
-  zipCode?: string,
-) {
-  if (!state || !city) {
-    return 'ERR: Location unavailable!';
-  }
-
-  let str = `Located in ${city}, ${state}`;
-  if (zipCode) str += ' ' + zipCode;
-  str += '.';
-  return str;
-}
-
-type PricesAndRankingProps = {
-  inStateTuition?: number;
-  outStateTuition?: number;
-  ranking?: number;
-};
-
-// Component that should show the
-// prices and ranking of this school
-const PricesAndRanking: React.FunctionComponent<PricesAndRankingProps> =
-  ({
-    inStateTuition,
-    outStateTuition,
-    ranking,
-  }: PricesAndRankingProps) => {
-    const inState = formatNumberToMoney(inStateTuition);
-    const outState = formatNumberToMoney(outStateTuition);
-
-    return (
-      <div className={styles.Centering}>
-        <div className={styles.PricesAndRankingContainer}>
-          <div className={styles.PricesContainer}>
-            <div style={{ width: '100%' }}>
-              <div className={styles.SinglePrice}>
-                <p className={styles.Tuition + ' ' + styles.InState}>
-                  In-State Tuition:
-                </p>
-                <p className={styles.Tuition + styles.Cost}>
-                  {inState}
-                </p>
-              </div>
-              <div className={styles.SinglePrice}>
-                <p className={styles.Tuition + ' ' + styles.OutState}>
-                  Out-of-State Tuition:
-                </p>
-                <p className={styles.Tuition + ' ' + styles.Cost}>
-                  {outState}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.RankingContainer}>
-            <p className={styles.RankingLabel}>Ranking</p>
-            <p className={styles.Ranking}>{ranking}</p>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-type PublicityIndicatorProps = {
-  status: 'Public' | 'Private';
-};
-
-// Indicates whether the school is public or private
-const PublicityIndicator: React.FunctionComponent<PublicityIndicatorProps> =
-  ({ status }: PublicityIndicatorProps) => {
-    const selectedClassName =
-      styles.PublicityLabel + ' ' + styles.Selected;
-    const unSelectedClassName =
-      styles.PublicityLabel + ' ' + styles.Unselected;
-
-    const publicClassName =
-      status === 'Public' ? selectedClassName : unSelectedClassName;
-    const privateClassName =
-      status === 'Public' ? unSelectedClassName : selectedClassName;
-
-    return (
-      <div className={styles.Centering}>
-        <span>
-          <p className={styles.PublicityLabel}>This university is </p>
-          <p className={publicClassName}>Public</p>
-          <p className={styles.PublicityLabel}> | </p>
-          <p className={privateClassName}>Private</p>
-        </span>
-      </div>
-    );
-  };
-
-type EnrollmentStatsProps = {
-  undergradEnrollment?: number;
-  graduateEnrollment?: number;
-};
-
-// Component to show all available enrollment stats
-const EnrollmentStats: React.FunctionComponent<EnrollmentStatsProps> =
-  ({
-    undergradEnrollment,
-    graduateEnrollment,
-  }: EnrollmentStatsProps) => {
-    if (
-      undergradEnrollment !== undefined &&
-      graduateEnrollment !== undefined
-    ) {
-      return (
-        <p>
-          This university currently has{' '}
-          {undergradEnrollment.toLocaleString('en-US')} undergraduate
-          students and {graduateEnrollment.toLocaleString('en-US')}{' '}
-          graduate students enrolled.
-        </p>
-      );
-    } else if (undergradEnrollment !== undefined) {
-      return (
-        <p>
-          This university currently has{' '}
-          {undergradEnrollment.toLocaleString('en-US')} undergraduate
-          students enrolled.
-        </p>
-      );
-    } else if (graduateEnrollment !== undefined) {
-      return (
-        <p>
-          This university currently has{' '}
-          {graduateEnrollment.toLocaleString('en-US')} graduate
-          students enrolled.
-        </p>
-      );
-    }
-    return UNAVAILABLE;
-  };
-
-type AcceptanceStatsProps = {
-  acceptanceRate?: number;
-  graduationRate?: number;
-};
-
-// Component to show all available enrollment stats
-const AcceptanceStats: React.FunctionComponent<AcceptanceStatsProps> =
-  ({ acceptanceRate, graduationRate }: AcceptanceStatsProps) => {
-    if (
-      acceptanceRate !== undefined &&
-      graduationRate !== undefined
-    ) {
-      acceptanceRate = acceptanceRate * 100;
-      graduationRate = graduationRate * 100;
-      return (
-        <p>
-          The acceptance rate at this university is{' '}
-          {acceptanceRate.toFixed(0)}%, and the graduation rate is{' '}
-          {graduationRate.toFixed(0)}%.
-        </p>
-      );
-    } else if (acceptanceRate !== undefined) {
-      return (
-        <p>
-          The acceptance rate at this university is{' '}
-          {acceptanceRate * 100}%.
-        </p>
-      );
-    } else if (graduationRate !== undefined) {
-      return (
-        <p>
-          The acceptance rate at this university is{' '}
-          {graduationRate * 100}%.
-        </p>
-      );
-    }
-    return UNAVAILABLE;
-  };
 
 /*
  * The instance page for a single university
@@ -197,72 +21,158 @@ const AcceptanceStats: React.FunctionComponent<AcceptanceStatsProps> =
  * Any attribute information should be passed in as a property
  */
 const University: React.FunctionComponent<UniversityProps> = ({
-  uniQuery,
+  id,
 }: UniversityProps) => {
-  const location = formatLocation(
-    uniQuery.state,
-    uniQuery.city,
-    uniQuery.zipCode,
-  );
-  const finAid = formatNumberToMoney(uniQuery.avgFinancialAid);
+  const [uniQuery, setQuery] = useState<UniversityType | null>(null);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({ model: 'universities', id: id });
+        setQuery({ ...data });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, [id]);
+
+  if (uniQuery == null)
+    return (
+      <div className={styles.University}>
+        <p>Loading, please be patient.</p>
+      </div>
+    );
+
+  const state = formatAddressState(uniQuery.location);
 
   return (
-    <div>
-      <h1 className={styles.UniversityName}>{uniQuery.schoolName}</h1>
-      <h3 className={styles.UniversityLocation}>{location}</h3>
-      <PricesAndRanking
-        ranking={uniQuery.ranking}
-        inStateTuition={uniQuery.inStateTuition}
-        outStateTuition={uniQuery.outStateTuition}
-      />
-      {uniQuery.type && <PublicityIndicator status={uniQuery.type} />}
-      <h4 className={styles.Stats}>University Statistics:</h4>
+    <div className={styles.University}>
+      <h1 className={styles.Name}>{uniQuery.univ_name}</h1>
+      <h3 className={styles.Location}>{state}</h3>
 
-      {/* Section for all other stats */}
-      <h5 className={styles.Section}>Financial Aid</h5>
-      {uniQuery.avgFinancialAid !== undefined ? (
-        <p>
-          This university offers an average of {finAid} in financial
-          support.
-        </p>
+      {uniQuery.rank ? (
+        <p>This university is ranked {uniQuery.rank}.</p>
       ) : (
-        { UNAVAILABLE }
+        <p>We could not find a ranking for this university.</p>
       )}
 
-      <h5 className={styles.Section}>Mascot</h5>
-      {uniQuery.mascot ? (
-        <p>This university&#39;s mascot is {uniQuery.mascot}.</p>
-      ) : (
-        { UNAVAILABLE }
-      )}
-
-      <h5 className={styles.Section}>Enrollment</h5>
-      <EnrollmentStats
-        undergradEnrollment={uniQuery.undergradEnrollment}
-        graduateEnrollment={uniQuery.graduateEnrollment}
-      />
-
-      <h5 className={styles.Section}>Acceptance and Graduation</h5>
-      <AcceptanceStats
-        acceptanceRate={uniQuery.acceptanceRate}
-        graduationRate={uniQuery.graduationRate}
-      />
+      <p>This university is a {uniQuery.ownership_id} university.</p>
       <p>
-        Close by entertainment includes:{' '}
-        <NavLink to="/entertainments/id=1">
-          Mozarts Coffee Roaters
-        </NavLink>
-        , <NavLink to="/entertainments/id=2">Target</NavLink>, and{' '}
-        <NavLink to="/entertainments/id=3">Lan Ramen</NavLink>
-        .Apartments that are located near this university include{' '}
-        <NavLink to="/apartments/id=1">Parkside Place</NavLink>,{' '}
-        <NavLink to="/apartments/id=3">3401 at Red River</NavLink>,
-        and{' '}
-        <NavLink to="/apartments/id=2">
-          Barclay Square at Princeton Forrestal
-        </NavLink>
+        You can find the university website{' '}
+        <Nav.Link
+          href={uniQuery.school_url}
+          style={{ display: 'inline', padding: '0' }}
+        >
+          here
+        </Nav.Link>
         .
       </p>
+
+      {uniQuery.avg_cost_attendance !== 0 ? (
+        <p>
+          The average cost of attendance for this university is{' '}
+          {formatNumberToMoney(uniQuery.avg_cost_attendance)}.
+        </p>
+      ) : (
+        <p>
+          We could not find the average cost of attendance for this
+          university.
+        </p>
+      )}
+      {uniQuery.tuition_in_st !== 0 ? (
+        <p>
+          The in-state tuition for this university is{' '}
+          {formatNumberToMoney(uniQuery.tuition_in_st)}.
+        </p>
+      ) : (
+        <p>
+          We could not find the in-state tuition for this university.
+        </p>
+      )}
+      {uniQuery.tuition_out_st !== 0 ? (
+        <p>
+          The out-of-state tuition for this university is{' '}
+          {formatNumberToMoney(uniQuery.tuition_out_st)}.
+        </p>
+      ) : (
+        <p>
+          We could not find the out-of-state tuition for this
+          university.
+        </p>
+      )}
+
+      <p>
+        This university has a graudation rate of{' '}
+        {(100 * uniQuery.graduation_rate).toFixed(1)}%. There are{' '}
+        {uniQuery.num_undergrad.toLocaleString('en-US')} undergrad
+        students and {uniQuery.num_graduate.toLocaleString('en-US')}{' '}
+        graduate students.
+      </p>
+
+      <p>
+        The average SAT score for this university is{' '}
+        {uniQuery.avg_sat}. It has an acceptance rate of{' '}
+        {(100 * uniQuery.acceptance_rate).toFixed(1)}%.
+      </p>
+
+      <p>Carnegie undergrad: {uniQuery.carnegie_undergrad}</p>
+      <p>The locale is: {uniQuery.locale}</p>
+
+      <div className={styles.Splitter}>
+        <div className={styles.SplitSide}>
+          <p>
+            We found {uniQuery.amenities_nearby.length} nearby
+            entertainment amenit
+            {uniQuery.amenities_nearby.length === 1 ? 'y' : 'ies'}.
+          </p>
+          {uniQuery.amenities_nearby.length > 0 && (
+            <div>
+              <ul style={{ width: '100%', textAlign: 'center' }}>
+                {uniQuery.amenities_nearby.map((amenity, index) => (
+                  <li key={index}>
+                    <Nav.Link
+                      href={`/amenities/${amenity.amenity_id}`}
+                    >
+                      {amenity.amenity_name}
+                    </Nav.Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <div className={styles.SplitSide}>
+          <p>
+            We found {uniQuery.housing_nearby.length} nearby housing
+            location
+            {uniQuery.housing_nearby.length === 1 ? '' : 's'}.
+          </p>
+          {uniQuery.housing_nearby.length > 0 && (
+            <div>
+              <ul style={{ width: '100%', textAlign: 'center' }}>
+                {uniQuery.housing_nearby.map((housing, index) => (
+                  <li key={index}>
+                    <Nav.Link
+                      href={`/amenities/${housing.property_id}`}
+                    >
+                      {housing.property_name}
+                    </Nav.Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <img src={uniQuery.image} />
+
+      <p>A map of the location:</p>
+      <Location
+        position={{ lat: uniQuery.latitude, lng: uniQuery.longitude }}
+      />
     </div>
   );
 };
