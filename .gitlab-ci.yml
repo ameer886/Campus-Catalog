@@ -29,6 +29,11 @@ postman_tests:
     - newman --version
     - newman run Postman.json
 
+selenium_tests:
+  stage: test
+  image: forbesye/selenium-ci
+  script:
+    - python3 front-end/guitests.py
 
 deploy_develop:
   image: python:3.6-stretch
