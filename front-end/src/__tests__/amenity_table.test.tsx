@@ -78,29 +78,15 @@ describe('Apartment Table Test Suite', () => {
       </MemoryRouter>,
     );
 
-    const aptLink1 = screen.getByRole('link', {
-      name: EXAMPLE_ROWS[0].amen_name,
-    });
-    expect(aptLink1).not.toBeNull();
-    expect(aptLink1.getAttribute('href')).toBe(
-      `/amenities/${EXAMPLE_ROWS[0].id}`,
-    );
-
-    const aptLink2 = screen.getByRole('link', {
-      name: EXAMPLE_ROWS[1].amen_name,
-    });
-    expect(aptLink2).not.toBeNull();
-    expect(aptLink2.getAttribute('href')).toBe(
-      `/amenities/${EXAMPLE_ROWS[1].id}`,
-    );
-
-    const aptLink3 = screen.getByRole('link', {
-      name: EXAMPLE_ROWS[2].amen_name,
-    });
-    expect(aptLink3).not.toBeNull();
-    expect(aptLink3.getAttribute('href')).toBe(
-      `/amenities/${EXAMPLE_ROWS[2].id}`,
-    );
+    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
+      const aptLink = screen.getByRole('link', {
+        name: EXAMPLE_ROWS[i].amen_name,
+      });
+      expect(aptLink).not.toBeNull();
+      expect(aptLink.getAttribute('href')).toBe(
+        `/amenities/${EXAMPLE_ROWS[i].id}`,
+      );
+    }
   });
 
   // Only tests amenity name
