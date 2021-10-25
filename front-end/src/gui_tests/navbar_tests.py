@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import sys
 
-URL = "http://localhost:3000/"
+URL = "https://www.campuscatalog.me/"
 
 class Test(unittest.TestCase):
    @classmethod

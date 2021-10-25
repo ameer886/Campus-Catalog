@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 import sys
 
-URL = "http://localhost:3000/about/"
+URL = "https://www.campuscatalog.me/about/"
 
 class Test(unittest.TestCase):
    @classmethod
@@ -22,7 +22,7 @@ class Test(unittest.TestCase):
    
    def testAboutInformation(self):
       self.driver.get(URL)
-      self.driver.implicitly_wait(10)
+      self.driver.implicitly_wait(20)
       assert self.driver.title == "Campus Catalog"
       title = self.driver.find_element_by_class_name('AboutPage_Title__2srkJ').text
       assert title == 'About'
@@ -32,20 +32,20 @@ class Test(unittest.TestCase):
    
    def testCodebaseLinks(self):
       self.driver.get(URL)
-      self.driver.implicitly_wait(10)
+      self.driver.implicitly_wait(30)
+
+      link = self.driver.find_element_by_link_text('Our GitLab repository').get_attribute('href')
+      assert link == 'https://gitlab.com/RG8452/campus-catalog/'
 
       link = self.driver.find_element_by_link_text('Our Postman docs').get_attribute('href')
       assert link == 'https://documenter.getpostman.com/view/17627995/UUy3A7Rd'
 
-      self.driver.back()
-      self.driver.implicitly_wait(10)
-      link = self.driver.find_element_by_link_text('Our GitLab repository').get_attribute('href')
-      assert link == 'https://gitlab.com/RG8452/campus-catalog/'
+      
 
       
       
 
 
 if __name__ == "__main__":
-    PATH = sys.argv[1]
-    unittest.main(argv=['first-arg-is-ignored'])
+   PATH = sys.argv[1]
+   unittest.main(argv=['first-arg-is-ignored'])
