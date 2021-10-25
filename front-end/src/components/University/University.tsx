@@ -155,7 +155,7 @@ const University: React.FunctionComponent<UniversityProps> = ({
                 {uniQuery.housing_nearby.map((housing, index) => (
                   <li key={index}>
                     <Nav.Link
-                      href={`/amenities/${housing.property_id}`}
+                      href={`/housing/${housing.property_id}`}
                     >
                       {housing.property_name}
                     </Nav.Link>

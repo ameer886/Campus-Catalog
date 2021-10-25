@@ -146,7 +146,7 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
                 {aptQuery.amenities_nearby.map((amenity, index) => (
                   <li key={index}>
                     <Nav.Link
-                      href={`/entertainments/${amenity.amenity_id}`}
+                      href={`/amenities/${amenity.amenity_id}`}
                     >
                       {amenity.amenity_name}
                     </Nav.Link>
@@ -170,7 +170,7 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
                   (university, index) => (
                     <li key={index}>
                       <Nav.Link
-                        href={`/entertainments/${university.university_id}`}
+                        href={`/universities/${university.university_id}`}
                       >
                         {university.university_name}
                       </Nav.Link>
