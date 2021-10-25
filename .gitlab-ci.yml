@@ -29,6 +29,15 @@ postman_tests:
     - newman --version
     - newman run Postman.json
 
+python_unit_tests:
+  image: python:3.6-stretch
+  stage: test
+  before_script:
+    - pip install -r back-end/requirements.txt
+  script:
+    - cd back-end
+    - python3 -m unit_test
+
 
 deploy_develop:
   image: python:3.6-stretch
