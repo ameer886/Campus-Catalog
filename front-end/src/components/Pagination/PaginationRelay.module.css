@@ -1,0 +1,14 @@
+.ButtonContainer {
+  margin: 4px;
+}
+
+.PageButton {
+  margin: 0px 4px;
+}
+
+.IconAdjust {
+  margin-top: -4px;
+  color: black;
+  width: 20px;
+  height: 20px;
+}

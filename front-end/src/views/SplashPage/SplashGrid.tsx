@@ -14,18 +14,18 @@ type CardProps = {
 
 const allCards: CardProps[] = [
   {
-    href: '/entertainments',
-    title: 'Entertainment',
+    href: '/amenities',
+    title: 'Amenities',
     img: EntertainmentImg,
   },
   {
     href: '/universities',
-    title: 'University',
+    title: 'Universities',
     img: HarvardImg,
   },
   {
-    href: '/apartments',
-    title: 'Apartments',
+    href: '/housing',
+    title: 'Housing',
     img: ApartmentImg,
   },
 ];

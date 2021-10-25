@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
 MAKEFLAGS 	  += --no-builtin-rules
 SHELL		  := bash
-ENV_FILE	  := ../.env
+ENV_FILE	  := ../back-end/.env
 
 docker-frontend:
 	cd front-end && docker build -t front-end .; docker run -it -p 3000:3000 front-end

@@ -10,6 +10,18 @@ import ReactBootstrapLogoImg from './Images/ReactBootstrapLogo.png';
 import ReactLogoImg from './Images/ReactLogo.png';
 import TypeScriptLogoImg from './Images/TypeScriptLogo.png';
 
+import JestLogoImg from './Images/JestLogo.png';
+import AxiosLogoImg from './Images/AxiosLogo.png';
+import SeleniumLogoImg from './Images/SeleniumLogo.png';
+import PythonLogoImg from './Images/PythonLogo.png';
+import NGINXLogoImg from './Images/NGINXLogo.png';
+import AWSElasticBeanstalkLogoImg from './Images/AWSElasticBeanstalkLogo.png';
+import DockerLogoImg from './Images/DockerLogo.png';
+import AmazonRDSLogoImg from './Images/AmazonRDSLogo.png';
+import MarshmallowLogoImg from './Images/MarshmallowLogo.png';
+import FlaskLogoImg from './Images/FlaskLogo.png';
+import SQLAlchemyLogoImg from './Images/SQLAlchemyLogo.png';
+
 // API images
 import ApifyLogoImg from './Images/ApifyLogo.png';
 import DoELogoImg from './Images/DoELogo.png';
@@ -83,6 +95,72 @@ export const aboutTools: ToolOrAPI[] = [
     description: 'Node Package Manager',
     link: 'https://www.npmjs.com/',
     img: NPMLogoImg,
+  },
+  {
+    name: 'Jest',
+    description: 'React unit testing',
+    link: 'https://jestjs.io/',
+    img: JestLogoImg,
+  },
+  {
+    name: 'Axios',
+    description: 'RESTful API manager',
+    link: 'https://axios-http.com/',
+    img: AxiosLogoImg,
+  },
+  {
+    name: 'Selenium',
+    description: 'Acceptance testsk',
+    link: 'https://www.selenium.dev/',
+    img: SeleniumLogoImg,
+  },
+  {
+    name: 'Python',
+    description: 'Back-end implementation',
+    link: 'https://www.python.org/',
+    img: PythonLogoImg,
+  },
+  {
+    name: 'NGINX',
+    description: 'Server hosting',
+    link: 'https://www.nginx.com/',
+    img: NGINXLogoImg,
+  },
+  {
+    name: 'AWS Elastic Beanstalk',
+    description: 'Back-end server deployment',
+    link: 'https://aws.amazon.com/elasticbeanstalk/',
+    img: AWSElasticBeanstalkLogoImg,
+  },
+  {
+    name: 'Docker',
+    description: 'Containerizations',
+    link: 'https://www.docker.com/',
+    img: DockerLogoImg,
+  },
+  {
+    name: 'Amazon RDS',
+    description: 'RDBMS',
+    link: 'https://aws.amazon.com/rds/',
+    img: AmazonRDSLogoImg,
+  },
+  {
+    name: 'marshmallow',
+    description: 'Object serialization',
+    link: 'https://marshmallow.readthedocs.io/en/stable/',
+    img: MarshmallowLogoImg,
+  },
+  {
+    name: 'Flask',
+    description: 'Python web dev framework',
+    link: 'https://flask.palletsprojects.com/en/1.1.x/',
+    img: FlaskLogoImg,
+  },
+  {
+    name: 'SQLAlchemy',
+    description: 'Python SQL toolkit',
+    link: 'https://www.sqlalchemy.org/',
+    img: SQLAlchemyLogoImg,
   },
 ];
 
