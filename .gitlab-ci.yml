@@ -32,6 +32,8 @@ postman_tests:
 selenium_tests:
   stage: test
   image: forbesye/selenium-ci
+  before_script:
+    - pip3 install -r back-end/requirements.txt
   script:
     - python3 front-end/guitests.py
 
