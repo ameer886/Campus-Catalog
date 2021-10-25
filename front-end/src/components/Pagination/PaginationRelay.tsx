@@ -32,7 +32,7 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
     const startElt = curPage * pageSize + 1;
     const curPages = `${startElt} - ${Math.min(
       totalElements,
-      startElt + pageSize,
+      startElt + pageSize - 1,
     )}`;
     const lastPage = Math.floor((totalElements - 1) / pageSize);
 
@@ -44,6 +44,7 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
         <div className={styles.ButtonContainer}>
           {/* First Page button */}
           <Button
+            aria-label="first"
             className={styles.PageButton + ' btn btn-outline-info'}
             disabled={curPage === 0}
             onClick={() => setPage(0)}
@@ -54,6 +55,7 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
 
           {/* Previous Page button */}
           <Button
+            aria-label="prev"
             className={styles.PageButton + ' btn btn-outline-info'}
             disabled={curPage === 0}
             onClick={() => setPage(curPage - 1)}
@@ -64,6 +66,7 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
 
           {/* Next Page button */}
           <Button
+            aria-label="next"
             className={styles.PageButton + ' btn btn-outline-info'}
             disabled={curPage === lastPage}
             onClick={() => setPage(curPage + 1)}
@@ -74,6 +77,7 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
 
           {/* Last Page button */}
           <Button
+            aria-label="last"
             className={styles.PageButton + ' btn btn-outline-info'}
             disabled={curPage === lastPage}
             onClick={() => setPage(lastPage)}

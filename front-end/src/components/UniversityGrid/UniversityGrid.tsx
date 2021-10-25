@@ -19,6 +19,7 @@ const UniversityCard: React.FunctionComponent<CardProps> = ({
 
   return (
     <Nav.Link
+      aria-label={university.univ_name + ' link'}
       className={styles.CardLink}
       href={curPath + '/' + university.id}
     >
