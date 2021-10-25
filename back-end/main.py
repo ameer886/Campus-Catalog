@@ -1,10 +1,9 @@
 import flask
 import json
 from flask import Flask, jsonify, request
-from flask.templating import render_template
 from flask_cors import CORS
 from db import db_init
-from models import University, Housing, Amenities, UniversityImages
+from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, validate
 import queries
@@ -17,7 +16,7 @@ ma = Marshmallow(app)
 
 @app.route("/")
 def home():
-    return "<h1> hello world </h1>"
+    return '<h1> goodbye world </h1>'
 
 
 class AmenitiesImagesSchema(ma.Schema):

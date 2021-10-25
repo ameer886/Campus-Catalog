@@ -4,9 +4,8 @@ import sys
 from flask import Flask
 from sqlalchemy import MetaData
 
-sys.path.append("..")
-from src.db import db_init
-from src.models import University
+from db import db_init
+from models import University
 
 
 class TestBackEnd(unittest.TestCase):
