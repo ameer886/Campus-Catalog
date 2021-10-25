@@ -10,7 +10,7 @@ global:
   application_name: campus-catalog
   branch: null
   default_ec2_keyname: null
-  default_platform: Docker
+  default_platform: Docker running on 64bit Amazon Linux 2
   default_region: us-west-2
   include_git_submodules: true
   instance_profile: null
