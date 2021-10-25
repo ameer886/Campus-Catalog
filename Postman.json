@@ -1,0 +1,442 @@
+{
+	"info": {
+		"_postman_id": "aa344641-478e-4a79-b956-4f88d9e56545",
+		"name": "Campus Catalog API Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "All Universities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is ok\", () => {\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is a json\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.campuscatalog.me/universities",
+					"protocol": "https",
+					"host": [
+						"api",
+						"campuscatalog",
+						"me"
+					],
+					"path": [
+						"universities"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Detail about every university in the database",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.campuscatalog.me/universities",
+							"protocol": "https",
+							"host": [
+								"api",
+								"campuscatalog",
+								"me"
+							],
+							"path": [
+								"universities"
+							],
+							"query": [
+								{
+									"key": "universities",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"universities\": [\r\n        {\r\n            \"acceptance_rate\": 0.9175,\r\n            \"avg_cost_attendance\": 23053.0,\r\n            \"city\": \"Normal\",\r\n            \"ownership_id\": \"Public\",\r\n            \"rank\": null,\r\n            \"state\": \"AL\",\r\n            \"tuition_in_st\": 10024,\r\n            \"tuition_out_st\": 18634,\r\n            \"univ_id\": \"100654\",\r\n            \"univ_name\": \"Alabama A & M University\"\r\n        }\r\n    ]\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Get detailed info about a single university by university id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is ok\", () => {\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is a json\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.campuscatalog.me/universities/166027",
+					"protocol": "https",
+					"host": [
+						"api",
+						"campuscatalog",
+						"me"
+					],
+					"path": [
+						"universities",
+						"166027"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Single University By University ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.campuscatalog.me/universities/166027",
+							"protocol": "https",
+							"host": [
+								"api",
+								"campuscatalog",
+								"me"
+							],
+							"path": [
+								"universities",
+								"166027"
+							],
+							"query": [
+								{
+									"key": "univ_id",
+									"value": "166027",
+									"description": "Find school using university Id",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"acceptance_rate\": 0.0464,\n    \"alias\": null,\n    \"amenities_nearby\": [\n        {\n            \"amenity_id\": \"15145970\",\n            \"amenity_name\": \"Seven Stars\"\n        },\n        {\n            \"amenity_id\": \"570249054\",\n            \"amenity_name\": \"The Table at Season to Taste\"\n        },\n        {\n            \"amenity_id\": \"681871271\",\n            \"amenity_name\": \"Yume Ga Arukara\"\n        },\n        {\n            \"amenity_id\": \"705431959\",\n            \"amenity_name\": \"Zinnia\"\n        },\n        {\n            \"amenity_id\": \"816618589\",\n            \"amenity_name\": \"Boomerangs\"\n        },\n        {\n            \"amenity_id\": \"825371886\",\n            \"amenity_name\": \"Curio Coffee and Wine\"\n        },\n        {\n            \"amenity_id\": \"895036475\",\n            \"amenity_name\": \"The Shops at Porter\"\n        },\n        {\n            \"amenity_id\": \"928906963\",\n            \"amenity_name\": \"Abodeon\"\n        },\n        {\n            \"amenity_id\": \"1037909514\",\n            \"amenity_name\": \"The Harvard Coop Bookstore\"\n        }\n    ],\n    \"avg_cost_attendance\": 73485.0,\n    \"avg_sat\": 1517.0,\n    \"carnegie_undergrad\": \"Four-year, full-time, more selective, lower transfer-in\",\n    \"graduation_rate\": 0.971,\n    \"housing_nearby\": [\n        {\n            \"property_id\": \"j32dzy5\",\n            \"property_name\": \"929 Mass\"\n        },\n        {\n            \"property_id\": \"jms6hv5\",\n            \"property_name\": \"8 Allen St\"\n        },\n        {\n            \"property_id\": \"esf855n\",\n            \"property_name\": \"165 Erie St\"\n        },\n        {\n            \"property_id\": \"kxjwby9\",\n            \"property_name\": \"35 Magee St\"\n        },\n        {\n            \"property_id\": \"720dv4y\",\n            \"property_name\": \"AVA North Point\"\n        },\n        {\n            \"property_id\": \"s923g87\",\n            \"property_name\": \"216 Norfolk St\"\n        },\n        {\n            \"property_id\": \"j5spef5\",\n            \"property_name\": \"124 Berkshire St\"\n        },\n        {\n            \"property_id\": \"8hy66v3\",\n            \"property_name\": \"9 Upland Rd\"\n        },\n        {\n            \"property_id\": \"9f6c6k5\",\n            \"property_name\": \"77 Francis Ave\"\n        },\n        {\n            \"property_id\": \"nsrjptq\",\n            \"property_name\": \"17 Putnam Ave\"\n        },\n        {\n            \"property_id\": \"kt38sc8\",\n            \"property_name\": \"58 Plymouth St\"\n        },\n        {\n            \"property_id\": \"dthhrhh\",\n            \"property_name\": \"Blair Pond Estates\"\n        },\n        {\n            \"property_id\": \"ctq40ye\",\n            \"property_name\": \"Chroma\"\n        },\n        {\n            \"property_id\": \"8hxfqq0\",\n            \"property_name\": \"54 Portsmouth St\"\n        },\n        {\n            \"property_id\": \"empe9vp\",\n            \"property_name\": \"Luxe at Alewife\"\n        },\n        {\n            \"property_id\": \"bkqm7rc\",\n            \"property_name\": \"216 Norfolk St\"\n        },\n        {\n            \"property_id\": \"9mm23c7\",\n            \"property_name\": \"Ten Essex\"\n        },\n        {\n            \"property_id\": \"27r7yj8\",\n            \"property_name\": \"17 Putnam Ave\"\n        },\n        {\n            \"property_id\": \"zvrt5fx\",\n            \"property_name\": \"216 Norfolk St\"\n        },\n        {\n            \"property_id\": \"jje23b7\",\n            \"property_name\": \"16 Chauncy St\"\n        },\n        {\n            \"property_id\": \"h2tl302\",\n            \"property_name\": \"Twenty20\"\n        },\n        {\n            \"property_id\": \"8jmzhb3\",\n            \"property_name\": \"216 Norfolk St\"\n        },\n        {\n            \"property_id\": \"hm7n3y0\",\n            \"property_name\": \"20 Hubbard Ave\"\n        },\n        {\n            \"property_id\": \"cptn4fe\",\n            \"property_name\": \"146 Columbia St\"\n        },\n        {\n            \"property_id\": \"587v38p\",\n            \"property_name\": \"48 Porter St\"\n        },\n        {\n            \"property_id\": \"nvz6n5p\",\n            \"property_name\": \"Fuse\"\n        },\n        {\n            \"property_id\": \"0vcp101\",\n            \"property_name\": \"359 Prospect St\"\n        },\n        {\n            \"property_id\": \"zndx86x\",\n            \"property_name\": \"469 Windsor St\"\n        },\n        {\n            \"property_id\": \"eycs0jq\",\n            \"property_name\": \"10 Cambridge Ter\"\n        },\n        {\n            \"property_id\": \"ldpry3g\",\n            \"property_name\": \"CLINTON & PROSPECT APARTMENTS\"\n        },\n        {\n            \"property_id\": \"5r1f2lq\",\n            \"property_name\": \"43 Davenport St\"\n        },\n        {\n            \"property_id\": \"f4wh6ct\",\n            \"property_name\": \"216 Norfolk St\"\n        },\n        {\n            \"property_id\": \"hlwlx01\",\n            \"property_name\": \"197 Sidney St\"\n        },\n        {\n            \"property_id\": \"64d7zwr\",\n            \"property_name\": \"3 Dana St\"\n        },\n        {\n            \"property_id\": \"xv481qn\",\n            \"property_name\": \"19 Forest St\"\n        },\n        {\n            \"property_id\": \"ww6235k\",\n            \"property_name\": \"231 Norfolk St\"\n        },\n        {\n            \"property_id\": \"zhnv10z\",\n            \"property_name\": \"Vivo Apartments\"\n        },\n        {\n            \"property_id\": \"hvyee11\",\n            \"property_name\": \"15 Pleasant Pl\"\n        },\n        {\n            \"property_id\": \"xyw14eq\",\n            \"property_name\": \"19A Forest St\"\n        },\n        {\n            \"property_id\": \"tq2vsv9\",\n            \"property_name\": \"20 Hubbard Ave\"\n        },\n        {\n            \"property_id\": \"srp8517\",\n            \"property_name\": \"64 Sacramento St\"\n        },\n        {\n            \"property_id\": \"r2qxff2\",\n            \"property_name\": \"357 Prospect St\"\n        },\n        {\n            \"property_id\": \"666fy0r\",\n            \"property_name\": \"371 Prospect St\"\n        },\n        {\n            \"property_id\": \"c00m1me\",\n            \"property_name\": \"Church Corner\"\n        },\n        {\n            \"property_id\": \"ptb9nsr\",\n            \"property_name\": \"Watermark Kendall West\"\n        },\n        {\n            \"property_id\": \"2wmfvg8\",\n            \"property_name\": \"Third Square\"\n        },\n        {\n            \"property_id\": \"74xhn4x\",\n            \"property_name\": \"Lofts at Kendall Square\"\n        },\n        {\n            \"property_id\": \"srj4z66\",\n            \"property_name\": \"Axiom Apartments\"\n        },\n        {\n            \"property_id\": \"dxvyq6h\",\n            \"property_name\": \"Windsor at Cambridge Park\"\n        },\n        {\n            \"property_id\": \"3zbnzkg\",\n            \"property_name\": \"8 Newport Rd\"\n        },\n        {\n            \"property_id\": \"b1l0sl8\",\n            \"property_name\": \"255 Walden St\"\n        },\n        {\n            \"property_id\": \"9bqnxy5\",\n            \"property_name\": \"17 Pine St\"\n        },\n        {\n            \"property_id\": \"80g8b72\",\n            \"property_name\": \"100 Memorial Drive\"\n        },\n        {\n            \"property_id\": \"yypycyt\",\n            \"property_name\": \"2 Ware St\"\n        },\n        {\n            \"property_id\": \"sbsn5q4\",\n            \"property_name\": \"15 Hollis St\"\n        },\n        {\n            \"property_id\": \"ldcrped\",\n            \"property_name\": \"183 River St\"\n        },\n        {\n            \"property_id\": \"2276znc\",\n            \"property_name\": \"165 Erie St\"\n        },\n        {\n            \"property_id\": \"crdsc0f\",\n            \"property_name\": \"The Wyeth\"\n        },\n        {\n            \"property_id\": \"963v765\",\n            \"property_name\": \"Zinc\"\n        },\n        {\n            \"property_id\": \"7ktfq4z\",\n            \"property_name\": \"216 Norfolk St\"\n        },\n        {\n            \"property_id\": \"w3f395h\",\n            \"property_name\": \"Parkside Place\"\n        },\n        {\n            \"property_id\": \"9tz8q87\",\n            \"property_name\": \"222 Prospect St\"\n        },\n        {\n            \"property_id\": \"1en2dz7\",\n            \"property_name\": \"369 Prospect St\"\n        },\n        {\n            \"property_id\": \"wb9j6dl\",\n            \"property_name\": \"237 Columbia St\"\n        },\n        {\n            \"property_id\": \"1bndw37\",\n            \"property_name\": \"376 Prospect St\"\n        },\n        {\n            \"property_id\": \"zsqr5ey\",\n            \"property_name\": \"35 Magee St\"\n        },\n        {\n            \"property_id\": \"nytnqpq\",\n            \"property_name\": \"9 Fairfield St\"\n        },\n        {\n            \"property_id\": \"nz0591p\",\n            \"property_name\": \"220 Prospect St\"\n        },\n        {\n            \"property_id\": \"hfh78t3\",\n            \"property_name\": \"10 Cambridge Ter\"\n        },\n        {\n            \"property_id\": \"ffn0hxs\",\n            \"property_name\": \"77 Norfolk St\"\n        },\n        {\n            \"property_id\": \"w3tl86k\",\n            \"property_name\": \"13 Andrew St\"\n        },\n        {\n            \"property_id\": \"5r99egq\",\n            \"property_name\": \"132 Cherry St\"\n        },\n        {\n            \"property_id\": \"rn5dm12\",\n            \"property_name\": \"Elevate\"\n        },\n        {\n            \"property_id\": \"vkvxfcf\",\n            \"property_name\": \"17 Putnam Ave\"\n        },\n        {\n            \"property_id\": \"fnbte5s\",\n            \"property_name\": \"Vox on Two\"\n        },\n        {\n            \"property_id\": \"kg47xrc\",\n            \"property_name\": \"10 Cambridge Ter\"\n        },\n        {\n            \"property_id\": \"c2k7q5f\",\n            \"property_name\": \"2542 Massachusetts Ave\"\n        },\n        {\n            \"property_id\": \"5vsen6m\",\n            \"property_name\": \"9 Upland Rd\"\n        },\n        {\n            \"property_id\": \"2wkg129\",\n            \"property_name\": \"93 Upland Rd\"\n        },\n        {\n            \"property_id\": \"vbsyksd\",\n            \"property_name\": \"Atmark Cambridge\"\n        },\n        {\n            \"property_id\": \"z17jldw\",\n            \"property_name\": \"Walden Park\"\n        },\n        {\n            \"property_id\": \"0x34ml2\",\n            \"property_name\": \"53 Porter Rd\"\n        },\n        {\n            \"property_id\": \"zw7df4y\",\n            \"property_name\": \"6 Emmons Plz\"\n        },\n        {\n            \"property_id\": \"lgycrve\",\n            \"property_name\": \"354 Hurley St\"\n        },\n        {\n            \"property_id\": \"d1bxvqj\",\n            \"property_name\": \"333 Harvard St Unit 7\"\n        },\n        {\n            \"property_id\": \"h2k9bk0\",\n            \"property_name\": \"Briston Arms Apartments\"\n        },\n        {\n            \"property_id\": \"qsm8k3z\",\n            \"property_name\": \"Hanover Alewife\"\n        },\n        {\n            \"property_id\": \"wvwfs4l\",\n            \"property_name\": \"Proto Kendall Square\"\n        },\n        {\n            \"property_id\": \"lkv4mve\",\n            \"property_name\": \"136 Banks St\"\n        },\n        {\n            \"property_id\": \"sl3g3b5\",\n            \"property_name\": \"63 Plymouth St\"\n        },\n        {\n            \"property_id\": \"b9stnfc\",\n            \"property_name\": \"17 Farrar St\"\n        },\n        {\n            \"property_id\": \"x3l1zcp\",\n            \"property_name\": \"10 Cambridge Ter\"\n        },\n        {\n            \"property_id\": \"m25f5fl\",\n            \"property_name\": \"10 Salem St\"\n        },\n        {\n            \"property_id\": \"zx9e5kx\",\n            \"property_name\": \"218 Banks St\"\n        },\n        {\n            \"property_id\": \"d1z42gk\",\n            \"property_name\": \"Cambridge Park Apartments\"\n        },\n        {\n            \"property_id\": \"y32cmmr\",\n            \"property_name\": \"371 Prospect St\"\n        }\n    ],\n    \"image\": \"https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=Aap_uECEW7tKoxQJQttF1fHy79RdpxSoFilK7axoUuBejiKebh8kVHPYGuTzGXfjZBALDg0_mYwV4d6LtmNb_ZzR-0ivb0307lYmV-bj16ndgXjy9E8xKPQ5OFQgEb1MzKBgIQzqrZ6209hiCOzXt6pzvvAmdNUlfRot8DHCTM564Qliq5O9&key=AIzaSyBoJ_VtYjWOc9te4hGw5lx209dF2enIIL8\",\n    \"latitude\": 42.37447,\n    \"locale\": \"City: Midsize\",\n    \"location\": {\n        \"city\": \"Cambridge\",\n        \"state\": \"MA\",\n        \"zipcode\": \"02138\"\n    },\n    \"longitude\": -71.11832,\n    \"num_graduate\": 27520,\n    \"num_undergrad\": 14467,\n    \"ownership_id\": \"Private Non-Profit\",\n    \"rank\": 2,\n    \"school_url\": \"www.harvard.edu/\",\n    \"tuition_in_st\": 51925,\n    \"tuition_out_st\": 51925,\n    \"univ_id\": \"166027\",\n    \"univ_name\": \"Harvard University\",\n    \"zip_code\": \"02138\"\n}"
+				}
+			]
+		},
+		{
+			"name": "All Housing",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is ok\", () => {\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is a json\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.campuscatalog.me/housing",
+					"protocol": "https",
+					"host": [
+						"api",
+						"campuscatalog",
+						"me"
+					],
+					"path": [
+						"housing"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Basic info about every property in database",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.campuscatalog.me/housing",
+							"protocol": "https",
+							"host": [
+								"api",
+								"campuscatalog",
+								"me"
+							],
+							"path": [
+								"housing"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"properties\": [\r\n        {\r\n            \"city\": \"Auburn\",\r\n            \"max_rent\": 800,\r\n            \"max_sqft\": 1000.0,\r\n            \"property_id\": \"35erbsf\",\r\n            \"property_name\": \"343 S Gay St\",\r\n            \"property_type\": \"condo\",\r\n            \"rating\": 0.0,\r\n            \"state\": \"AL\",\r\n            \"transit_score\": 0,\r\n            \"walk_score\": 62\r\n        }\r\n    ]\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Get detailed info about a single housing by property id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is ok\", () => {\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is a json\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.campuscatalog.me/housing/z7hmtvy",
+					"protocol": "https",
+					"host": [
+						"api",
+						"campuscatalog",
+						"me"
+					],
+					"path": [
+						"housing",
+						"z7hmtvy"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Single Apartment By Apartment ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://campuscatalog.me/api/apartments/aptID=93825",
+							"protocol": "https",
+							"host": [
+								"campuscatalog",
+								"me"
+							],
+							"path": [
+								"api",
+								"apartments",
+								"aptID=93825"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"amenities_nearby\": [\n        {\n            \"amenity_id\": \"160468746\",\n            \"amenity_name\": \"August Karaoke Box\"\n        },\n        {\n            \"amenity_id\": \"785321832\",\n            \"amenity_name\": \"Poke Wave\"\n        },\n        {\n            \"amenity_id\": \"835180697\",\n            \"amenity_name\": \"Vietshack\"\n        }\n    ],\n    \"bath\": {\n        \"max\": 1.0,\n        \"min\": 1.0\n    },\n    \"bed\": {\n        \"max\": 2.0,\n        \"min\": 1.0\n    },\n    \"building_amenities\": [\n        \"Air Conditioning\",\n        \"Washer/Dryer Hookup\",\n        \"Refrigerator\",\n        \"Heating\",\n        \"Kitchen\",\n        \"Pool\"\n    ],\n    \"cat_allow\": false,\n    \"cat_weight\": null,\n    \"dog_allow\": false,\n    \"dog_weight\": null,\n    \"images\": [\n        \"https://images1.apartments.com/i2/aC8W0DyV_5jUjSwTIyt3tenj30IkfU-JH-YmPS7xKvM/111/700-w-university-dr-tempe-az-primary-photo.jpg?p=1\"\n    ],\n    \"location\": {\n        \"city\": \"Tempe\",\n        \"lat\": \"33.4227426\",\n        \"lon\": \"-111.9491285\",\n        \"neighborhood\": \"Downtown Tempe\",\n        \"state\": \"AZ\",\n        \"street address\": \"700 W University Dr\",\n        \"zipcode\": \"85281\"\n    },\n    \"max_num_cat\": 0,\n    \"max_num_dog\": 0,\n    \"max_rent\": 1350,\n    \"min_rent\": 1200,\n    \"property_id\": \"z7hmtvy\",\n    \"property_name\": \"700 W University Dr\",\n    \"property_type\": \"condo\",\n    \"rating\": 0.0,\n    \"sqft\": {\n        \"max\": 840.0,\n        \"min\": 595.0\n    },\n    \"transit_score\": 59,\n    \"universities_nearby\": [\n        {\n            \"university_id\": \"484899\",\n            \"university_name\": \"Aveda Institute-Phoenix\"\n        },\n        {\n            \"university_id\": \"475839\",\n            \"university_name\": \"Sessions College for Professional Design\"\n        },\n        {\n            \"university_id\": \"488077\",\n            \"university_name\": \"Sonoran Desert Institute\"\n        },\n        {\n            \"university_id\": \"363934\",\n            \"university_name\": \"University of Advancing Technology\"\n        },\n        {\n            \"university_id\": \"104151\",\n            \"university_name\": \"Arizona State University Campus Immersion\"\n        },\n        {\n            \"university_id\": \"110219\",\n            \"university_name\": \"Bryan University\"\n        },\n        {\n            \"university_id\": \"105668\",\n            \"university_name\": \"Rio Salado College\"\n        },\n        {\n            \"university_id\": \"404055\",\n            \"university_name\": \"Brookline College-Tempe\"\n        },\n        {\n            \"university_id\": \"494171\",\n            \"university_name\": \"Arizona College of Nursing-Tempe\"\n        },\n        {\n            \"university_id\": \"420246\",\n            \"university_name\": \"Southwest College of Naturopathic Medicine & Health Sciences\"\n        },\n        {\n            \"university_id\": \"442879\",\n            \"university_name\": \"Southwest Institute of Healing Arts\"\n        },\n        {\n            \"university_id\": \"262341\",\n            \"university_name\": \"Conservatory of Recording Arts and Sciences\"\n        }\n    ],\n    \"util_included\": null,\n    \"walk_score\": 83\n}"
+				}
+			]
+		},
+		{
+			"name": "All Amenities",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is ok\", () => {\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is a json\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.campuscatalog.me/amenities",
+					"protocol": "https",
+					"host": [
+						"api",
+						"campuscatalog",
+						"me"
+					],
+					"path": [
+						"amenities"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "All Entertainments",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.campuscatalog.me/amenities",
+							"protocol": "https",
+							"host": [
+								"api",
+								"campuscatalog",
+								"me"
+							],
+							"path": [
+								"amenities"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"amenities\": [\r\n        {\r\n            \"amen_id\": 621884499,\r\n            \"amen_name\": \"Pinballz Arcade\",\r\n            \"city\": \"Austin\",\r\n            \"deliver\": false,\r\n            \"num_review\": 516,\r\n            \"pricing\": \"N/A\",\r\n            \"rating\": 4.5,\r\n            \"state\": \"TX\",\r\n            \"takeout\": false\r\n        }\r\n    ]\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Get detailed info about a single amenity by amenity id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is ok\", () => {\r",
+							"    pm.response.to.be.ok;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is a json\", () => {\r",
+							"    pm.response.to.be.json;\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.campuscatalog.me/amenities/621884499",
+					"protocol": "https",
+					"host": [
+						"api",
+						"campuscatalog",
+						"me"
+					],
+					"path": [
+						"amenities",
+						"621884499"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Single Entertainment By Entertainment ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.campuscatalog.me/amenities/<amen_id>?amen_id",
+							"protocol": "https",
+							"host": [
+								"api",
+								"campuscatalog",
+								"me"
+							],
+							"path": [
+								"amenities",
+								"<amen_id>"
+							],
+							"query": [
+								{
+									"key": "amen_id",
+									"value": null
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\r\n    \"address\": \"8940 Research Blvd Ste 100 Austin, TX 78758\",\r\n    \"amen_alias\": \"pinballz-arcade-austin\",\r\n    \"amen_id\": 621884499,\r\n    \"amen_name\": \"Pinballz Arcade\",\r\n    \"categories\": [\r\n        \"Arcades\",\r\n        \"Venues & Event Spaces\"\r\n    ],\r\n    \"city\": \"Austin\",\r\n    \"deliver\": false,\r\n    \"hours\": \"Monday: 11:00 AM – 12:00 AM\\nTuesday: 11:00 AM – 12:00 AM\\nWednesday: 11:00 AM – 12:00 AM\\nThursday: 11:00 AM – 12:00 AM\\nFriday: 11:00 AM – 2:00 AM\\nSaturday: 11:00 AM – 2:00 AM\\nSunday: 11:00 AM – 10:00 PM\",\r\n    \"housing_nearby\": [\r\n        {\r\n            \"property_id\": \"85j4gs0\",\r\n            \"property_name\": \"Bristol Heights\"\r\n        },\r\n        {\r\n            \"property_id\": \"wdql8xl\",\r\n            \"property_name\": \"Lenox 7th\"\r\n        },\r\n        {\r\n            \"property_id\": \"hdmtyg0\",\r\n            \"property_name\": \"Highline\"\r\n        },\r\n        {\r\n            \"property_id\": \"xyzjk0n\",\r\n            \"property_name\": \"Residences at The Triangle\"\r\n        },\r\n        {\r\n            \"property_id\": \"ywncj5s\",\r\n            \"property_name\": \"10821 Redmond Rd\"\r\n        },\r\n        {\r\n            \"property_id\": \"xrg78dp\",\r\n            \"property_name\": \"4610 Esper Ln\"\r\n        },\r\n        {\r\n            \"property_id\": \"c58khgd2\",\r\n            \"property_name\": \"Barton Creek Villas\"\r\n        },\r\n        {\r\n            \"property_id\": \"9lxcrj5\",\r\n            \"property_name\": \"Southpark Crossing Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"ekx6s0p\",\r\n            \"property_name\": \"South Shore District\"\r\n        },\r\n        {\r\n            \"property_id\": \"hbv4z32\",\r\n            \"property_name\": \"Treehouse\"\r\n        },\r\n        {\r\n            \"property_id\": \"bqrhv48\",\r\n            \"property_name\": \"Tacara Steiner Ranch\"\r\n        },\r\n        {\r\n            \"property_id\": \"re5tqv1\",\r\n            \"property_name\": \"The Chateau on West 8th\"\r\n        },\r\n        {\r\n            \"property_id\": \"vrxy7ce\",\r\n            \"property_name\": \"7109 Bay City Bend\"\r\n        },\r\n        {\r\n            \"property_id\": \"wt92vql\",\r\n            \"property_name\": \"Sycamore Springs\"\r\n        },\r\n        {\r\n            \"property_id\": \"9hefqf6\",\r\n            \"property_name\": \"10015 Lake Creek Pkwy Unit 525.8804\"\r\n        },\r\n        {\r\n            \"property_id\": \"hn65xh0\",\r\n            \"property_name\": \"Platform\"\r\n        },\r\n        {\r\n            \"property_id\": \"r9epjv0\",\r\n            \"property_name\": \"8645 Piney Creek Bend\"\r\n        },\r\n        {\r\n            \"property_id\": \"67d5d1v\",\r\n            \"property_name\": \"The Ridge Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"e3zb9mp\",\r\n            \"property_name\": \"2801 Wells Branch Pkwy Unit 1 -135.8715\"\r\n        },\r\n        {\r\n            \"property_id\": \"svfzfl4\",\r\n            \"property_name\": \"Oak Crest\"\r\n        },\r\n        {\r\n            \"property_id\": \"tweclhb\",\r\n            \"property_name\": \"The 704\"\r\n        },\r\n        {\r\n            \"property_id\": \"ke7t8m8\",\r\n            \"property_name\": \"AMLI Lakeline\"\r\n        },\r\n        {\r\n            \"property_id\": \"c0k95wd\",\r\n            \"property_name\": \"6900 Gaur Dr\"\r\n        },\r\n        {\r\n            \"property_id\": \"mnyf9tj\",\r\n            \"property_name\": \"Monterey Ranch\"\r\n        },\r\n        {\r\n            \"property_id\": \"60gfb5r\",\r\n            \"property_name\": \"The Copeland\"\r\n        },\r\n        {\r\n            \"property_id\": \"pl113dt\",\r\n            \"property_name\": \"Bexley at Anderson Mill\"\r\n        },\r\n        {\r\n            \"property_id\": \"9ncfv45\",\r\n            \"property_name\": \"Bainbridge Villas\"\r\n        },\r\n        {\r\n            \"property_id\": \"rcb3yk1\",\r\n            \"property_name\": \"Windsor Oak Hill\"\r\n        },\r\n        {\r\n            \"property_id\": \"vzf177f\",\r\n            \"property_name\": \"9500 Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"e82t05m\",\r\n            \"property_name\": \"11721 Domain Blvd Unit 1556.569\"\r\n        },\r\n        {\r\n            \"property_id\": \"6g4tw6s\",\r\n            \"property_name\": \"The Monarch by Windsor\"\r\n        },\r\n        {\r\n            \"property_id\": \"0dvlpx3\",\r\n            \"property_name\": \"1113 Salem Park Ct\"\r\n        },\r\n        {\r\n            \"property_id\": \"jpfj7l4\",\r\n            \"property_name\": \"Laurel\"\r\n        },\r\n        {\r\n            \"property_id\": \"b5qxnw9\",\r\n            \"property_name\": \"Fivetwo At Highland\"\r\n        },\r\n        {\r\n            \"property_id\": \"s38bpy6\",\r\n            \"property_name\": \"Oakville Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"zfgjevz\",\r\n            \"property_name\": \"Griffis at The Domain\"\r\n        },\r\n        {\r\n            \"property_id\": \"kwlhh7c\",\r\n            \"property_name\": \"The Braxton\"\r\n        },\r\n        {\r\n            \"property_id\": \"0d99th0\",\r\n            \"property_name\": \"The Atlantic Grand Oaks\"\r\n        },\r\n        {\r\n            \"property_id\": \"d0hsnqk\",\r\n            \"property_name\": \"Colonial Grand at Canyon Creek\"\r\n        },\r\n        {\r\n            \"property_id\": \"rbs3e82\",\r\n            \"property_name\": \"Twelve100 Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"pfxmtlt\",\r\n            \"property_name\": \"Liv @ NW Hills\"\r\n        },\r\n        {\r\n            \"property_id\": \"xbqp0kq\",\r\n            \"property_name\": \"The Trails at Canyon Creek\"\r\n        },\r\n        {\r\n            \"property_id\": \"brsb238\",\r\n            \"property_name\": \"Modera Domain\"\r\n        },\r\n        {\r\n            \"property_id\": \"6m91p6r\",\r\n            \"property_name\": \"Sullivan\"\r\n        },\r\n        {\r\n            \"property_id\": \"1lmlp44\",\r\n            \"property_name\": \"Toscana Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"fx1e26t\",\r\n            \"property_name\": \"13005 Heinemann Dr Unit 1112.26008\"\r\n        },\r\n        {\r\n            \"property_id\": \"5jrz8zn\",\r\n            \"property_name\": \"12345 Lamplight Village Ave Unit 0822.76867\"\r\n        },\r\n        {\r\n            \"property_id\": \"0j40ef0\",\r\n            \"property_name\": \"5200 N Lamar Blvd Unit D302 .502316\"\r\n        },\r\n        {\r\n            \"property_id\": \"tk95z2b\",\r\n            \"property_name\": \"Lucent\"\r\n        },\r\n        {\r\n            \"property_id\": \"h69b8h1\",\r\n            \"property_name\": \"The Flats on San Felipe\"\r\n        },\r\n        {\r\n            \"property_id\": \"42559th\",\r\n            \"property_name\": \"Lamar Union\"\r\n        },\r\n        {\r\n            \"property_id\": \"xv4mxln\",\r\n            \"property_name\": \"Bexley 3FIVE\"\r\n        },\r\n        {\r\n            \"property_id\": \"epnhtgp\",\r\n            \"property_name\": \"Remington House Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"2x385hb\",\r\n            \"property_name\": \"The M At Lakeline\"\r\n        },\r\n        {\r\n            \"property_id\": \"rdsyjd0\",\r\n            \"property_name\": \"The District on La Frontera\"\r\n        },\r\n        {\r\n            \"property_id\": \"wl792ph\",\r\n            \"property_name\": \"Vineyard Hills Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"7r526kz\",\r\n            \"property_name\": \"Davies Ranch\"\r\n        },\r\n        {\r\n            \"property_id\": \"tyhcqcc\",\r\n            \"property_name\": \"The Nine on Shoreline\"\r\n        },\r\n        {\r\n            \"property_id\": \"84wzmz0\",\r\n            \"property_name\": \"CYPRESS MCKINNEY FALLS\"\r\n        },\r\n        {\r\n            \"property_id\": \"lefv8gf\",\r\n            \"property_name\": \"Axis West Campus\"\r\n        },\r\n        {\r\n            \"property_id\": \"3j1pvhd\",\r\n            \"property_name\": \"Townhomes at Sendera Trails\"\r\n        },\r\n        {\r\n            \"property_id\": \"dnlnsyk\",\r\n            \"property_name\": \"1500 E Riverside Dr Unit 314.323557\"\r\n        },\r\n        {\r\n            \"property_id\": \"vsvz28g\",\r\n            \"property_name\": \"Cliffs at Barton Creek\"\r\n        },\r\n        {\r\n            \"property_id\": \"gxn64yz\",\r\n            \"property_name\": \"Barton Creek Landing\"\r\n        },\r\n        {\r\n            \"property_id\": \"zmehtyw\",\r\n            \"property_name\": \"River Crossing Townhomes\"\r\n        },\r\n        {\r\n            \"property_id\": \"7ydd9qw\",\r\n            \"property_name\": \"Preserve at Rolling Oaks by Cortland\"\r\n        },\r\n        {\r\n            \"property_id\": \"c9fxpcd\",\r\n            \"property_name\": \"2101 Burton Dr Unit 162.6453\"\r\n        },\r\n        {\r\n            \"property_id\": \"fxqbqzr\",\r\n            \"property_name\": \"Sedona Springs\"\r\n        },\r\n        {\r\n            \"property_id\": \"f837j6s\",\r\n            \"property_name\": \"Estates at Austin\"\r\n        },\r\n        {\r\n            \"property_id\": \"c58khgd22\",\r\n            \"property_name\": \"Barton Creek Villas\"\r\n        },\r\n        {\r\n            \"property_id\": \"228xb8b\",\r\n            \"property_name\": \"Palo Verde\"\r\n        },\r\n        {\r\n            \"property_id\": \"6vfj7lr\",\r\n            \"property_name\": \"15200 Shell Bark\"\r\n        },\r\n        {\r\n            \"property_id\": \"74qnccx\",\r\n            \"property_name\": \"River Stone Ranch\"\r\n        },\r\n        {\r\n            \"property_id\": \"j2mdt87\",\r\n            \"property_name\": \"2005 Bouldin Avenue\"\r\n        },\r\n        {\r\n            \"property_id\": \"47bk48k\",\r\n            \"property_name\": \"Pioneer Hill\"\r\n        },\r\n        {\r\n            \"property_id\": \"xwfw7mn\",\r\n            \"property_name\": \"Parkside Crossing\"\r\n        },\r\n        {\r\n            \"property_id\": \"8qgk411\",\r\n            \"property_name\": \"Marquis at Great Hills\"\r\n        },\r\n        {\r\n            \"property_id\": \"6ebd8rr\",\r\n            \"property_name\": \"Standard at Domain Northside\"\r\n        },\r\n        {\r\n            \"property_id\": \"ktx3he9\",\r\n            \"property_name\": \"Harris Branch Seniors\"\r\n        },\r\n        {\r\n            \"property_id\": \"59fctzm\",\r\n            \"property_name\": \"Yaupon\"\r\n        },\r\n        {\r\n            \"property_id\": \"dfkp6mk\",\r\n            \"property_name\": \"Ashton Austin\"\r\n        },\r\n        {\r\n            \"property_id\": \"bm6fd09\",\r\n            \"property_name\": \"2801 Wells Branch Pkwy Unit 17 - 1736.350081\"\r\n        },\r\n        {\r\n            \"property_id\": \"w13q0kh22\",\r\n            \"property_name\": \"3401 at Red River\"\r\n        },\r\n        {\r\n            \"property_id\": \"zs1mfvz\",\r\n            \"property_name\": \"River Ranch\"\r\n        },\r\n        {\r\n            \"property_id\": \"w37p4vl\",\r\n            \"property_name\": \"2602 Deerfoot Trl\"\r\n        },\r\n        {\r\n            \"property_id\": \"b8k61y9\",\r\n            \"property_name\": \"1711 Brentwood St\"\r\n        },\r\n        {\r\n            \"property_id\": \"7w8rg3w\",\r\n            \"property_name\": \"5200 N Lamar Blvd Unit F301.7518\"\r\n        },\r\n        {\r\n            \"property_id\": \"gylh47x\",\r\n            \"property_name\": \"620 Canyon Creek\"\r\n        },\r\n        {\r\n            \"property_id\": \"mbz9k6j\",\r\n            \"property_name\": \"2325 Gilia Dr\"\r\n        },\r\n        {\r\n            \"property_id\": \"6c6twrt\",\r\n            \"property_name\": \"Ravina Apartment Homes\"\r\n        },\r\n        {\r\n            \"property_id\": \"p5126lr\",\r\n            \"property_name\": \"Indigo\"\r\n        },\r\n        {\r\n            \"property_id\": \"9tp7re6\",\r\n            \"property_name\": \"The Aspect\"\r\n        },\r\n        {\r\n            \"property_id\": \"6f87hsv\",\r\n            \"property_name\": \"The Breakers on the Lake\"\r\n        },\r\n        {\r\n            \"property_id\": \"hmbl3h3\",\r\n            \"property_name\": \"Sur512\"\r\n        },\r\n        {\r\n            \"property_id\": \"gc021qz\",\r\n            \"property_name\": \"1110 Fiesta St\"\r\n        },\r\n        {\r\n            \"property_id\": \"3kgxjtg\",\r\n            \"property_name\": \"3007 E MLK Jr. Blvd.\"\r\n        },\r\n        {\r\n            \"property_id\": \"qr9q2qx\",\r\n            \"property_name\": \"Gallery at Domain\"\r\n        },\r\n        {\r\n            \"property_id\": \"f7bfpps\",\r\n            \"property_name\": \"Altair Tech Ridge\"\r\n        },\r\n        {\r\n            \"property_id\": \"n3cqt3m\",\r\n            \"property_name\": \"Beck at Wells Branch\"\r\n        },\r\n        {\r\n            \"property_id\": \"gq2bjnz\",\r\n            \"property_name\": \"Sentral East Austin 1630\"\r\n        },\r\n        {\r\n            \"property_id\": \"dxw4lrl\",\r\n            \"property_name\": \"Pearl Lantana\"\r\n        },\r\n        {\r\n            \"property_id\": \"lq4gjtg\",\r\n            \"property_name\": \"Cortland Arboretum\"\r\n        },\r\n        {\r\n            \"property_id\": \"w13q0kh2\",\r\n            \"property_name\": \"3401 at Red River\"\r\n        },\r\n        {\r\n            \"property_id\": \"xjnh1hn\",\r\n            \"property_name\": \"Griffis at Riata\"\r\n        },\r\n        {\r\n            \"property_id\": \"9kk5rg5\",\r\n            \"property_name\": \"Bexley SoCo\"\r\n        },\r\n        {\r\n            \"property_id\": \"kbnecnb\",\r\n            \"property_name\": \"Cascade Apartments (Algarita)\"\r\n        },\r\n        {\r\n            \"property_id\": \"7gmf3wx\",\r\n            \"property_name\": \"Altura Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"8fqtme1\",\r\n            \"property_name\": \"Mueller Flats Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"ctyxhff\",\r\n            \"property_name\": \"Canyon Resort at Great Hills Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"endp0gq\",\r\n            \"property_name\": \"The Quincy (TX)\"\r\n        },\r\n        {\r\n            \"property_id\": \"vrh3r0e\",\r\n            \"property_name\": \"5200 N Lamar Blvd Unit B301.7515\"\r\n        },\r\n        {\r\n            \"property_id\": \"46054nj\",\r\n            \"property_name\": \"Ovation Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"v9lz7wd\",\r\n            \"property_name\": \"Riata\"\r\n        },\r\n        {\r\n            \"property_id\": \"n1mlzwn\",\r\n            \"property_name\": \"2801 Wells Branch Pkwy Unit 13 - 1326.47043\"\r\n        },\r\n        {\r\n            \"property_id\": \"2v19mn8\",\r\n            \"property_name\": \"Cole Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"q1gnflw\",\r\n            \"property_name\": \"4009 Rivercrest Dr\"\r\n        },\r\n        {\r\n            \"property_id\": \"nwz7cqn\",\r\n            \"property_name\": \"The Vibe\"\r\n        },\r\n        {\r\n            \"property_id\": \"ybxrhjs\",\r\n            \"property_name\": \"2203 Palmera Cove\"\r\n        },\r\n        {\r\n            \"property_id\": \"5l8f95n\",\r\n            \"property_name\": \"Colonial Grand at Canyon Pointe\"\r\n        },\r\n        {\r\n            \"property_id\": \"etmzhpm\",\r\n            \"property_name\": \"The Monroe\"\r\n        },\r\n        {\r\n            \"property_id\": \"y6de0mv\",\r\n            \"property_name\": \"11721 Domain Blvd Unit 2201.5737\"\r\n        },\r\n        {\r\n            \"property_id\": \"pfzryrs\",\r\n            \"property_name\": \"Radius On Grove\"\r\n        },\r\n        {\r\n            \"property_id\": \"crqy08e\",\r\n            \"property_name\": \"Whisper Hollow\"\r\n        },\r\n        {\r\n            \"property_id\": \"0b2b680\",\r\n            \"property_name\": \"5106 Caswell Ave\"\r\n        },\r\n        {\r\n            \"property_id\": \"fhf9f0s\",\r\n            \"property_name\": \"Park at Estancia\"\r\n        },\r\n        {\r\n            \"property_id\": \"498j3sl\",\r\n            \"property_name\": \"8605 Rockwood Ln\"\r\n        },\r\n        {\r\n            \"property_id\": \"51bfv4m\",\r\n            \"property_name\": \"Arboretum Oaks\"\r\n        },\r\n        {\r\n            \"property_id\": \"vmepv2g\",\r\n            \"property_name\": \"Callista Hill Country Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"475fp4j\",\r\n            \"property_name\": \"5947 Kevin Kelly Pl\"\r\n        },\r\n        {\r\n            \"property_id\": \"ps7vhls\",\r\n            \"property_name\": \"Villas at Guadalupe\"\r\n        },\r\n        {\r\n            \"property_id\": \"6pk1ytt\",\r\n            \"property_name\": \"2801 Wells Branch Pkwy Unit 24-2434.8716\"\r\n        },\r\n        {\r\n            \"property_id\": \"p8t8krr\",\r\n            \"property_name\": \"1104 E Applegate Dr\"\r\n        },\r\n        {\r\n            \"property_id\": \"gbhe80z\",\r\n            \"property_name\": \"5200 N Lamar Blvd Unit C102.220732\"\r\n        },\r\n        {\r\n            \"property_id\": \"4qcsmhj\",\r\n            \"property_name\": \"East Vue Ranch Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"vrs6xre\",\r\n            \"property_name\": \"Water Marq\"\r\n        },\r\n        {\r\n            \"property_id\": \"7b7gtvz\",\r\n            \"property_name\": \"Stonelake at the Arboretum\"\r\n        },\r\n        {\r\n            \"property_id\": \"fd0l6jr\",\r\n            \"property_name\": \"Ethos Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"bcc8veb\",\r\n            \"property_name\": \"Alexan Garza Ranch\"\r\n        },\r\n        {\r\n            \"property_id\": \"gkjsd2y\",\r\n            \"property_name\": \"Eleven by Windsor\"\r\n        },\r\n        {\r\n            \"property_id\": \"hrzeph0\",\r\n            \"property_name\": \"Stoney Ridge Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"f3nz8ts\",\r\n            \"property_name\": \"Hyde Park Square\"\r\n        },\r\n        {\r\n            \"property_id\": \"snrv426\",\r\n            \"property_name\": \"9900 McNeil Dr Unit 7-07205.264805\"\r\n        },\r\n        {\r\n            \"property_id\": \"qh9nsgy\",\r\n            \"property_name\": \"2801 Wells Branch Pkwy Unit 2 - 225.8708\"\r\n        },\r\n        {\r\n            \"property_id\": \"mzypn0j\",\r\n            \"property_name\": \"26 West | Student Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"bnsv08c\",\r\n            \"property_name\": \"Saratoga Ridge\"\r\n        },\r\n        {\r\n            \"property_id\": \"52w6v8q\",\r\n            \"property_name\": \"Village at East Riverside\"\r\n        },\r\n        {\r\n            \"property_id\": \"1tmrcg6\",\r\n            \"property_name\": \"Northshore Austin\"\r\n        },\r\n        {\r\n            \"property_id\": \"p1cr57t\",\r\n            \"property_name\": \"The Addison Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"2p59mw9\",\r\n            \"property_name\": \"Villages at the Domain\"\r\n        },\r\n        {\r\n            \"property_id\": \"4nfj42l\",\r\n            \"property_name\": \"Hardrock Canyon\"\r\n        },\r\n        {\r\n            \"property_id\": \"r7xyf32\",\r\n            \"property_name\": \"Wilder\"\r\n        },\r\n        {\r\n            \"property_id\": \"6ysjxdt\",\r\n            \"property_name\": \"The Grand at the Domain\"\r\n        },\r\n        {\r\n            \"property_id\": \"52d45jm\",\r\n            \"property_name\": \"Signature 1909\"\r\n        },\r\n        {\r\n            \"property_id\": \"enyv29q\",\r\n            \"property_name\": \"2101 Burton Dr Unit 165.6455\"\r\n        },\r\n        {\r\n            \"property_id\": \"5wjjflp\",\r\n            \"property_name\": \"13425 Ranch Rd 620 N Unit 0536.7653\"\r\n        },\r\n        {\r\n            \"property_id\": \"7l6m0xw\",\r\n            \"property_name\": \"Trailhead\"\r\n        },\r\n        {\r\n            \"property_id\": \"mg9rscj\",\r\n            \"property_name\": \"11011 Domain Dr Unit 10-107.5220\"\r\n        },\r\n        {\r\n            \"property_id\": \"3ld98rf\",\r\n            \"property_name\": \"The Clark\"\r\n        },\r\n        {\r\n            \"property_id\": \"m3997bl\",\r\n            \"property_name\": \"Waters at Barton Creek\"\r\n        },\r\n        {\r\n            \"property_id\": \"xjbbxmq\",\r\n            \"property_name\": \"2202 Galway St\"\r\n        },\r\n        {\r\n            \"property_id\": \"dvc6sfk\",\r\n            \"property_name\": \"Bridge at Asher\"\r\n        },\r\n        {\r\n            \"property_id\": \"n5v2rvq\",\r\n            \"property_name\": \"South Shore\"\r\n        },\r\n        {\r\n            \"property_id\": \"khky189\",\r\n            \"property_name\": \"2956 Westlake Dr\"\r\n        },\r\n        {\r\n            \"property_id\": \"cwct2kg\",\r\n            \"property_name\": \"2801 Wells Branch Pkwy Unit 14-1434.8711\"\r\n        },\r\n        {\r\n            \"property_id\": \"ysqfbps\",\r\n            \"property_name\": \"Promesa\"\r\n        },\r\n        {\r\n            \"property_id\": \"e6bmnrn\",\r\n            \"property_name\": \"The Park at Monterey Oaks\"\r\n        },\r\n        {\r\n            \"property_id\": \"clg3jxg\",\r\n            \"property_name\": \"2102 Margalene Way\"\r\n        },\r\n        {\r\n            \"property_id\": \"8fsj4h0\",\r\n            \"property_name\": \"Post West Austin\"\r\n        },\r\n        {\r\n            \"property_id\": \"1dfnsl7\",\r\n            \"property_name\": \"3201 Century Park Blvd Unit 1525.259132\"\r\n        },\r\n        {\r\n            \"property_id\": \"45eynfk\",\r\n            \"property_name\": \"Windsor South Lamar\"\r\n        },\r\n        {\r\n            \"property_id\": \"mdgjmyk\",\r\n            \"property_name\": \"Mosaic at Mueller\"\r\n        },\r\n        {\r\n            \"property_id\": \"cd4js4g\",\r\n            \"property_name\": \"Korina at the Grove\"\r\n        },\r\n        {\r\n            \"property_id\": \"jxf9g36\",\r\n            \"property_name\": \"Landing at Double Creek\"\r\n        },\r\n        {\r\n            \"property_id\": \"450w6nj\",\r\n            \"property_name\": \"Griffis Southpark\"\r\n        },\r\n        {\r\n            \"property_id\": \"9t9whv6\",\r\n            \"property_name\": \"5200 N Lamar Blvd Unit C204.362090\"\r\n        },\r\n        {\r\n            \"property_id\": \"flkx5rr\",\r\n            \"property_name\": \"Cielo\"\r\n        },\r\n        {\r\n            \"property_id\": \"etl0s7m\",\r\n            \"property_name\": \"Post South Lamar\"\r\n        },\r\n        {\r\n            \"property_id\": \"15z6xw4\",\r\n            \"property_name\": \"AMLI South Shore\"\r\n        },\r\n        {\r\n            \"property_id\": \"7580d7y\",\r\n            \"property_name\": \"Griffis SoCo Austin\"\r\n        },\r\n        {\r\n            \"property_id\": \"m08lk0h\",\r\n            \"property_name\": \"Terra\"\r\n        },\r\n        {\r\n            \"property_id\": \"fw4vpsr\",\r\n            \"property_name\": \"Midtown Commons\"\r\n        },\r\n        {\r\n            \"property_id\": \"332rzqe\",\r\n            \"property_name\": \"The Woods on Barton Skyway\"\r\n        },\r\n        {\r\n            \"property_id\": \"ymmwbkt\",\r\n            \"property_name\": \"Mueller Square\"\r\n        },\r\n        {\r\n            \"property_id\": \"xbx1yxn\",\r\n            \"property_name\": \"95Twenty\"\r\n        },\r\n        {\r\n            \"property_id\": \"0e452j3\",\r\n            \"property_name\": \"Lakeshore Pearl\"\r\n        },\r\n        {\r\n            \"property_id\": \"q26vg3z\",\r\n            \"property_name\": \"Melrose Trail\"\r\n        },\r\n        {\r\n            \"property_id\": \"xxfmm9m\",\r\n            \"property_name\": \"Overture Domain 55+ Active Adult Apartment...\"\r\n        },\r\n        {\r\n            \"property_id\": \"p1hww3t\",\r\n            \"property_name\": \"Rhythm\"\r\n        },\r\n        {\r\n            \"property_id\": \"djgt33k\",\r\n            \"property_name\": \"The Asten at Ribelin Ranch\"\r\n        },\r\n        {\r\n            \"property_id\": \"gszjctw\",\r\n            \"property_name\": \"Post Park Mesa\"\r\n        },\r\n        {\r\n            \"property_id\": \"jdp7v25\",\r\n            \"property_name\": \"Crestview Commons\"\r\n        },\r\n        {\r\n            \"property_id\": \"dhrwm0j\",\r\n            \"property_name\": \"8803 dandelion trail\"\r\n        },\r\n        {\r\n            \"property_id\": \"1yhdkx5\",\r\n            \"property_name\": \"Windsor Ridge\"\r\n        },\r\n        {\r\n            \"property_id\": \"p9c5ygt\",\r\n            \"property_name\": \"Dobie Twenty21 Student Spaces\"\r\n        },\r\n        {\r\n            \"property_id\": \"9pj7we6\",\r\n            \"property_name\": \"Sunrise Bluffs\"\r\n        },\r\n        {\r\n            \"property_id\": \"rdky5k3\",\r\n            \"property_name\": \"Woodwillow Townhomes and Duplexes\"\r\n        },\r\n        {\r\n            \"property_id\": \"6bh7hmt\",\r\n            \"property_name\": \"Avonmora Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"tgxe3tc\",\r\n            \"property_name\": \"15110 Walcott Dr\"\r\n        },\r\n        {\r\n            \"property_id\": \"xzwjmjm\",\r\n            \"property_name\": \"Wildcreek Apartments\"\r\n        },\r\n        {\r\n            \"property_id\": \"0039d11\",\r\n            \"property_name\": \"Residences at the Domain\"\r\n        },\r\n        {\r\n            \"property_id\": \"47q9rqj\",\r\n            \"property_name\": \"Overture Arboretum 60+ Active Adult Apartm...\"\r\n        },\r\n        {\r\n            \"property_id\": \"rxxpkt1\",\r\n            \"property_name\": \"Venue on Guadalupe\"\r\n        },\r\n        {\r\n            \"property_id\": \"4elk3lh\",\r\n            \"property_name\": \"Century Travesia\"\r\n        },\r\n        {\r\n            \"property_id\": \"p59074s\",\r\n            \"property_name\": \"Bexley at Tech Ridge\"\r\n        },\r\n        {\r\n            \"property_id\": \"6l8zekt\",\r\n            \"property_name\": \"14300 Tandem Blvd Unit 211.306331\"\r\n        }\r\n    ],\r\n    \"images\": [\r\n        \"https://s3-media2.fl.yelpcdn.com/bphoto/I87-ZJHR4IIuAIC3X63qbQ/o.jpg\",\r\n        \"https://s3-media1.fl.yelpcdn.com/bphoto/TDq4b0-LOvBnx-31jna6Eg/o.jpg\",\r\n        \"https://s3-media4.fl.yelpcdn.com/bphoto/AvHrZwwf3MTugrsT42a_sg/o.jpg\"\r\n    ],\r\n    \"latitude\": 30.370098247589,\r\n    \"longitude\": -97.7218437194824,\r\n    \"num_review\": 516,\r\n    \"pricing\": \"N/A\",\r\n    \"rating\": 4.5,\r\n    \"reviews\": [\r\n        {\r\n            \"review_id\": \"b02UpQhI8tRsaIL81qo9dg\",\r\n            \"user_id\": \"IeCL5FV3rP8lSnhH3SiRsw\",\r\n            \"user_name\": \"Sonya R.\"\r\n        },\r\n        {\r\n            \"review_id\": \"uKUpyiKhEO4FFPsB5otDpA\",\r\n            \"user_id\": \"aROsX0NqIOLcB7X2-BcyRQ\",\r\n            \"user_name\": \"Jesus C.\"\r\n        },\r\n        {\r\n            \"review_id\": \"idpsatBx_gr5Iba1HVHBjw\",\r\n            \"user_id\": \"T9KVnp2lKpcO4E-ICCtqeA\",\r\n            \"user_name\": \"Emma U.\"\r\n        }\r\n    ],\r\n    \"state\": \"TX\",\r\n    \"takeout\": false,\r\n    \"universities_nearby\": [\r\n        {\r\n            \"university_id\": \"494524\",\r\n            \"university_name\": \"Avenue Five Institute-South Austin Campus\"\r\n        },\r\n        {\r\n            \"university_id\": \"45133401\",\r\n            \"university_name\": \"Academy of Hair Design - Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"228778\",\r\n            \"university_name\": \"The University of Texas at Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"247825\",\r\n            \"university_name\": \"Austin Graduate School of Theology\"\r\n        },\r\n        {\r\n            \"university_id\": \"458070\",\r\n            \"university_name\": \"Avenue Five Institute\"\r\n        },\r\n        {\r\n            \"university_id\": \"458973\",\r\n            \"university_name\": \"Strayer University-Texas\"\r\n        },\r\n        {\r\n            \"university_id\": \"485953\",\r\n            \"university_name\": \"The Recording Conservatory of Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"224004\",\r\n            \"university_name\": \"Concordia University Texas\"\r\n        },\r\n        {\r\n            \"university_id\": \"37728102\",\r\n            \"university_name\": \"Nuvani Institute-North Campus\"\r\n        },\r\n        {\r\n            \"university_id\": \"226903\",\r\n            \"university_name\": \"Southern Careers Institute-Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"223056\",\r\n            \"university_name\": \"Baldwin Beauty School-South Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"223001\",\r\n            \"university_name\": \"Austin Presbyterian Theological Seminary\"\r\n        },\r\n        {\r\n            \"university_id\": \"437635\",\r\n            \"university_name\": \"The College of Health Care Professions-Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"222992\",\r\n            \"university_name\": \"Austin Community College District\"\r\n        },\r\n        {\r\n            \"university_id\": \"224712\",\r\n            \"university_name\": \"Episcopal Theological Seminary of the Southwest\"\r\n        },\r\n        {\r\n            \"university_id\": \"37728103\",\r\n            \"university_name\": \"Nuvani Institute-South Campus\"\r\n        },\r\n        {\r\n            \"university_id\": \"490425\",\r\n            \"university_name\": \"Ann Webb Skin Institute\"\r\n        },\r\n        {\r\n            \"university_id\": \"225575\",\r\n            \"university_name\": \"Huston-Tillotson University\"\r\n        },\r\n        {\r\n            \"university_id\": \"414489\",\r\n            \"university_name\": \"Baldwin Beauty School-North Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"451565\",\r\n            \"university_name\": \"Paul Mitchell the School-Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"429094\",\r\n            \"university_name\": \"AOMA Graduate School of Integrative Medicine\"\r\n        },\r\n        {\r\n            \"university_id\": \"444556\",\r\n            \"university_name\": \"Auguste Escoffier School of Culinary Arts-Austin\"\r\n        },\r\n        {\r\n            \"university_id\": \"480888\",\r\n            \"university_name\": \"CyberTex Institute of Technology\"\r\n        },\r\n        {\r\n            \"university_id\": \"227845\",\r\n            \"university_name\": \"Saint Edward's University\"\r\n        },\r\n        {\r\n            \"university_id\": \"430704\",\r\n            \"university_name\": \"Texas Health and Science University\"\r\n        }\r\n    ],\r\n    \"yelp_id\": \"ypMOQQV3gMc2kI8ZYdklSQ\",\r\n    \"zip_code\": \"78758\"\r\n}"
+				}
+			]
+		}
+	]
+}
