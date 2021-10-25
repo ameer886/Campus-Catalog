@@ -34,6 +34,7 @@ selenium_tests:
   image: forbesye/selenium-ci
   before_script:
     - pip3 install -r front-end/src/gui_tests/requirements.txt
+    - chmod a+x "./front-end/src/gui_tests/chromedriver_linux"
   script:
     - python3 front-end/guitests.py
 
