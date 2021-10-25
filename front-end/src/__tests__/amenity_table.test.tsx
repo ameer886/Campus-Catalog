@@ -4,72 +4,69 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { MemoryRouter } from 'react-router-dom';
 
-import type { ApartmentRowType } from '../views/Apartments/ApartmentsPage';
-import ApartmentTable from '../components/ApartmentTable/ApartmentTable';
+import type { EntertainmentRowType } from '../views/Entertainments/EntertainmentsPage';
+import EntertainmentTable from '../components/EntertainmentTable/EntertainmentTable';
 
 configure({ adapter: new Adapter() });
 
-const EXAMPLE_ROWS: Array<ApartmentRowType> = [
+const EXAMPLE_ROWS: Array<EntertainmentRowType> = [
   {
-    city: 'Auburn',
-    max_rent: 800,
-    max_sqft: 1000.0,
-    property_id: '35erbsf',
-    property_name: '343 S Gay St',
-    property_type: 'condo',
-    rating: 0.0,
-    state: 'AL',
-    transit_score: 0,
-    walk_score: 62,
+    amen_id: 621884499,
+    amen_name: 'Pinballz Arcade',
+    city: 'Austin',
+    deliver: false,
+    num_review: 516,
+    pricing: 'N/A',
+    rating: 4.5,
+    state: 'TX',
+    takeout: false,
 
-    id: '35erbsf',
+    id: 621884499,
   },
   {
-    city: 'Burlington',
-    max_rent: 1100,
-    max_sqft: 220.0,
-    property_id: 'sqj5kb7',
-    property_name: '161 S Prospect St',
-    property_type: 'condo',
-    rating: 0.0,
-    state: 'VT',
-    transit_score: 47,
-    walk_score: 77,
+    amen_id: 485770102,
+    amen_name: 'Blue Starlite Mini Urban Drive-In',
+    city: 'Austin',
+    deliver: false,
+    num_review: 149,
+    pricing: 'N/A',
+    rating: 4.5,
+    state: 'TX',
+    takeout: false,
 
-    id: 'sqj5kb7',
+    id: 485770102,
   },
   {
-    city: 'Tempe',
-    max_rent: 1350,
-    max_sqft: 840.0,
-    property_id: 'z7hmtvy',
-    property_name: '700 W University Dr',
-    property_type: 'condo',
-    rating: 0.0,
-    state: 'AZ',
-    transit_score: 59,
-    walk_score: 83,
+    amen_id: 462165312,
+    amen_name: 'Elephant Room',
+    city: 'Austin',
+    deliver: false,
+    num_review: 431,
+    pricing: '$$',
+    rating: 4.0,
+    state: 'TX',
+    takeout: false,
 
-    id: 'z7hmtvy',
+    id: 462165312,
   },
 ];
-const NUM_COLUMNS = 5;
+const NUM_COLUMNS = 6;
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useLocation: () => ({
-    pathname: '/housing',
+    pathname: '/amenities',
   }),
 }));
 
 describe('Apartment Table Test Suite', () => {
   it('snapshot test', () => {
-    const snap = shallow(<ApartmentTable rows={EXAMPLE_ROWS} />);
+    const snap = shallow(<EntertainmentTable rows={EXAMPLE_ROWS} />);
     expect(snap).toMatchSnapshot();
   });
 
   it('page displays cur page and total', () => {
-    render(<ApartmentTable rows={EXAMPLE_ROWS} />);
+    render(<EntertainmentTable rows={EXAMPLE_ROWS} />);
     const textElement = screen.getByText('Showing items 1 - 3 of 3.');
     expect(textElement).toBeInTheDocument();
   });
@@ -77,39 +74,39 @@ describe('Apartment Table Test Suite', () => {
   it('links have correct href', () => {
     render(
       <MemoryRouter initialEntries={['/housing']}>
-        <ApartmentTable rows={EXAMPLE_ROWS} />
+        <EntertainmentTable rows={EXAMPLE_ROWS} />
       </MemoryRouter>,
     );
 
     const aptLink1 = screen.getByRole('link', {
-      name: EXAMPLE_ROWS[0].property_name,
+      name: EXAMPLE_ROWS[0].amen_name,
     });
     expect(aptLink1).not.toBeNull();
     expect(aptLink1.getAttribute('href')).toBe(
-      `/housing/${EXAMPLE_ROWS[0].id}`,
+      `/amenities/${EXAMPLE_ROWS[0].id}`,
     );
 
     const aptLink2 = screen.getByRole('link', {
-      name: EXAMPLE_ROWS[1].property_name,
+      name: EXAMPLE_ROWS[1].amen_name,
     });
     expect(aptLink2).not.toBeNull();
     expect(aptLink2.getAttribute('href')).toBe(
-      `/housing/${EXAMPLE_ROWS[1].id}`,
+      `/amenities/${EXAMPLE_ROWS[1].id}`,
     );
 
     const aptLink3 = screen.getByRole('link', {
-      name: EXAMPLE_ROWS[2].property_name,
+      name: EXAMPLE_ROWS[2].amen_name,
     });
     expect(aptLink3).not.toBeNull();
     expect(aptLink3.getAttribute('href')).toBe(
-      `/housing/${EXAMPLE_ROWS[2].id}`,
+      `/amenities/${EXAMPLE_ROWS[2].id}`,
     );
   });
 
-  // Only tests property name
+  // Only tests amenity name
   // it's too much code to test all five columns...
   it('sort function works', () => {
-    render(<ApartmentTable rows={EXAMPLE_ROWS} />);
+    render(<EntertainmentTable rows={EXAMPLE_ROWS} />);
 
     let tableBody = screen.getByRole('table')?.children[1];
     expect(tableBody).not.toBeNull();
@@ -119,12 +116,12 @@ describe('Apartment Table Test Suite', () => {
       expect(row).not.toBeNull();
       expect(row.childElementCount).toBe(NUM_COLUMNS);
       expect(row.children[0].textContent).toEqual(
-        EXAMPLE_ROWS[i].property_name,
+        EXAMPLE_ROWS[i].amen_name,
       );
     }
 
     const thead = screen.getByRole('columnheader', {
-      name: 'Property Name',
+      name: 'Amenity Name',
     });
     expect(thead).not.toBeNull();
 
@@ -133,14 +130,14 @@ describe('Apartment Table Test Suite', () => {
     expect(tableBody).not.toBeNull();
     expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
     const sortedRows = EXAMPLE_ROWS.sort((a, b) =>
-      a.property_name.localeCompare(b.property_name),
+      a.amen_name.localeCompare(b.amen_name),
     );
     for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
       const row = tableBody.children[i];
       expect(row).not.toBeNull();
       expect(row.childElementCount).toBe(NUM_COLUMNS);
       expect(row.children[0].textContent).toEqual(
-        sortedRows[i].property_name,
+        sortedRows[i].amen_name,
       );
     }
 
@@ -154,7 +151,7 @@ describe('Apartment Table Test Suite', () => {
       expect(row).not.toBeNull();
       expect(row.childElementCount).toBe(NUM_COLUMNS);
       expect(row.children[0].textContent).toEqual(
-        sortedRows[i].property_name,
+        sortedRows[i].amen_name,
       );
     }
 
@@ -167,7 +164,7 @@ describe('Apartment Table Test Suite', () => {
       expect(row).not.toBeNull();
       expect(row.childElementCount).toBe(NUM_COLUMNS);
       expect(row.children[0].textContent).toEqual(
-        EXAMPLE_ROWS[i].property_name,
+        EXAMPLE_ROWS[i].amen_name,
       );
     }
   });
@@ -177,7 +174,7 @@ describe('Apartment Table Test Suite', () => {
     for (let i = 0; i < 25; i++) {
       rows.push(EXAMPLE_ROWS[0]);
     }
-    render(<ApartmentTable rows={rows} />);
+    render(<EntertainmentTable rows={rows} />);
 
     const firstBtn = screen.getByRole('button', {
       name: 'first',
