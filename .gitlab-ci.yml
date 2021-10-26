@@ -28,6 +28,15 @@ postman_tests:
     - newman --version
     - newman run Postman.json
 
+selenium_tests:
+  stage: test
+  image: bhinh/selenium
+  before_script:
+    - pip3 install -r front-end/src/gui_tests/requirements.txt
+    - chmod a+x "./front-end/src/gui_tests/chromedriver_linux"
+  script:
+    - python3 front-end/guitests.py
+    
 python_unit_tests:
   image: python:3.8
   stage: test
