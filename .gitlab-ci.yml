@@ -31,9 +31,11 @@ postman_tests:
 
 selenium_tests:
   stage: test
-  image: forbesye/selenium-ci
+  image: python:3.6-stretch
   before_script:
     - pip3 install -r front-end/src/gui_tests/requirements.txt
+    - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - sudo apt install ./google-chrome-stable_current_amd64.deb
     - chmod a+x "./front-end/src/gui_tests/chromedriver_linux"
   script:
     - python3 front-end/guitests.py
