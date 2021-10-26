@@ -30,7 +30,7 @@ postman_tests:
     - newman run Postman.json
 
 python_unit_tests:
-  image: python:3.6-stretch
+  image: python:3.8
   stage: test
   before_script:
     - pip install -r back-end/requirements.txt
@@ -40,7 +40,7 @@ python_unit_tests:
 
 
 deploy_develop:
-  image: python:3.6-stretch
+  image: python:3.8
   only:
     variables:
       - $CI_COMMIT_BRANCH == "back-end"
@@ -53,7 +53,7 @@ deploy_develop:
     - /root/.local/bin/eb deploy environment-name
 
 deploy_production:
-  image: python:3.6-stretch
+  image: python:3.8
   only:
     variables:
       - $CI_COMMIT_BRANCH == "main"
