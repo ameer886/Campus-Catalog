@@ -31,10 +31,12 @@ postman_tests:
 
 selenium_tests:
   stage: test
-  image: python:3.6-stretch
+  image: python:3.6
   before_script:
     - pip3 install -r front-end/src/gui_tests/requirements.txt
     - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    - apt-get update
+    - apt-get install -y gconf-service libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libxss1 fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
     - apt install ./google-chrome-stable_current_amd64.deb
     - chmod a+x "./front-end/src/gui_tests/chromedriver_linux"
   script:
