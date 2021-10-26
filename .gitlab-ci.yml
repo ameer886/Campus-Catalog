@@ -31,7 +31,7 @@ postman_tests:
 
 selenium_tests:
   stage: test
-  image: selenium/standalone-chrome
+  image: bhinh/selenium
   before_script:
     - pip3 install -r front-end/src/gui_tests/requirements.txt
     - chmod a+x "./front-end/src/gui_tests/chromedriver_linux"
