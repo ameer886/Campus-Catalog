@@ -16,7 +16,7 @@ ma = Marshmallow(app)
 
 @app.route("/")
 def home():
-    return '<h1> goodbye world </h1>'
+    return "<h1> goodbye world </h1>"
 
 
 class AmenitiesImagesSchema(ma.Schema):
@@ -40,7 +40,6 @@ class AmenitiesCategoriesSchema(ma.Schema):
 
 
 class AmenitiesSchema(ma.Schema):
-
     class Meta:
         ordered = True
 
@@ -103,7 +102,6 @@ all_amenities_schema = AmenitiesSchema(
 
 
 class HousingSchema(ma.Schema):
-
     class Meta:
         ordered = True
 
@@ -227,7 +225,6 @@ def get_housing_by_id(id):
 
 
 class UniversitySchema(ma.Schema):
-
     class Meta:
         ordered = True
 

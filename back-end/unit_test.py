@@ -11,8 +11,6 @@ from db import db_init
 from models import University, Housing, Amenities
 
 
-
-
 class TestBackEnd(unittest.TestCase):
 
     # set up test environment
@@ -89,7 +87,7 @@ class TestBackEnd(unittest.TestCase):
 
         # set up instance housing
         dummy = dict()
-        dummy["property_id"] = '999'
+        dummy["property_id"] = "999"
         dummy["property_name"] = "Dummy Home"
         dummy["property_type"] = "Dumb"
         dummy["address"] = "Dummi"
@@ -117,7 +115,7 @@ class TestBackEnd(unittest.TestCase):
         self.assertEqual(num_row, original_row_count + 1)
 
         # remove dummy instance
-        self.mock_db.session.query(hous).filter(hous.c.property_id == '999').delete()
+        self.mock_db.session.query(hous).filter(hous.c.property_id == "999").delete()
         self.mock_db.session.commit()
         num_row = self.mock_db.session.query(hous).count()
         self.assertEqual(num_row, original_row_count)
@@ -187,7 +185,6 @@ class TestBackEnd(unittest.TestCase):
         self.assertEqual(data["amenities"][0]["state"], "TX")
         self.assertEqual(data["amenities"][0]["takeout"], False)
 
-
     def test_endpoint3(self):
         url = "https://api.campuscatalog.me/universities"
         r = urllib.request.urlopen(url)
@@ -200,7 +197,9 @@ class TestBackEnd(unittest.TestCase):
         self.assertEqual(data["universities"][0]["tuition_in_st"], 10024)
         self.assertEqual(data["universities"][0]["tuition_out_st"], 18634)
         self.assertEqual(data["universities"][0]["univ_id"], "100654")
-        self.assertEqual(data["universities"][0]["univ_name"], "Alabama A & M University")
+        self.assertEqual(
+            data["universities"][0]["univ_name"], "Alabama A & M University"
+        )
 
     def test_endpoint4(self):
         url = "https://api.campuscatalog.me/universities/100663"
@@ -210,7 +209,10 @@ class TestBackEnd(unittest.TestCase):
         self.assertEqual(data["avg_cost_attendance"], 24495.0)
         self.assertEqual(data["amenities_nearby"][0]["amenity_id"], "48971135")
         self.assertEqual(data["avg_sat"], 1234.0)
-        self.assertEqual(data["carnegie_undergrad"], "Four-year, medium full-time, selective, higher transfer-in")
+        self.assertEqual(
+            data["carnegie_undergrad"],
+            "Four-year, medium full-time, selective, higher transfer-in",
+        )
         self.assertEqual(data["graduation_rate"], 0.634)
         self.assertEqual(data["housing_nearby"][0]["property_id"], "jch15k4")
         self.assertEqual(data["longitude"], -86.79935)
@@ -221,13 +223,18 @@ class TestBackEnd(unittest.TestCase):
         r = urllib.request.urlopen(url)
         data = json.loads(r.read())
         self.assertEqual(data["address"], "2015 E M Franklin Ave Austin, TX 78723")
-        self.assertEqual(data["amen_alias"], "blue-starlite-mini-urban-drive-in-austin-3")
+        self.assertEqual(
+            data["amen_alias"], "blue-starlite-mini-urban-drive-in-austin-3"
+        )
         self.assertEqual(data["amen_id"], 485770102)
         self.assertEqual(data["amen_name"], "Blue Starlite Mini Urban Drive-In")
         self.assertEqual(data["categories"][0], "Drive-In Theater")
         self.assertEqual(data["city"], "Austin")
         self.assertEqual(data["deliver"], False)
-        self.assertEqual(data["hours"], "Monday: 7:45 \u2013 11:30 PM\nTuesday: 7:45 \u2013 10:00 PM\nWednesday: 7:45 \u2013 10:00 PM\nThursday: 7:45 PM \u2013 12:00 AM\nFriday: 7:45 PM \u2013 12:00 AM\nSaturday: 7:45 PM \u2013 12:00 AM\nSunday: 7:30 \u2013 11:30 PM")
+        self.assertEqual(
+            data["hours"],
+            "Monday: 7:45 \u2013 11:30 PM\nTuesday: 7:45 \u2013 10:00 PM\nWednesday: 7:45 \u2013 10:00 PM\nThursday: 7:45 PM \u2013 12:00 AM\nFriday: 7:45 PM \u2013 12:00 AM\nSaturday: 7:45 PM \u2013 12:00 AM\nSunday: 7:30 \u2013 11:30 PM",
+        )
         self.assertEqual(data["housing_nearby"][0]["property_id"], "85j4gs0")
 
     def test_endpoint6(self):
@@ -240,7 +247,10 @@ class TestBackEnd(unittest.TestCase):
         self.assertEqual(data["building_amenities"][0], "Washer/Dryer - In Unit")
         self.assertEqual(data["cat_allow"], False)
         self.assertEqual(data["dog_allow"], False)
-        self.assertEqual(data["images"][0], "https://images1.apartments.com/i2/2FXViLtJdfie7JYpAkCeEKNNsU0AtIH_pf2zE7CaSno/111/161-s-prospect-st-burlington-vt-primary-photo.jpg?p=1")
+        self.assertEqual(
+            data["images"][0],
+            "https://images1.apartments.com/i2/2FXViLtJdfie7JYpAkCeEKNNsU0AtIH_pf2zE7CaSno/111/161-s-prospect-st-burlington-vt-primary-photo.jpg?p=1",
+        )
         self.assertEqual(data["location"]["city"], "Burlington")
         self.assertEqual(data["max_num_cat"], 0)
         self.assertEqual(data["max_num_dog"], 0)
