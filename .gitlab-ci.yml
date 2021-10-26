@@ -42,11 +42,11 @@ deploy_develop:
   image: python:3.8
   only:
     variables:
-      - $CI_COMMIT_BRANCH == "back-end" --no-guess
+      - $CI_COMMIT_BRANCH == "back-end"
   stage: deploy
   before_script:
     - pip install awsebcli --upgrade --user
-    - git checkout back-end
+    - git checkout back-end --no-guess
   script:
     - cd back-end
     - /root/.local/bin/eb deploy environment-name
