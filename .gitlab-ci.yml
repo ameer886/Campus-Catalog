@@ -8,7 +8,6 @@ stages:
 build:
   stage: build
   script:
-    - echo "Building"
     - cd front-end
     - npm install --legacy-peer-deps
     - CI=false npm run-script build
@@ -37,22 +36,32 @@ selenium_tests:
     - chmod a+x "./front-end/src/gui_tests/chromedriver_linux"
   script:
     - python3 front-end/guitests.py
+    
+python_unit_tests:
+  image: python:3.8
+  stage: test
+  before_script:
+    - pip install -r back-end/requirements.txt
+  script:
+    - cd back-end
+    - python3 -m unit_test
+
 
 deploy_develop:
-  image: python:3.6-stretch
+  image: python:3.8
   only:
     variables:
       - $CI_COMMIT_BRANCH == "back-end"
   stage: deploy
   before_script:
     - pip install awsebcli --upgrade --user
-    - git checkout back-end
+    - git checkout back-end --no-guess
   script:
     - cd back-end
     - /root/.local/bin/eb deploy environment-name
 
 deploy_production:
-  image: python:3.6-stretch
+  image: python:3.8
   only:
     variables:
       - $CI_COMMIT_BRANCH == "main"
