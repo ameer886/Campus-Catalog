@@ -63,13 +63,15 @@ const University: React.FunctionComponent<UniversityProps> = ({
         <Nav.Link
           href={uniQuery.school_url}
           style={{ display: 'inline', padding: '0' }}
+          rel="nofollower noopener"
         >
           here
         </Nav.Link>
         .
       </p>
 
-      {uniQuery.avg_cost_attendance !== 0 ? (
+      {uniQuery.avg_cost_attendance != null &&
+      uniQuery.avg_cost_attendance !== 0 ? (
         <p>
           The average cost of attendance for this university is{' '}
           {formatNumberToMoney(uniQuery.avg_cost_attendance)}.
@@ -80,7 +82,8 @@ const University: React.FunctionComponent<UniversityProps> = ({
           university.
         </p>
       )}
-      {uniQuery.tuition_in_st !== 0 ? (
+      {uniQuery.tuition_in_st != null &&
+      uniQuery.tuition_in_st !== 0 ? (
         <p>
           The in-state tuition for this university is{' '}
           {formatNumberToMoney(uniQuery.tuition_in_st)}.
@@ -90,7 +93,8 @@ const University: React.FunctionComponent<UniversityProps> = ({
           We could not find the in-state tuition for this university.
         </p>
       )}
-      {uniQuery.tuition_out_st !== 0 ? (
+      {uniQuery.tuition_out_st != null &&
+      uniQuery.tuition_out_st !== 0 ? (
         <p>
           The out-of-state tuition for this university is{' '}
           {formatNumberToMoney(uniQuery.tuition_out_st)}.
@@ -103,17 +107,53 @@ const University: React.FunctionComponent<UniversityProps> = ({
       )}
 
       <p>
-        This university has a graudation rate of{' '}
-        {(100 * uniQuery.graduation_rate).toFixed(1)}%. There are{' '}
-        {uniQuery.num_undergrad.toLocaleString('en-US')} undergrad
-        students and {uniQuery.num_graduate.toLocaleString('en-US')}{' '}
-        graduate students.
+        {uniQuery.graduation_rate != null ? (
+          <span>
+            This university has a graudation rate of{' '}
+            {(100 * uniQuery.graduation_rate).toFixed(1)}%.{' '}
+          </span>
+        ) : (
+          <span>We could not find the graduation rate. </span>
+        )}
+        {uniQuery.num_undergrad != null ? (
+          <span>
+            There are {uniQuery.num_undergrad.toLocaleString('en-US')}{' '}
+            undergrad students.{' '}
+          </span>
+        ) : (
+          <span>
+            We could not find the number of undergrad students.{' '}
+          </span>
+        )}
+        {uniQuery.num_graduate != null ? (
+          <span>
+            There are {uniQuery.num_graduate.toLocaleString('en-US')}{' '}
+            graduate students.
+          </span>
+        ) : (
+          <span>
+            We could not find the number of graduate students.
+          </span>
+        )}
       </p>
 
       <p>
-        The average SAT score for this university is{' '}
-        {uniQuery.avg_sat}. It has an acceptance rate of{' '}
-        {(100 * uniQuery.acceptance_rate).toFixed(1)}%.
+        {uniQuery.avg_sat ? (
+          <span>
+            The average SAT score for this university is{' '}
+            {uniQuery.avg_sat}.
+          </span>
+        ) : (
+          <span>We could not find the average SAT score. </span>
+        )}
+        {uniQuery.acceptance_rate ? (
+          <span>
+            The acceptance rate
+            {(100 * uniQuery.acceptance_rate).toFixed(1)}%.
+          </span>
+        ) : (
+          <span>We could not find the acceptance rate.</span>
+        )}
       </p>
 
       <p>Carnegie undergrad: {uniQuery.carnegie_undergrad}</p>
