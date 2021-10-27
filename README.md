@@ -11,7 +11,10 @@
 Git SHA: 5ec689f5ed95cd4609390452070f08cd1adc0eef
 
 Phase I Leader: Ryan Gahagan
+
 Phase II Leader: David He
+
+Phase III Leader: TBA
 
 Website: https://campuscatalog.me
 
@@ -45,3 +48,14 @@ Time of completion:
 
 Comments: Thank you Jefferson and Caitlin for making the tutorials on Flask, AWS Set up, and debugging.
 However, this phase is too short for a lot of implementations. Please consider making phase 2 longer.
+
+## Phase 3
+Time of completion:
+
+| Member | Estimated | Actual |
+| ------ | ------ | ------ |
+| Ryan Gahagan | 35 | N/A |
+| Andrew Luo | 25 | N/A |
+| Brandon Hinh | 25 | N/A |
+| Richa Gadre | N/A | N/A |
+| David He | 30 | N/A |
