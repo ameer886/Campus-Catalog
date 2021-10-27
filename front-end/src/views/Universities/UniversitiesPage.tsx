@@ -16,24 +16,24 @@ const PAGE_SIZE = 9;
 
 // Type of a single university
 export type UniversityType = {
-  acceptance_rate: number;
+  acceptance_rate?: number;
   alias: string | null;
-  avg_cost_attendance: number;
-  avg_sat: number;
+  avg_cost_attendance?: number;
+  avg_sat?: number;
   carnegie_undergrad: string;
-  graduation_rate: number;
+  graduation_rate?: number;
   image: string;
   latitude: number;
   locale: string;
   location: Address;
   longitude: number;
-  num_graduate: number;
-  num_undergrad: number;
+  num_graduate?: number;
+  num_undergrad?: number;
   ownership_id: string;
   rank: number;
   school_url: string;
-  tuition_in_st: number;
-  tuition_out_st: number;
+  tuition_in_st?: number;
+  tuition_out_st?: number;
   univ_id: string;
   univ_name: string;
   zip_code: string;

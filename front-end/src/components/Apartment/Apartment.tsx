@@ -47,6 +47,9 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
 
   const nbd = `${aptQuery.location.neighborhood}, ${aptQuery.location['street address']}`;
   const state = formatAddressState(aptQuery.location);
+  aptQuery.amenities_nearby = aptQuery.amenities_nearby.filter(
+    (amenity) => amenity.amenity_id != null,
+  );
 
   return (
     <div className={styles.Apartment}>
