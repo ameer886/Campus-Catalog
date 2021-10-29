@@ -1,6 +1,8 @@
+from logging import raiseExceptions
+from os import abort
 import flask
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from db import db_init
 from models import University, Housing, Amenities
@@ -194,19 +196,48 @@ table_columns = (
 )
 all_housing_schema = HousingSchema(only=table_columns, many=True)
 
-
 @app.route("/housing", methods=["GET"])
 def get_all_housing():
-    all_housing = Housing.query.all()
+    
+    # retrieve query params
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+
+    # verify param validity
+    if page < 1:
+        abort(400, "invalid paramter: page must be greater than 0")
+    if per_page < 1:
+        abort(400, "invalid paramter: per_page must be greater than 0")
+    
+    # query and paginate
+    try:
+        paginated_response = Housing.query.paginate(page, max_per_page=per_page)
+        all_housing = paginated_response.items
+    except Exception:
+        err = flask.Response(
+            json.dumps({"error": f"{page} not found"}), 404, mimetype="application/json"
+        )
+        return err
+
+    page_headers = {'page': page, 
+                    "per_page": paginated_response.per_page,
+                    "max_page": paginated_response.pages}
+
     result = all_housing_schema.dump(all_housing)
-    return jsonify({"properties": result})
+    return jsonify(page_headers, {"properties": result})
 
 
 @app.route("/housing/<string:id>", methods=["GET"])
 def get_housing_by_id(id):
     sql = queries.query_images(id)
     result = db.session.execute(sql)
+    if result.first() is None:
+        err = flask.Response(
+            json.dumps({"error": id + " not found"}), 404, mimetype="application/json"
+        )
+        return err
     housing = Housing.build_obj_from_args(*result)
+    result.close()
     amen_sql = queries.query_amen(id)
     amen_nearby = db.session.execute(amen_sql)
     univ_sql = queries.query_univ(id)
@@ -215,12 +246,6 @@ def get_housing_by_id(id):
     universities = tuple(univ_nearby)
     housing.set_amen_nearby(amenities)
     housing.set_univ_nearby(universities)
-    if housing is None:
-        err = flask.Response(
-            json.dump({"error": id + " not found"}), mimetype="application/json"
-        )
-        err.status_code = 404
-        return err
     return jsonify(single_housing_schema.dump(housing))
 
 
