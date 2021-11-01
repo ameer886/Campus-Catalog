@@ -219,9 +219,10 @@ def get_all_housing():
         )
         return err
 
-    page_headers = {'page': page, 
+    page_headers = {"page": page, 
                     "per_page": paginated_response.per_page,
-                    "max_page": paginated_response.pages}
+                    "max_page": paginated_response.pages,
+                    "total_items": paginated_response.total}
 
     result = all_housing_schema.dump(all_housing)
     return jsonify(page_headers, {"properties": result})
