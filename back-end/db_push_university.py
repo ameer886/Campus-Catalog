@@ -89,7 +89,6 @@ while page_num < page_limit:
             num_undergrad=item["latest.student.enrollment.undergrad_12_month"],
             num_graduate=item["latest.student.enrollment.grad_12_month"],
             ownership_id=item["latest.school.ownership"],
-            mascot_name="NaN",
             acceptance_rate=item["latest.admissions.admission_rate.overall"],
             graduation_rate=item["latest.completion.completion_rate_4yr_150nt"],
             tuition_in_st=item["latest.cost.tuition.in_state"],
