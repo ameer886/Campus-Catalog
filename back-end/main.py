@@ -438,8 +438,31 @@ def get_univ_by_id(id):
 
 @app.route("/amenities", methods=["GET"])
 def amenities():
-    amenities = Amenities.query.all()
-    return jsonify({"amenities": all_amenities_schema.dump(amenities)})
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+
+    if page < 1:
+        abort(400, "invalid paramter: page must be greater than 0")
+    if per_page < 1:
+        abort(400, "invalid paramter: per_page must be greater than 0")
+    
+    # query and paginate
+    try:
+        paginated_response = Amenities.query.paginate(page, max_per_page=per_page)
+        all_amenities = paginated_response.items
+    except Exception:
+        err = flask.Response(
+            json.dumps({"error": f"{page} not found"}), 404, mimetype="application/json"
+        )
+        return err
+
+    page_headers = {"page": page, 
+                    "per_page": paginated_response.per_page,
+                    "max_page": paginated_response.pages,
+                    "total_items": paginated_response.total}
+
+    result = all_amenities_schema.dump(all_amenities)
+    return jsonify(page_headers, {"amenities": result})
 
 
 @app.route("/amenities/<int:amen_id>", methods=["GET"])
