@@ -270,7 +270,6 @@ class UniversitySchema(ma.Schema):
     num_undergrad = fields.Int()
     num_graduate = fields.Int()
     ownership_id = fields.Method("map_ownership")
-    mascot_name = fields.Str()
     acceptance_rate = fields.Float(missing=0.0)
     graduation_rate = fields.Float(missing=0.0)
     tuition_in_st = fields.Int()
@@ -368,7 +367,7 @@ class UniversitySchema(ma.Schema):
         }
 
 
-exclude_columns = ("city", "state", "mascot_name")
+exclude_columns = ("city", "state")
 single_univ_schema = UniversitySchema(exclude=exclude_columns)
 
 univ_columns = (
@@ -389,9 +388,30 @@ all_univ_schema = UniversitySchema(only=univ_columns, many=True)
 
 @app.route("/universities", methods=["GET"])
 def get_all_universities():
-    all_univ = University.query.all()
+
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+
+    if page < 1:
+        abort(400, "invalid paramter: page must be greater than 0")
+    if per_page < 1:
+        abort(400, "invalid paramter: per_page must be greater than 0")
+    
+    try:
+        paginated_response = University.query.paginate(page, max_per_page=per_page)
+        all_univ = paginated_response.items
+    except Exception:
+        err = flask.Response(
+            json.dumps({"error": f"{page} not found"}), 404, mimetype="application/json"
+        )
+        return err
+
+    page_headers = {"page": page, 
+                    "per_page": paginated_response.per_page,
+                    "max_page": paginated_response.pages,
+                    "total_items": paginated_response.total}
     result = all_univ_schema.dump(all_univ)
-    return jsonify({"universities": result})
+    return jsonify(page_headers, {"universities": result})
 
 
 @app.route("/universities/<string:id>", methods=["GET"])
