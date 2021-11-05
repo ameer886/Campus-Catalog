@@ -1,16 +1,20 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 
-import { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
-import PaginatedTable from '../../components/Pagination/PaginatedTable';
-import { ApartmentRowType } from '../../views/Apartments/ApartmentsPage';
+import type { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
+import type { ApartmentRowType } from '../../views/Apartments/ApartmentsPage';
+import type { IntentionallyAny } from '../../utilities';
+import type { PaginationMeta } from '../../components/Pagination/PaginatedTable';
 
+import PaginationRelay from '../Pagination/PaginationRelay';
+import GenericTable from '../../components/GenericTable/GenericTable';
+
+import { getAPI } from '../../APIClient';
 import { formatNumberToMoney } from '../../utilities';
 
 import './ApartmentTable.css';
 
-type ApartmentTableProps = {
-  rows: Array<ApartmentRowType>;
-};
+const PAGE_SIZE = 10;
 
 const apartmentTableHeaders: ColumnDefinitionType<
   ApartmentRowType,
@@ -61,16 +65,54 @@ const apartmentTableHeaders: ColumnDefinitionType<
   },
 ];
 
-const ApartmentTable: React.FunctionComponent<ApartmentTableProps> =
-  ({ rows }: ApartmentTableProps) => {
-    return (
-      <div className="ApartmentTable">
-        <PaginatedTable
-          columnDefinitions={apartmentTableHeaders}
-          data={rows}
-        />
-      </div>
-    );
-  };
+const ApartmentTable: React.FunctionComponent = () => {
+  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<Array<ApartmentRowType>>([]);
+  const [meta, setMeta] = useState<PaginationMeta | null>(null);
+  const [page, setPage] = useState(1); // Pages are 1-indexed
+  console.log(page);
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({ model: 'housing' });
+        const responseMeta: PaginationMeta = { ...data[0] };
+        const responseRows = data[1].properties.map(
+          (apt: IntentionallyAny) => {
+            return {
+              id: apt.property_id,
+              ...apt,
+            };
+          },
+        );
+        setRows(responseRows);
+        setMeta(responseMeta);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, []);
+
+  if (loading || meta == null)
+    return <p>Loading, please be patient.</p>;
+
+  return (
+    <div className="ApartmentTable">
+      <GenericTable
+        columnDefinitions={apartmentTableHeaders}
+        data={rows}
+      />
+
+      <PaginationRelay
+        curPage={page}
+        setPage={setPage}
+        pageSize={PAGE_SIZE}
+        totalElements={meta.total_items}
+      />
+    </div>
+  );
+};
 
 export default ApartmentTable;

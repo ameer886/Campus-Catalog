@@ -6,8 +6,6 @@ import Table from 'react-bootstrap/Table';
 
 import './GenericTable.css';
 
-import { PAGE_SIZE } from '../Pagination/PaginatedTable';
-
 /*
  * This component is a stylized table made to be as generic as I can
  * You should be able to pass basically anything reasonable into the table
@@ -107,21 +105,6 @@ const GenericRows = <T extends RowWithIndex, K extends keyof T>({
 };
 
 /*
- * Optional addition of curPage and setPage allows for the pagination table
- * to correctly slice while also maintaining sort functionality
- * There's unfortunately no way to slice only in the pagination table while
- * also maintaining sort in the generic table without making them somehow
- * codependent, and this was the best solution I could find that allows
- * both GenericTables and PaginationTables to function
- */
-type PrivateTableProps<T extends RowWithIndex, K extends keyof T> = {
-  curPage?: number;
-  setPage?: React.Dispatch<React.SetStateAction<number>>;
-  columnDefinitions: Array<ColumnDefinitionType<T, K>>;
-  data: Array<T>;
-};
-
-/*
  * The data prop should just be an array of all the table values
  * The columnDefinitions prop is more complicated.
  * The columnDefinitions depends on the type T of the data you pass in.
@@ -135,9 +118,7 @@ type PrivateTableProps<T extends RowWithIndex, K extends keyof T> = {
 const GenericTable = <T extends RowWithIndex, K extends keyof T>({
   columnDefinitions,
   data,
-  curPage,
-  setPage,
-}: PrivateTableProps<T, K>): JSX.Element => {
+}: GenericTableProps<T, K>): JSX.Element => {
   /*
    * This state allows us to track our current sort state
    * We know for certain that all keys K are unique, so the states are:
@@ -170,19 +151,11 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
         }
       });
     }
-
-    if (curPage !== undefined)
-      // Slice i.e. paginate your data whenever you sort or change
-      return copy.slice(
-        curPage * PAGE_SIZE,
-        (curPage + 1) * PAGE_SIZE,
-      );
     return copy;
-  }, [curSort, data, columnDefinitions, curPage]);
+  }, [curSort, data, columnDefinitions]);
 
   // This is a useful wrapper on how to change our sort order
   const changeSortFunc = (key: string) => {
-    if (setPage) setPage(0);
     if (curSort == null || !curSort.includes(`${key}`)) {
       setSort(`${key}asc`);
     } else if (curSort.includes(`${key}asc`)) {

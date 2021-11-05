@@ -12,6 +12,13 @@ import PaginationRelay from './PaginationRelay';
 
 export const PAGE_SIZE = 10;
 
+export type PaginationMeta = {
+  page: number;
+  per_page: number;
+  max_page: number;
+  total_items: number;
+};
+
 /*
  * Wrapper class for the generic table that also adds pagination
  * Pages are currently set to be 10 rows long
@@ -28,8 +35,6 @@ const PaginatedTable = <T extends RowWithIndex, K extends keyof T>({
       <GenericTable
         columnDefinitions={columnDefinitions}
         data={data}
-        curPage={page}
-        setPage={setPage}
       />
 
       <PaginationRelay
