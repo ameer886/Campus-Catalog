@@ -34,7 +34,10 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
       totalElements,
       startElt + pageSize - 1,
     )}`;
-    const lastPage = Math.ceil((totalElements - 1) / pageSize);
+    const lastPage =
+      totalElements % pageSize === 0
+        ? Math.ceil((totalElements - 1) / pageSize)
+        : Math.ceil(totalElements / pageSize);
 
     return (
       <div>

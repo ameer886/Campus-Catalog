@@ -1,14 +1,19 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 
-import { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
-import PaginatedTable from '../../components/Pagination/PaginatedTable';
-import { EntertainmentRowType } from '../../views/Entertainments/EntertainmentsPage';
+import type { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
+import type { EntertainmentRowType } from '../../views/Entertainments/EntertainmentsPage';
+import type { IntentionallyAny } from '../../utilities';
+import type { PaginationMeta } from '../../components/Pagination/PaginatedTable';
+
+import GenericTable from '../GenericTable/GenericTable';
+import PaginationRelay from '../Pagination/PaginationRelay';
+
+import { getAPI } from '../../APIClient';
 
 import './EntertainmentTable.css';
 
-type EntertainmentTableProps = {
-  rows: Array<EntertainmentRowType>;
-};
+const PAGE_SIZE = 10;
 
 const entertainmentTableHeaders: ColumnDefinitionType<
   EntertainmentRowType,
@@ -58,16 +63,59 @@ const entertainmentTableHeaders: ColumnDefinitionType<
   },
 ];
 
-const EntertainmentTable: React.FunctionComponent<EntertainmentTableProps> =
-  ({ rows }: EntertainmentTableProps) => {
-    return (
-      <div className="EntertainmentTable">
-        <PaginatedTable
-          columnDefinitions={entertainmentTableHeaders}
-          data={rows}
-        />
-      </div>
-    );
-  };
+const EntertainmentTable: React.FunctionComponent = () => {
+  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState<Array<EntertainmentRowType>>([]);
+  const [meta, setMeta] = useState<PaginationMeta | null>(null);
+  const [page, setPage] = useState(1); // Pages are 1-indexed
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({
+          model: 'amenities',
+          params: `page=${page}&per_page=${PAGE_SIZE}`,
+        });
+        const responseMeta: PaginationMeta = { ...data[0] };
+        const responseRows = data[1].amenities.map(
+          (apt: IntentionallyAny) => {
+            return {
+              id: apt.amen_id,
+              ...apt,
+            };
+          },
+        );
+        setRows(responseRows);
+        setMeta(responseMeta);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchDataAsync();
+  }, [page]);
+
+  if (loading || meta == null)
+    return <p>Loading, please be patient.</p>;
+
+  return (
+    <div className="EntertainmentTable">
+      <GenericTable
+        columnDefinitions={entertainmentTableHeaders}
+        data={rows}
+      />
+
+      <PaginationRelay
+        curPage={page}
+        setPage={(e) => {
+          setLoading(true);
+          setPage(e);
+        }}
+        pageSize={PAGE_SIZE}
+        totalElements={meta.total_items}
+      />
+    </div>
+  );
+};
 
 export default EntertainmentTable;

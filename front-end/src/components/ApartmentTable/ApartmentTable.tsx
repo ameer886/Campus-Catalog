@@ -70,7 +70,6 @@ const ApartmentTable: React.FunctionComponent = () => {
   const [rows, setRows] = useState<Array<ApartmentRowType>>([]);
   const [meta, setMeta] = useState<PaginationMeta | null>(null);
   const [page, setPage] = useState(1); // Pages are 1-indexed
-  console.log(page);
 
   useEffect(() => {
     const fetchDataAsync = async () => {
