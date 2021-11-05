@@ -19,11 +19,14 @@ const CLIENT = axios.create({
 export const getAPI = async ({
   id,
   model,
+  params,
 }: {
   id?: string;
   model: string;
+  params?: string;
 }): Promise<IntentionallyAny> => {
-  const url = id ? `/${model}/${id}` : `/${model}`;
+  let url = id ? `/${model}/${id}` : `/${model}`;
+  if (params) url += `?${params}`;
   return getData(url);
 };
 

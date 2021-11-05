@@ -75,7 +75,10 @@ const ApartmentTable: React.FunctionComponent = () => {
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
-        const data = await getAPI({ model: 'housing' });
+        const data = await getAPI({
+          model: 'housing',
+          params: `page=${page}&per_page=${PAGE_SIZE}`,
+        });
         const responseMeta: PaginationMeta = { ...data[0] };
         const responseRows = data[1].properties.map(
           (apt: IntentionallyAny) => {
@@ -93,7 +96,7 @@ const ApartmentTable: React.FunctionComponent = () => {
       }
     };
     fetchDataAsync();
-  }, []);
+  }, [page]);
 
   if (loading || meta == null)
     return <p>Loading, please be patient.</p>;
@@ -107,7 +110,10 @@ const ApartmentTable: React.FunctionComponent = () => {
 
       <PaginationRelay
         curPage={page}
-        setPage={setPage}
+        setPage={(e) => {
+          setLoading(true);
+          setPage(e);
+        }}
         pageSize={PAGE_SIZE}
         totalElements={meta.total_items}
       />
