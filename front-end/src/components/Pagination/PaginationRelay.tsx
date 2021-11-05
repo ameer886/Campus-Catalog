@@ -11,7 +11,7 @@ import {
 import styles from './PaginationRelay.module.css';
 
 type PaginationRelayProps = {
-  curPage: number; // Current page, zero-indexed
+  curPage: number; // Current page, one-indexed
   pageSize: number;
   totalElements: number;
   setPage: React.Dispatch<React.SetStateAction<number>>; // setPage function for table
@@ -29,12 +29,12 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
     totalElements,
     setPage,
   }: PaginationRelayProps) => {
-    const startElt = curPage * pageSize + 1;
+    const startElt = (curPage - 1) * pageSize + 1;
     const curPages = `${startElt} - ${Math.min(
       totalElements,
       startElt + pageSize - 1,
     )}`;
-    const lastPage = Math.floor((totalElements - 1) / pageSize);
+    const lastPage = Math.ceil((totalElements - 1) / pageSize);
 
     return (
       <div>
@@ -46,8 +46,8 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
           <Button
             aria-label="first"
             className={styles.PageButton + ' btn btn-outline-info'}
-            disabled={curPage === 0}
-            onClick={() => setPage(0)}
+            disabled={curPage === 1}
+            onClick={() => setPage(1)}
             title="Jump to First Page"
           >
             <BsChevronDoubleLeft className={styles.IconAdjust} />
@@ -57,7 +57,7 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
           <Button
             aria-label="prev"
             className={styles.PageButton + ' btn btn-outline-info'}
-            disabled={curPage === 0}
+            disabled={curPage === 1}
             onClick={() => setPage(curPage - 1)}
             title="Previous Page"
           >
