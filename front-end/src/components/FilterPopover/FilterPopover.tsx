@@ -1,26 +1,45 @@
 import React from 'react';
 
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import Popover from 'react-bootstrap/Popover';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import { BsFilterCircle } from 'react-icons/bs';
 
 import styles from './FilterPopover.module.css';
 
-export type FilterPopoverOption = {
+type FilterPopoverCheckboxOption = {
   header: string;
   key: string;
   values: Array<{
     value: string;
     displayStr: string;
-    checked?: boolean;
+    __checked?: boolean; // For internal use only, please don't set this
   }>;
 };
+
+type FilterPopoverInputOption = {
+  header: string;
+  key: string;
+  displayStr: string;
+  __value?: string; // For internal use only, please don't set this
+};
+
+export type FilterPopoverOption =
+  | FilterPopoverCheckboxOption
+  | FilterPopoverInputOption;
 
 export type FilterPopoverProps = {
   options: Array<FilterPopoverOption>;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
 };
+
+function isCheckboxOption(x: FilterPopoverOption): boolean {
+  return (x as FilterPopoverCheckboxOption).values != null;
+}
+function isInputOption(x: FilterPopoverOption): boolean {
+  return (x as FilterPopoverInputOption).displayStr != null;
+}
 
 const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
   options,
@@ -30,12 +49,21 @@ const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
     let output = '';
     options.forEach((option) => {
       let substr = `${option.key}=`;
-      option.values.forEach((val) => {
-        if (val.checked) {
-          if (substr.slice(-1) != '=') substr += ',';
-          substr += val.value;
-        }
-      });
+
+      if (isCheckboxOption(option)) {
+        (option as FilterPopoverCheckboxOption).values.forEach(
+          (val) => {
+            if (val.__checked) {
+              if (substr.slice(-1) != '=') substr += ',';
+              substr += val.value;
+            }
+          },
+        );
+      } else if (isInputOption(option)) {
+        const cast = option as FilterPopoverInputOption;
+        substr += cast.__value ?? '';
+      }
+
       if (substr.slice(-1) != '=') output += '&' + substr;
     });
     setFilter(output);
@@ -70,21 +98,54 @@ const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
             <div key={index}>
               <h4 className={styles.OptionHeader}>{option.header}</h4>
 
-              {option.values.map((val, i2) => (
-                <div key={i2} className={styles.InputDiv}>
-                  <input
-                    className={styles.Input}
-                    type="checkbox"
-                    defaultChecked={val.checked}
-                    value={val.value}
-                    id={option.key + '-' + val.value}
-                    onClick={() => {
-                      val.checked = !val.checked;
-                    }}
-                  />
-                  <label htmlFor={val.value}>{val.displayStr}</label>
+              {isCheckboxOption(option) &&
+                (option as FilterPopoverCheckboxOption).values.map(
+                  (val, i2) => (
+                    <div key={i2} className={styles.CheckDiv}>
+                      <input
+                        className={styles.Check}
+                        type="checkbox"
+                        defaultChecked={val.__checked}
+                        value={val.value}
+                        id={option.key + '-' + val.value}
+                        onClick={() => {
+                          val.__checked = !val.__checked;
+                        }}
+                      />
+                      <label htmlFor={val.value}>
+                        {val.displayStr}
+                      </label>
+                    </div>
+                  ),
+                )}
+
+              {isInputOption(option) && (
+                <div className={styles.CheckDiv}>
+                  <Form>
+                    <Form.Group style={{ display: 'flex' }}>
+                      <Form.Label className={styles.InputLabel}>
+                        Enter a{' '}
+                        {
+                          (option as FilterPopoverInputOption)
+                            .displayStr
+                        }{' '}
+                        here:
+                      </Form.Label>
+                      <Form.Control
+                        id={option.key}
+                        defaultValue={
+                          (option as FilterPopoverInputOption).__value
+                        }
+                        onChange={(e) =>
+                          ((
+                            option as FilterPopoverInputOption
+                          ).__value = e.target.value)
+                        }
+                      />
+                    </Form.Group>
+                  </Form>
                 </div>
-              ))}
+              )}
             </div>
           );
         })}

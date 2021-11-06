@@ -26,6 +26,11 @@ const popoverOptions: FilterPopoverOption[] = [
       { value: 'house', displayStr: 'House' },
     ],
   },
+  {
+    header: 'State',
+    key: 'state',
+    displayStr: 'state',
+  },
 ];
 
 /*
