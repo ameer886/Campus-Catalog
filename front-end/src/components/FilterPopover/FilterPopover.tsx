@@ -7,12 +7,39 @@ import { BsFilterCircle } from 'react-icons/bs';
 
 import styles from './FilterPopover.module.css';
 
-const FilterPopover: React.FunctionComponent = () => {
-  const inputArray = [
-    { value: '1', displayStr: 'Option 1' },
-    { value: '2', displayStr: 'Option 2' },
-    { value: '3', displayStr: 'Option 3' },
-  ];
+export type FilterPopoverOption = {
+  header: string;
+  key: string;
+  values: Array<{
+    value: string;
+    displayStr: string;
+    checked?: boolean;
+  }>;
+};
+
+export type FilterPopoverProps = {
+  options: Array<FilterPopoverOption>;
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
+  options,
+  setFilter,
+}: FilterPopoverProps) => {
+  const applyFilter = () => {
+    let output = '';
+    options.forEach((option) => {
+      let substr = `${option.key}=`;
+      option.values.forEach((val) => {
+        if (val.checked) {
+          if (substr.slice(-1) != '=') substr += ',';
+          substr += val.value;
+        }
+      });
+      if (substr.slice(-1) != '=') output += '&' + substr;
+    });
+    setFilter(output);
+  };
 
   const pop = (
     <Popover id="popover-basic" style={{ minWidth: '360px' }}>
@@ -28,26 +55,39 @@ const FilterPopover: React.FunctionComponent = () => {
            */}
           <Button
             aria-label="Close"
-            onClick={() => document.body.click()}
+            onClick={() => {
+              applyFilter();
+              document.body.click();
+            }}
           >
             Apply
           </Button>
         </div>
       </Popover.Title>
       <Popover.Content>
-        <p>Select one of the following:</p>
+        {options.map((option, index) => {
+          return (
+            <div key={index}>
+              <h4 className={styles.OptionHeader}>{option.header}</h4>
 
-        {inputArray.map((item, index) => (
-          <div key={index} className={styles.InputDiv}>
-            <input
-              className={styles.Input}
-              type="checkbox"
-              value={item.value}
-              id={item.value}
-            />
-            <label htmlFor={item.value}>{item.displayStr}</label>
-          </div>
-        ))}
+              {option.values.map((val, i2) => (
+                <div key={i2} className={styles.InputDiv}>
+                  <input
+                    className={styles.Input}
+                    type="checkbox"
+                    defaultChecked={val.checked}
+                    value={val.value}
+                    id={option.key + '-' + val.value}
+                    onClick={() => {
+                      val.checked = !val.checked;
+                    }}
+                  />
+                  <label htmlFor={val.value}>{val.displayStr}</label>
+                </div>
+              ))}
+            </div>
+          );
+        })}
       </Popover.Content>
     </Popover>
   );
