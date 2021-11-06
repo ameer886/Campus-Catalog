@@ -1,10 +1,11 @@
-from logging import raiseExceptions
 from os import abort
 import flask
 import json
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from db import db_init
+from sqlalchemy import text, desc
+from sqlalchemy.sql.schema import MetaData, Column
 from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, validate
@@ -14,6 +15,12 @@ app = Flask(__name__)
 CORS(app)
 db = db_init(app)
 ma = Marshmallow(app)
+
+metadata = MetaData(db.engine)
+metadata.reflect()
+university = metadata.tables["university"]
+housing = metadata.tables["housing"]
+housingImages = metadata.tables["housingImages"]
 
 
 @app.route("/")
@@ -196,26 +203,55 @@ table_columns = (
 )
 all_housing_schema = HousingSchema(only=table_columns, many=True)
 
+def normalize_query(params):
+    unflat_params = params.to_dict()
+    return {k: v for k, v in unflat_params.items() if k in table_columns}
+
 @app.route("/housing", methods=["GET"])
 def get_all_housing():
-    
-    # retrieve query params
+
+    # retrieve params
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
+    sort_column = request.args.get('sort', default='state', type=str).lower()
+    sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
+
+    # retrieve params for filtering
+    type_filter = request.args.getlist('type')
+
+    type_list = type_filter[0].split(',') if len(type_filter) > 0 else type_filter
+    
+    # positional filters
+    filter_params = normalize_query(request.args)
+    filter_on = bool(filter_params)
 
     # verify param validity
     if page < 1:
         abort(400, "invalid paramter: page must be greater than 0")
     if per_page < 1:
         abort(400, "invalid paramter: per_page must be greater than 0")
+    if sort_column not in housing.c:
+        abort(400, f"invalid paramter: column {sort_column} not in table")
+    if sort_column not in table_columns:
+        abort(400, f"invalid paramter: column {sort_column.capitalize()} not in {table_columns}")
     
     # query and paginate
     try:
-        paginated_response = Housing.query.paginate(page, max_per_page=per_page)
+        # get Query object
+        sql_query = Housing.query
+
+        # apply filters if detected
+        if len(type_filter) > 0:
+            sql_query = sql_query.filter(getattr(Housing, 'property_type').in_(type_list)) 
+        if filter_on:
+            sql_query = sql_query.filter_by(**filter_params)
+        
+        order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
+        paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
         all_housing = paginated_response.items
-    except Exception:
+    except Exception as e:
         err = flask.Response(
-            json.dumps({"error": f"{page} not found"}), 404, mimetype="application/json"
+            json.dumps({"error": f"{e}, {page} not found"}), 404, mimetype="application/json"
         )
         return err
 
@@ -232,17 +268,17 @@ def get_all_housing():
 def get_housing_by_id(id):
     sql = queries.query_images(id)
     result = db.session.execute(sql)
-    if result.first() is None:
+    if result.rowcount == 0:
         err = flask.Response(
             json.dumps({"error": id + " not found"}), 404, mimetype="application/json"
         )
         return err
     housing = Housing.build_obj_from_args(*result)
-    result.close()
     amen_sql = queries.query_amen(id)
     amen_nearby = db.session.execute(amen_sql)
     univ_sql = queries.query_univ(id)
     univ_nearby = db.session.execute(univ_sql)
+    result.close()
     amenities = tuple(amen_nearby)
     universities = tuple(univ_nearby)
     housing.set_amen_nearby(amenities)
