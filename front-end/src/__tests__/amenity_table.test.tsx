@@ -61,12 +61,14 @@ jest.mock('react-router-dom', () => ({
 
 describe('Apartment Table Test Suite', () => {
   it('snapshot test', () => {
-    const snap = shallow(<EntertainmentTable rows={EXAMPLE_ROWS} />);
+    const snap = shallow(
+      <EntertainmentTable testRows={EXAMPLE_ROWS} />,
+    );
     expect(snap).toMatchSnapshot();
   });
 
   it('page displays cur page and total', () => {
-    render(<EntertainmentTable rows={EXAMPLE_ROWS} />);
+    render(<EntertainmentTable testRows={EXAMPLE_ROWS} />);
     const textElement = screen.getByText('Showing items 1 - 3 of 3.');
     expect(textElement).toBeInTheDocument();
   });
@@ -74,7 +76,7 @@ describe('Apartment Table Test Suite', () => {
   it('links have correct href', () => {
     render(
       <MemoryRouter initialEntries={['/housing']}>
-        <EntertainmentTable rows={EXAMPLE_ROWS} />
+        <EntertainmentTable testRows={EXAMPLE_ROWS} />
       </MemoryRouter>,
     );
 
@@ -92,7 +94,7 @@ describe('Apartment Table Test Suite', () => {
   // Only tests amenity name
   // it's too much code to test all five columns...
   it('sort function works', () => {
-    render(<EntertainmentTable rows={EXAMPLE_ROWS} />);
+    render(<EntertainmentTable testRows={EXAMPLE_ROWS} />);
 
     let tableBody = screen.getByRole('table')?.children[1];
     expect(tableBody).not.toBeNull();
@@ -111,11 +113,15 @@ describe('Apartment Table Test Suite', () => {
     });
     expect(thead).not.toBeNull();
 
+    // Copy avoids sorting original array
+    const copy: Array<EntertainmentRowType> = JSON.parse(
+      JSON.stringify(EXAMPLE_ROWS),
+    );
     fireEvent.click(thead);
     tableBody = screen.getByRole('table')?.children[1];
     expect(tableBody).not.toBeNull();
     expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    const sortedRows = EXAMPLE_ROWS.sort((a, b) =>
+    const sortedRows = copy.sort((a, b) =>
       a.amen_name.localeCompare(b.amen_name),
     );
     for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
@@ -160,7 +166,7 @@ describe('Apartment Table Test Suite', () => {
     for (let i = 0; i < 25; i++) {
       rows.push(EXAMPLE_ROWS[0]);
     }
-    render(<EntertainmentTable rows={rows} />);
+    render(<EntertainmentTable testRows={rows} />);
 
     const firstBtn = screen.getByRole('button', {
       name: 'first',
@@ -181,19 +187,33 @@ describe('Apartment Table Test Suite', () => {
 
     let textElement = screen.getByText('Showing items 1 - 10 of 25.');
     expect(textElement).toBeInTheDocument();
+    expect(firstBtn).toBeDisabled();
+    expect(prevBtn).toBeDisabled();
 
+    let tbody = screen.getByRole('table').children[1];
+    expect(tbody.childElementCount).toEqual(10);
+
+    expect(nextBtn).not.toBeDisabled();
     fireEvent.click(nextBtn);
     textElement = screen.getByText('Showing items 11 - 20 of 25.');
     expect(textElement).toBeInTheDocument();
 
+    expect(lastBtn).not.toBeDisabled();
     fireEvent.click(lastBtn);
     textElement = screen.getByText('Showing items 21 - 25 of 25.');
     expect(textElement).toBeInTheDocument();
+    expect(nextBtn).toBeDisabled();
+    expect(lastBtn).toBeDisabled();
 
+    tbody = screen.getByRole('table').children[1];
+    expect(tbody.childElementCount).toEqual(5);
+
+    expect(prevBtn).not.toBeDisabled();
     fireEvent.click(prevBtn);
     textElement = screen.getByText('Showing items 11 - 20 of 25.');
     expect(textElement).toBeInTheDocument();
 
+    expect(firstBtn).not.toBeDisabled();
     fireEvent.click(firstBtn);
     textElement = screen.getByText('Showing items 1 - 10 of 25.');
     expect(textElement).toBeInTheDocument();

@@ -152,7 +152,6 @@ describe('Apartment Table Test Suite', () => {
     tableBody = screen.getByRole('table')?.children[1];
     expect(tableBody).not.toBeNull();
     expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    console.log(EXAMPLE_ROWS);
     for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
       const row = tableBody.children[i];
       expect(row).not.toBeNull();
