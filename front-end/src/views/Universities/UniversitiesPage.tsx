@@ -11,6 +11,7 @@ import type { IntentionallyAny } from '../../utilities';
 import UniversityGrid from '../../components/UniversityGrid/UniversityGrid';
 import PaginationRelay from '../../components/Pagination/PaginationRelay';
 import { getAPI } from '../../APIClient';
+import { PaginationMeta } from '../../components/Pagination/PaginatedTable';
 
 const PAGE_SIZE = 9;
 
@@ -153,15 +154,22 @@ function sortCards(cards: UniversityRowType[], sortOrder: string) {
  */
 const UniversitiesPage: React.FunctionComponent = () => {
   const [sortOrder, setSortOrder] = useState('none');
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [meta, setMeta] = useState<PaginationMeta | null>(null);
   const [cards, setCards] = useState<Array<UniversityRowType>>([]);
 
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
-        const data = await getAPI({ model: 'universities' });
-        const responseCards = data.universities
+        const data = await getAPI({
+          model: 'universities',
+          params: `page=${page}&per_page=${PAGE_SIZE}`,
+        });
+        const responseMeta: PaginationMeta = {
+          ...data[0],
+        };
+        const responseCards = data[1].universities
           .map((university: IntentionallyAny) => {
             return {
               id: university.univ_id,
@@ -172,13 +180,14 @@ const UniversitiesPage: React.FunctionComponent = () => {
             (university: IntentionallyAny) => university.rank != null,
           );
         setCards(responseCards);
+        setMeta(responseMeta);
         setLoading(false);
       } catch (err) {
         console.error(err);
       }
     };
     fetchDataAsync();
-  }, []);
+  }, [page]);
 
   // Memoize card sorting because the calculation could get expensive
   const sortedCards = useMemo(() => {
@@ -186,22 +195,11 @@ const UniversitiesPage: React.FunctionComponent = () => {
     return sortCards(cards, sortOrder);
   }, [cards, sortOrder]);
 
-  const cardSlice = useMemo(() => {
-    return sortedCards.slice(
-      page * PAGE_SIZE,
-      (page + 1) * PAGE_SIZE,
-    );
-  }, [sortedCards, page, sortOrder]);
-  // The above line is not immediately intuitive: we add a dependency
-  // on sortOrder but don't use it. The reason for this is that the
-  // sortedCards reference is not changing on sort, even if its values are.
-  // Thus we need to re-slice whenever page or sortOrder changes, and
-  // we need sortedCards to actually slice.
-
   // Note: ALL HOOKS must come before a return
-  if (loading)
+  if (loading || meta == null)
     return (
       <div style={{ textAlign: 'center' }}>
+        <h1>Universities</h1>
         <p>Loading responses, please be patient.</p>
       </div>
     );
@@ -218,12 +216,15 @@ const UniversitiesPage: React.FunctionComponent = () => {
       <div className={styles.UniversitySplitter}>
         {/* Build the grid on the left */}
         <div className={styles.SplitterGrid}>
-          <UniversityGrid cards={cardSlice} />
+          <UniversityGrid cards={sortedCards} />
           <PaginationRelay
             curPage={page}
-            setPage={setPage}
+            setPage={(e) => {
+              setLoading(true);
+              setPage(e);
+            }}
             pageSize={PAGE_SIZE}
-            totalElements={cards.length}
+            totalElements={meta.total_items}
           />
         </div>
 

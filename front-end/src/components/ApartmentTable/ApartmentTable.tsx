@@ -71,6 +71,19 @@ const ApartmentTable: React.FunctionComponent = () => {
   const [meta, setMeta] = useState<PaginationMeta | null>(null);
   const [page, setPage] = useState(1); // Pages are 1-indexed
 
+  /*
+   * TODO: There's a big opportunity for refactor here!!!
+   * Specifically, both model tables look nearly identical
+   * with only two major differences: the column definitions
+   * and the method fetchDataAsync. If sorting and filtering
+   * don't change this flow too much, you can rework PaginatedTable
+   * (which is no longer being used at all) to take in a property
+   * for the column defs and a property for "getData" that
+   * does all the processing except the state dispatches in
+   * fetchDataAsync. This will allow the tables to specify
+   * what the query and response look like while also removing
+   * all the duplicated code.
+   */
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
