@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './CampCatSplashPage.module.css';
 import SplashGrid from './SplashGrid';
+import FilterPopover from '../../components/FilterPopover/FilterPopover';
 
 /*
  * The Splash Page
@@ -26,6 +27,8 @@ const CampCatSplashPage: React.FunctionComponent = () => {
       </div>
 
       <SplashGrid />
+
+      <FilterPopover />
     </div>
   );
 };
