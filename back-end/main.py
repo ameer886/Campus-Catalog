@@ -4,7 +4,7 @@ import json
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from db import db_init
-from sqlalchemy import text
+from sqlalchemy import text, desc
 from sqlalchemy.sql.schema import MetaData, Column
 from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
@@ -214,6 +214,7 @@ def get_all_housing():
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
     sort_column = request.args.get('sort', default='state', type=str).lower()
+    sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
 
     # retrieve params for filtering
     type_filter = request.args.getlist('type')
@@ -244,8 +245,9 @@ def get_all_housing():
             sql_query = sql_query.filter(getattr(Housing, 'property_type').in_(type_list)) 
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
-
-        paginated_response = sql_query.order_by(text(sort_column)).paginate(page, max_per_page=per_page)
+        
+        order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
+        paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
         all_housing = paginated_response.items
     except Exception as e:
         err = flask.Response(
