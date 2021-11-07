@@ -24,7 +24,7 @@ const OurNavbar = (props: any) => {
   /* load the fonts */
   WebFont.load({
     google: {
-      families: ["Raleway", "sans-serif", "Prompt"],
+      families: ["Oswald", "sans-serif", "Prompt"],
     },
   });
 
@@ -32,9 +32,10 @@ const OurNavbar = (props: any) => {
   const styles = {
     tabs: {
       color: "white",
-      fontFamily: "Raleway",
+      fontFamily: "Oswald",
       fontSize: "1.1vw",
       display: "flex",
+      float: "right"
     } as React.CSSProperties,
     searchButton: {
       backgroundColor: "white",
@@ -93,6 +94,7 @@ const OurNavbar = (props: any) => {
             {/* search bar */}
             <FormControl
               className="mr-sm-2"
+              
               type="text"
               placeholder="Search"
               ref={textInput}

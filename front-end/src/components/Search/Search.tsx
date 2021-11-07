@@ -49,39 +49,27 @@ function Search(q: any) {
 
   /* type of filter and text displayed in dropdown */
   const [filterType, setFilterType] = React.useState<number>(SearchType.All);
-  const [filterTitle, setFilterTitle] = React.useState<String>(
+  const [filterTitle, setFilterTitle] = React.useState<string>(
     "Filter by Model"
   );
 
   /* load in fonts */
   WebFont.load({
     google: {
-      families: ["serif", "Raleway", "sans-serif"],
+      families: ["serif", "Oswald", "sans-serif"],
     },
   });
 
-  /* when cities filter is clicked */
-  function universitiesOnClick() {
-    setFilterType(SearchType.Universities);
-    setFilterTitle("Filter by Universities");
-  }
-
-  /* when none filter is clicked */
-  function noneOnClick() {
-    setFilterType(SearchType.All);
-    setFilterTitle("Filter by Model");
-  }
 
   return (
     <div className="Search">
-      <Navbar singleColor={true} />
       <h1 className="search-heading">SEARCH RESULTS</h1>
       <h2 className="query-style">{q.q}</h2>
       <br />
       {/* display filter dropdown */}
       <DropdownButton id="dropdown-basic-button" title={filterTitle}>
-        <Dropdown.Item onClick={universitiesOnClick}>Universities</Dropdown.Item>
-        <Dropdown.Item onClick={noneOnClick}>All</Dropdown.Item>
+        <Dropdown.Item >Universities</Dropdown.Item>
+        <Dropdown.Item>All</Dropdown.Item>
       </DropdownButton>
       <br />
       <InstantSearch
@@ -97,23 +85,14 @@ function Search(q: any) {
             <div>
               <h1 className="section-title">Universities</h1>
               <p className="section-subtitle">
-                Learn about climate change in universities around the world.{" "}
+                Learn about universities.{" "}
               </p><br />
               <main><UniversitiesContent /></main>
             </div>) : (<div></div>)}
         </Index>
 
       </InstantSearch>
-      {/* display algolia logo */}
-      <div className="search-side-by-side">
-        <div>Powered by &nbsp;</div>
-        <div>
-          <Image
-            src={require("../../../assets/algolialogo.png")}
-            height="5%"
-            width="5%"/>
-        </div>
-      </div>
+      
       <br />
     </div>
   );

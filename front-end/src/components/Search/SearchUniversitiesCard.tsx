@@ -5,10 +5,10 @@ import { Highlight } from "react-instantsearch-dom"
 
 /* displays card for a city result
 in the search page */
-function SearchCityCard(props:any) {
+function SearchUniversitiesCard(props:any) {
 
     /* attributes of a city */
-    const city_attributes = [
+    const university_attributes = [
         {
             name: "Name:",
             attribute: "univ_name",
@@ -44,11 +44,11 @@ function SearchCityCard(props:any) {
     /* map the attribute data to text in the card */
     const displayCardText = () => {
         return (
-        city_attributes.map((city) => (
+        university_attributes.map((university) => (
             <Card.Text className="card-text-style" 
-                        key={city.attribute_id}>
-                <b>{city.name} {" "}</b>
-                <Highlight attribute={city.attribute} 
+                        key={university.attribute_id}>
+                <b>{university.name} {" "}</b>
+                <Highlight attribute={university.attribute} 
                             tagName="mark" 
                             hit={props.hit} />
             </Card.Text>
@@ -59,10 +59,10 @@ function SearchCityCard(props:any) {
     return(
         <Card>
             <Card.Body>
-                <a href={"/cities/id=" + props.hit.city_id}>
+                <a href={"/universities/id=" + props.hit.univ_id}>
                     <u>
                         <Card.Title className="card-title-style">
-                            {props.hit.city_name}
+                            {props.hit.univ_name}
                         </Card.Title>
                     </u>
                 </a>
@@ -71,4 +71,4 @@ function SearchCityCard(props:any) {
         </Card> 
     );
 }
-export default SearchCityCard;
+export default SearchUniversitiesCard;

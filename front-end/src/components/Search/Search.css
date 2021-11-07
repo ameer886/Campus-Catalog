@@ -7,9 +7,9 @@
     text-align: center;
     padding-right: 2vw;
     padding-left: 2vw;
-    background: linear-gradient(180deg, #3C0C0C 0%, 
-    #791414 45.83%, #3C0C0C 95.83%);
-    font-family: "Raleway";
+    background: linear-gradient(180deg, #0c173c 0%, 
+    #1b90c7 45.83%, #96c5d3 95.83%);
+    font-family: "Oswald";
     color: white;
     background-size: cover;
     width: 100%;
@@ -19,7 +19,7 @@
 }
 
 .result-style {
-    font-family: "Raleway";
+    font-family: "Oswald";
     color: white;
 }
 
@@ -32,7 +32,7 @@
     flex-direction:row;
     color: white;
     align-items: center;
-    font-family: "Raleway";
+    font-family: "Oswald";
     text-align: left;
 }
   
