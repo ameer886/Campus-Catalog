@@ -1,15 +1,14 @@
 .OurNavbar {
-   font-size: 90%;
-   font-weight: 400;
-   padding: 0.75em 0;
-   letter-spacing: 1px;
-   color: yellowgreen;
-   font-family: 'Oswald', sans-serif;
-   float: right;
+  font-size: 90%;
+  font-weight: 400;
+  padding: 0.75em 0;
+  letter-spacing: 1px;
+  color: yellowgreen;
+  font-family: 'Oswald', sans-serif;
+  float: right;
 }
 
 .brand {
-   padding: 0px 10px;
-   float: right;
+  padding: 0px 10px;
+  float: right;
 }
-
