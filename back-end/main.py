@@ -205,6 +205,10 @@ def normalize_query(params):
     unflat_params = params.to_dict()
     return {k: v for k, v in unflat_params.items() if k in table_columns}
 
+def normalize_amenities_query(params):
+    unflat_params = params.to_dict()
+    return {k: v for k, v in unflat_params.items() if k in amenities_table_columns}
+
 @app.route("/housing", methods=["GET"])
 def get_all_housing():
 
@@ -477,6 +481,13 @@ def get_all_amenities():
     sort_column = request.args.get('sort', default='state', type=str).lower()
     sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
 
+    type_filter = request.args.getlist('type')
+    type_list = type_filter[0].split(',') if len(type_filter) > 0 else type_filter
+
+    # positional filters
+    filter_params = normalize_amenities_query(request.args)
+    filter_on = bool(filter_params)
+
     if page < 1:
         abort(400, "invalid parameter: page must be greater than 0")
     if per_page < 1:
@@ -490,6 +501,10 @@ def get_all_amenities():
     # query and paginate
     try:
         sql_query = Amenities.query
+
+        if filter_on:
+            sql_query = sql_query.filter_by(**filter_params)
+
         order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
         paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
         all_amenities = paginated_response.items
