@@ -165,7 +165,6 @@ function Search(q: any) {
           )}
         </Index>
       </InstantSearch>
-
       <br />
     </div>
   );
