@@ -5,14 +5,16 @@ import type { ColumnDefinitionType } from '../../components/GenericTable/Generic
 import type { ApartmentRowType } from '../../views/Apartments/ApartmentsPage';
 import type { IntentionallyAny } from '../../utilities';
 import type { PaginationMeta } from '../../components/Pagination/PaginatedTable';
+import type { FilterPopoverOption } from '../../components/FilterPopover/FilterPopover';
 
 import PaginationRelay from '../Pagination/PaginationRelay';
 import GenericTable from '../../components/GenericTable/GenericTable';
+import FilterPopover from '../../components/FilterPopover/FilterPopover';
 
 import { getAPI } from '../../APIClient';
 import { formatNumberToMoney } from '../../utilities';
 
-import './ApartmentTable.css';
+import styles from './ApartmentTable.module.css';
 
 const PAGE_SIZE = 10;
 
@@ -65,6 +67,29 @@ const apartmentTableHeaders: ColumnDefinitionType<
   },
 ];
 
+const popoverOptions: FilterPopoverOption[] = [
+  {
+    header: 'Housing Type',
+    key: 'type',
+    values: [
+      { value: 'apartment', displayStr: 'Apartment' },
+      { value: 'condo', displayStr: 'Condo' },
+      { value: 'townhome', displayStr: 'Town home' },
+      { value: 'house', displayStr: 'House' },
+    ],
+  },
+  {
+    header: 'City',
+    key: 'city',
+    displayStr: 'city',
+  },
+  {
+    header: 'State',
+    key: 'state',
+    displayStr: 'state',
+  },
+];
+
 // This is an optional property to ONLY BE USED IN JEST TESTS
 // PLEASE do not use testRows in production
 type ApartmentTableTestProps = {
@@ -86,6 +111,8 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
           },
     );
     const [page, setPage] = useState(1); // Pages are 1-indexed
+    const [filter, setFilter] = useState('');
+    console.log(filter);
 
     /*
      * TODO: There's a big opportunity for refactor here!!!
@@ -137,7 +164,16 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
       return <p>Loading, please be patient.</p>;
 
     return (
-      <div className="ApartmentTable">
+      <div className={styles.ApartmentTable}>
+        <div>
+          <div className={styles.FilterButton}>
+            <FilterPopover
+              options={popoverOptions}
+              setFilter={setFilter}
+            />
+          </div>
+        </div>
+
         <GenericTable
           columnDefinitions={apartmentTableHeaders}
           data={rows}
