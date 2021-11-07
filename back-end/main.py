@@ -481,8 +481,8 @@ def get_all_amenities():
     sort_column = request.args.get('sort', default='state', type=str).lower()
     sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
 
-    type_filter = request.args.getlist('type')
-    type_list = type_filter[0].split(',') if len(type_filter) > 0 else type_filter
+    pricing_filter = request.args.get('price')
+    pricing_list = pricing_filter.split(',') if pricing_filter != None else pricing_filter
 
     # positional filters
     filter_params = normalize_amenities_query(request.args)
@@ -501,7 +501,8 @@ def get_all_amenities():
     # query and paginate
     try:
         sql_query = Amenities.query
-
+        if pricing_filter != None:
+            sql_query = sql_query.filter(getattr(Amenities, 'pricing').in_(pricing_list)) 
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
 
