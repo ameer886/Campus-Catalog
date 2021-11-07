@@ -1,22 +1,22 @@
-import React from "react";
-import algoliasearch from "algoliasearch/lite";
-import { Index, InstantSearch } from "react-instantsearch-dom";
-import { SearchBox, connectHits } from "react-instantsearch-dom";
-import { connectStateResults } from "react-instantsearch-dom";
-import "./Search.css";
-import Navbar from "../OurNavbar/OurNavbar";
-import Image from "react-bootstrap/Image";
-import WebFont from "webfontloader";
-import SearchUniversitiesCard from "./SearchUniversitiesCard";
-import SearchAmenitiesCard from "./SearchAmenitiesCard";
-import SearchHousingCard from "./SearchHousingCard";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
+import React from 'react';
+import algoliasearch from 'algoliasearch/lite';
+import { Index, InstantSearch } from 'react-instantsearch-dom';
+import { SearchBox, connectHits } from 'react-instantsearch-dom';
+import { connectStateResults } from 'react-instantsearch-dom';
+import './Search.css';
+import Navbar from '../OurNavbar/OurNavbar';
+import Image from 'react-bootstrap/Image';
+import WebFont from 'webfontloader';
+import SearchUniversitiesCard from './SearchUniversitiesCard';
+import SearchAmenitiesCard from './SearchAmenitiesCard';
+import SearchHousingCard from './SearchHousingCard';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
 
 /* creating search client for our Algolia search application */
 const searchClient = algoliasearch(
-  "XS3D8421D0",
-  "79178e75bc60777adc2ea95bbbc4195d"
+  'XS3D8421D0',
+  '79178e75bc60777adc2ea95bbbc4195d',
 );
 
 /* filter type for search */
@@ -40,11 +40,11 @@ const amenitiesHits = ({ hits }) => (
 const CustomAmenitiesHits = connectHits(amenitiesHits);
 
 const AmenitiesContent = connectStateResults(({ searchState }) =>
-searchState && searchState.query ? (
-  <div className="content">
-    <CustomAmenitiesHits />
-  </div>
-) : null
+  searchState && searchState.query ? (
+    <div className="content">
+      <CustomAmenitiesHits />
+    </div>
+  ) : null,
 );
 
 /* custom display of the universities results */
@@ -60,11 +60,11 @@ const universitiesHits = ({ hits }) => (
 const CustomUniversitiesHits = connectHits(universitiesHits);
 
 const UniversitiesContent = connectStateResults(({ searchState }) =>
-searchState && searchState.query ? (
-  <div className="content">
-    <CustomUniversitiesHits />
-  </div>
-) : null
+  searchState && searchState.query ? (
+    <div className="content">
+      <CustomUniversitiesHits />
+    </div>
+  ) : null,
 );
 
 /* custom display of the housing results */
@@ -80,58 +80,52 @@ const housingHits = ({ hits }) => (
 const CustomHousingHits = connectHits(housingHits);
 
 const HousingContent = connectStateResults(({ searchState }) =>
-searchState && searchState.query ? (
-  <div className="content">
-    <CustomHousingHits />
-  </div>
-) : null
+  searchState && searchState.query ? (
+    <div className="content">
+      <CustomHousingHits />
+    </div>
+  ) : null,
 );
-
-
-
 
 /* takes in query that the user searches and returns search results */
 function Search(q: any) {
-
   /* type of filter and text displayed in dropdown */
-  const [filterType, setFilterType] = React.useState<number>(SearchType.All);
-  const [filterTitle, setFilterTitle] = React.useState<string>(
-    "Filter by Model"
+  const [filterType, setFilterType] = React.useState<number>(
+    SearchType.All,
   );
+  const [filterTitle, setFilterTitle] =
+    React.useState<string>('Filter by Model');
 
   /* load in fonts */
   WebFont.load({
     google: {
-      families: ["serif", "Oswald", "sans-serif"],
+      families: ['serif', 'Oswald', 'sans-serif'],
     },
   });
 
   /* when amenities filter is clicked */
   function amenitiesOnClick() {
     setFilterType(SearchType.Amenities);
-    setFilterTitle("Filter by Amenities");
+    setFilterTitle('Filter by Amenities');
   }
 
   /* when housing filter is clicked */
   function housingOnClick() {
     setFilterType(SearchType.Housing);
-    setFilterTitle("Filter by Housing");
+    setFilterTitle('Filter by Housing');
   }
 
   /* when universities filter is clicked */
   function OnClick() {
     setFilterType(SearchType.Universities);
-    setFilterTitle("Filter by Universities");
+    setFilterTitle('Filter by Universities');
   }
 
   /* when none filter is clicked */
   function noneOnClick() {
     setFilterType(SearchType.All);
-    setFilterTitle("Filter by Model");
+    setFilterTitle('Filter by Model');
   }
-
-
-
 
   return (
     <div className="Search">
@@ -140,16 +134,18 @@ function Search(q: any) {
       <br />
       {/* display filter dropdown */}
       <DropdownButton id="dropdown-basic-button" title={filterTitle}>
-        <Dropdown.Item >amenities</Dropdown.Item>
+        <Dropdown.Item>amenities</Dropdown.Item>
         <Dropdown.Item>All</Dropdown.Item>
       </DropdownButton>
       <br />
       <InstantSearch
         indexName="amenities_index"
         searchClient={searchClient}
-        searchState={{query: q.q,}}>
-
-        <div style={{ display: "none" }}><SearchBox /></div>
+        searchState={{ query: q.q }}
+      >
+        <div style={{ display: 'none' }}>
+          <SearchBox />
+        </div>
         {/* index containing all amenities data  */}
         <Index indexName="amenities_index">
           {filterType === SearchType.Amenities ||
@@ -157,14 +153,19 @@ function Search(q: any) {
             <div>
               <h1 className="section-title">amenities</h1>
               <p className="section-subtitle">
-                Learn about amenities.{" "}
-              </p><br />
-              <main><AmenitiesContent /></main>
-            </div>) : (<div></div>)}
+                Learn about amenities.{' '}
+              </p>
+              <br />
+              <main>
+                <AmenitiesContent />
+              </main>
+            </div>
+          ) : (
+            <div></div>
+          )}
         </Index>
-
       </InstantSearch>
-      
+
       <br />
     </div>
   );
