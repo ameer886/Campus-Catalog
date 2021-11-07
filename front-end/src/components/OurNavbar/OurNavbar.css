@@ -1,3 +1,18 @@
+.OurNavbar {
+   font-size: 90%;
+   font-weight: 400;
+   padding: 0.75em 0;
+   letter-spacing: 1px;
+   color: white;
+   font-family: 'Raleway', sans-serif;
+}
+
+.navbar-tabs {
+   color:white;
+   font-family: 'Raleway';
+}
+
 .brand {
    padding: 0px 10px;
 }
+
