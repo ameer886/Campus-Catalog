@@ -98,8 +98,14 @@ type ApartmentTableTestProps = {
 
 const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
   ({ testRows }: ApartmentTableTestProps) => {
+    // A TON of useStates for managing this component, let's break them down
+    // loading: if true, display a loading text instead of the table
     const [loading, setLoading] = useState(testRows == null);
+
+    // rows: the actual data in the tables. Initially empty, set on query.
     const [rows, setRows] = useState<Array<ApartmentRowType>>([]);
+
+    // meta: the meta information for the query i.e. page, total items, etc
     const [meta, setMeta] = useState<PaginationMeta | null>(
       testRows == null
         ? null
@@ -110,9 +116,12 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
             per_page: PAGE_SIZE,
           },
     );
+
+    // page: the current query page
     const [page, setPage] = useState(1); // Pages are 1-indexed
+
+    // filter: a string for the current filter e.g. "&state=TX&city=Austin"
     const [filter, setFilter] = useState('');
-    console.log(filter);
 
     /*
      * TODO: There's a big opportunity for refactor here!!!
@@ -137,9 +146,11 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
 
       const fetchDataAsync = async () => {
         try {
+          let params = `page=${page}&per_page=${PAGE_SIZE}`;
+          if (filter) params += filter;
           const data = await getAPI({
             model: 'housing',
-            params: `page=${page}&per_page=${PAGE_SIZE}`,
+            params: params,
           });
           const responseMeta: PaginationMeta = { ...data[0] };
           const responseRows = data[1].properties.map(
@@ -158,7 +169,7 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
         }
       };
       fetchDataAsync();
-    }, [page]);
+    }, [page, filter]);
 
     if (loading || meta == null)
       return <p>Loading, please be patient.</p>;
@@ -169,7 +180,10 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
           <div className={styles.FilterButton}>
             <FilterPopover
               options={popoverOptions}
-              setFilter={setFilter}
+              setFilter={(e) => {
+                setLoading(testRows == null);
+                setFilter(e);
+              }}
             />
           </div>
         </div>

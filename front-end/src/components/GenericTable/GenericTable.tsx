@@ -182,11 +182,16 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
             ))}
           </tr>
         </thead>
-        <GenericRows
-          columnDefinitions={columnDefinitions}
-          data={sortedData}
-        />
+        {sortedData.length > 0 && (
+          <GenericRows
+            columnDefinitions={columnDefinitions}
+            data={sortedData}
+          />
+        )}
       </Table>
+      {sortedData.length === 0 && (
+        <p>Sorry, we found no data matching this filter.</p>
+      )}
     </>
   );
 };
