@@ -1,4 +1,3 @@
-from os import abort
 import flask
 import json
 from flask import Flask, jsonify, request, abort
@@ -20,7 +19,6 @@ metadata = MetaData(db.engine)
 metadata.reflect()
 university = metadata.tables["university"]
 housing = metadata.tables["housing"]
-housingImages = metadata.tables["housingImages"]
 amenities = metadata.tables["amenities"]
 
 
