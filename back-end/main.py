@@ -21,6 +21,7 @@ metadata.reflect()
 university = metadata.tables["university"]
 housing = metadata.tables["housing"]
 housingImages = metadata.tables["housingImages"]
+amenities = metadata.tables["amenities"]
 
 
 @app.route("/")
@@ -94,21 +95,18 @@ class AmenitiesSchema(ma.Schema):
 
 
 amenities_schema = AmenitiesSchema()
-all_amenities_schema = AmenitiesSchema(
-    only=[
-        "amen_id",
-        "amen_name",
-        "pricing",
-        "city",
-        "state",
-        "num_review",
-        "deliver",
-        "takeout",
-        "rating",
-    ],
-    many=True,
+amenities_table_columns = (
+    "amen_id",
+    "amen_name",
+    "pricing",
+    "city",
+    "state",
+    "num_review",
+    "deliver",
+    "takeout",
+    "rating",
 )
-
+all_amenities_schema = AmenitiesSchema(only=amenities_table_columns, many=True)
 
 class HousingSchema(ma.Schema):
     class Meta:
@@ -206,6 +204,10 @@ all_housing_schema = HousingSchema(only=table_columns, many=True)
 def normalize_query(params):
     unflat_params = params.to_dict()
     return {k: v for k, v in unflat_params.items() if k in table_columns}
+
+def normalize_amenities_query(params):
+    unflat_params = params.to_dict()
+    return {k: v for k, v in unflat_params.items() if k in amenities_table_columns}
 
 @app.route("/housing", methods=["GET"])
 def get_all_housing():
@@ -473,22 +475,51 @@ def get_univ_by_id(id):
 
 
 @app.route("/amenities", methods=["GET"])
-def amenities():
+def get_all_amenities():
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
+    sort_column = request.args.get('sort', default='state', type=str).lower()
+    sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
+    greater = request.args.get('greater', default=True, type=lambda v: v.lower() == 'true')
+
+    pricing_filter = request.args.get('price')
+    pricing_list = pricing_filter.split(',') if pricing_filter != None else pricing_filter
+
+    reviews = request.args.get('reviews', type=int)
+
+    # positional filters
+    filter_params = normalize_amenities_query(request.args)
+    filter_on = bool(filter_params)
 
     if page < 1:
-        abort(400, "invalid paramter: page must be greater than 0")
+        abort(400, "invalid parameter: page must be greater than 0")
     if per_page < 1:
-        abort(400, "invalid paramter: per_page must be greater than 0")
+        abort(400, "invalid parameter: per_page must be greater than 0")
+    if sort_column not in amenities.c:
+        abort(400, f"invalid parameter: column {sort_column} not in table")
+    if sort_column not in table_columns:
+        abort(400, f"invalid parameter: column {sort_column.capitalize()} not in {amenities_table_columns}")
+
     
     # query and paginate
     try:
-        paginated_response = Amenities.query.paginate(page, max_per_page=per_page)
+        sql_query = Amenities.query
+        if pricing_filter != None:
+            sql_query = sql_query.filter(getattr(Amenities, 'pricing').in_(pricing_list)) 
+        if filter_on:
+            sql_query = sql_query.filter_by(**filter_params)
+        if reviews != None:
+            if greater:
+                sql_query = sql_query.filter(Amenities.num_review >= reviews)
+            else:
+                sql_query = sql_query.filter(Amenities.num_review <= reviews)
+
+        order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
+        paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
         all_amenities = paginated_response.items
-    except Exception:
+    except Exception as e:
         err = flask.Response(
-            json.dumps({"error": f"{page} not found"}), 404, mimetype="application/json"
+            json.dumps({"error": f"{e}, {page} not found"}), 404, mimetype="application/json"
         )
         return err
 
@@ -502,7 +533,7 @@ def amenities():
 
 
 @app.route("/amenities/<int:amen_id>", methods=["GET"])
-def amenities_id(amen_id):
+def get_amenities_by_id(amen_id):
     amenity = Amenities.query.get(amen_id)
     if amenity is None:
         response = flask.Response(
