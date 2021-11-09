@@ -194,8 +194,9 @@ table_columns = (
     "rating",
     "walk_score",
     "transit_score",
+    "min_rent",
     "max_rent",
-    "max_sqft",
+    "bed"
 )
 all_housing_schema = HousingSchema(only=table_columns, many=True)
 
