@@ -485,6 +485,8 @@ def get_all_amenities():
 
     reviews = request.args.get('reviews', type=int)
 
+    rating = request.args.get('rate', type=float)
+
     # positional filters
     filter_params = normalize_amenities_query(request.args)
     filter_on = bool(filter_params)
@@ -507,10 +509,9 @@ def get_all_amenities():
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
         if reviews != None:
-            if greater:
-                sql_query = sql_query.filter(Amenities.num_review >= reviews)
-            else:
-                sql_query = sql_query.filter(Amenities.num_review <= reviews)
+            sql_query = sql_query.filter(Amenities.num_review >= reviews)
+        if rating != None:
+            sql_query = sql_query.filter(Amenities.rating >= rating)
 
         order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
         paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
