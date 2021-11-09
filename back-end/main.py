@@ -478,7 +478,6 @@ def get_all_amenities():
     per_page = request.args.get('per_page', default=10, type=int)
     sort_column = request.args.get('sort', default='state', type=str).lower()
     sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
-    greater = request.args.get('greater', default=True, type=lambda v: v.lower() == 'true')
 
     pricing_filter = request.args.get('price')
     pricing_list = pricing_filter.split(',') if pricing_filter != None else pricing_filter
