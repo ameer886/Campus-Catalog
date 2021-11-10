@@ -8,23 +8,47 @@ import Navbar from "../OurNavbar/OurNavbar";
 import Image from "react-bootstrap/Image";
 import WebFont from "webfontloader";
 import SearchUniversitiesCard from "./SearchUniversitiesCard";
+import SearchAmenitiesCard from "./SearchAmenitiesCard";
+import SearchHousingCard from "./SearchHousingCard";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 
 /* creating search client for our Algolia search application */
 const searchClient = algoliasearch(
-  "JLYMGSLKAK",
-  "5f470a089f411bfb08d7651de14a2987"
+  "XS3D8421D0",
+  "79178e75bc60777adc2ea95bbbc4195d"
 );
 
 /* filter type for search */
 enum SearchType {
+  Amenities,
+  Housing,
   Universities,
   All,
 }
 
-/* custom display of the cities results */
-const UniversitiesHits = ({ hits }) => (
+/* custom display of the amenities results */
+const amenitiesHits = ({ hits }) => (
+  <div className="row">
+    {hits.map((hit) => (
+      <div className="search-columns" key={hit.amen_id}>
+        <SearchAmenitiesCard hit={hit} />
+      </div>
+    ))}
+  </div>
+);
+const CustomAmenitiesHits = connectHits(amenitiesHits);
+
+const AmenitiesContent = connectStateResults(({ searchState }) =>
+searchState && searchState.query ? (
+  <div className="content">
+    <CustomAmenitiesHits />
+  </div>
+) : null
+);
+
+/* custom display of the universities results */
+const universitiesHits = ({ hits }) => (
   <div className="row">
     {hits.map((hit) => (
       <div className="search-columns" key={hit.univ_id}>
@@ -33,7 +57,7 @@ const UniversitiesHits = ({ hits }) => (
     ))}
   </div>
 );
-const CustomUniversitiesHits = connectHits(UniversitiesHits);
+const CustomUniversitiesHits = connectHits(universitiesHits);
 
 const UniversitiesContent = connectStateResults(({ searchState }) =>
 searchState && searchState.query ? (
@@ -42,6 +66,28 @@ searchState && searchState.query ? (
   </div>
 ) : null
 );
+
+/* custom display of the housing results */
+const housingHits = ({ hits }) => (
+  <div className="row">
+    {hits.map((hit) => (
+      <div className="search-columns" key={hit.property_id}>
+        <SearchHousingCard hit={hit} />
+      </div>
+    ))}
+  </div>
+);
+const CustomHousingHits = connectHits(housingHits);
+
+const HousingContent = connectStateResults(({ searchState }) =>
+searchState && searchState.query ? (
+  <div className="content">
+    <CustomHousingHits />
+  </div>
+) : null
+);
+
+
 
 
 /* takes in query that the user searches and returns search results */
@@ -60,6 +106,32 @@ function Search(q: any) {
     },
   });
 
+  /* when amenities filter is clicked */
+  function amenitiesOnClick() {
+    setFilterType(SearchType.Amenities);
+    setFilterTitle("Filter by Amenities");
+  }
+
+  /* when housing filter is clicked */
+  function housingOnClick() {
+    setFilterType(SearchType.Housing);
+    setFilterTitle("Filter by Housing");
+  }
+
+  /* when universities filter is clicked */
+  function OnClick() {
+    setFilterType(SearchType.Universities);
+    setFilterTitle("Filter by Universities");
+  }
+
+  /* when none filter is clicked */
+  function noneOnClick() {
+    setFilterType(SearchType.All);
+    setFilterTitle("Filter by Model");
+  }
+
+
+
 
   return (
     <div className="Search">
@@ -68,26 +140,26 @@ function Search(q: any) {
       <br />
       {/* display filter dropdown */}
       <DropdownButton id="dropdown-basic-button" title={filterTitle}>
-        <Dropdown.Item >Universities</Dropdown.Item>
+        <Dropdown.Item >amenities</Dropdown.Item>
         <Dropdown.Item>All</Dropdown.Item>
       </DropdownButton>
       <br />
       <InstantSearch
-        indexName="universities_index"
+        indexName="amenities_index"
         searchClient={searchClient}
         searchState={{query: q.q,}}>
 
         <div style={{ display: "none" }}><SearchBox /></div>
-        {/* index containing all cities data  */}
-        <Index indexName="universities_index">
-          {filterType === SearchType.Universities ||
+        {/* index containing all amenities data  */}
+        <Index indexName="amenities_index">
+          {filterType === SearchType.Amenities ||
           filterType === SearchType.All ? (
             <div>
-              <h1 className="section-title">Universities</h1>
+              <h1 className="section-title">amenities</h1>
               <p className="section-subtitle">
-                Learn about universities.{" "}
+                Learn about amenities.{" "}
               </p><br />
-              <main><UniversitiesContent /></main>
+              <main><AmenitiesContent /></main>
             </div>) : (<div></div>)}
         </Index>
 
