@@ -38,9 +38,11 @@ export type ApartmentType = {
 };
 
 export type ApartmentRowType = {
+  bed: MinMaxPair;
   city: string;
   max_rent: number;
   max_sqft: number;
+  min_rent: number;
   property_id: string;
   property_name: string;
   property_type: string;
