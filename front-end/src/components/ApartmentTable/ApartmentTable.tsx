@@ -88,6 +88,7 @@ const popoverOptions: FilterPopoverOption[] = [
   {
     header: 'Housing Type',
     key: 'type',
+    variant: 'checkbox',
     values: [
       { value: 'apartment', displayStr: 'Apartment' },
       { value: 'condo', displayStr: 'Condo' },
@@ -96,14 +97,22 @@ const popoverOptions: FilterPopoverOption[] = [
     ],
   },
   {
-    header: 'City',
-    key: 'city',
-    displayStr: 'city',
+    header: 'City, State',
+    key: 'cityState',
+    inputType: 'string',
+    values: [{ displayStr: 'Enter City, ST here' }],
   },
   {
-    header: 'State',
-    key: 'state',
-    displayStr: 'state',
+    header: 'Rating',
+    key: 'rating',
+    variant: 'radio',
+    values: [
+      { value: 'any', displayStr: 'Any', defaultChecked: true },
+      { value: '1', displayStr: '>= 1.0' },
+      { value: '2', displayStr: '>= 2.0' },
+      { value: '3', displayStr: '>= 3.0' },
+      { value: '4', displayStr: '>= 4.0' },
+    ],
   },
 ];
 
@@ -138,6 +147,7 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
     const [page, setPage] = useState(1); // Pages are 1-indexed
 
     // filter: a string for the current filter e.g. "&state=TX&city=Austin"
+    // const [filter, setFilter] = useState('&rating=any');
     const [filter, setFilter] = useState('');
 
     /*
