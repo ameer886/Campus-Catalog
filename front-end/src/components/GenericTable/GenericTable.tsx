@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Table from 'react-bootstrap/Table';
@@ -55,6 +54,8 @@ export type GenericTableProps<
 > = {
   columnDefinitions: Array<ColumnDefinitionType<T, K>>;
   data: Array<T>;
+  parentSort?: React.Dispatch<React.SetStateAction<string>>;
+  parentStr?: string;
 };
 
 // Builds the table itself
@@ -115,15 +116,18 @@ const GenericRows = <T extends RowWithIndex, K extends keyof T>({
 const GenericTable = <T extends RowWithIndex, K extends keyof T>({
   columnDefinitions,
   data,
+  parentSort,
+  parentStr,
 }: GenericTableProps<T, K>): JSX.Element => {
-  const [sortStr, setSortStr] = useState('NONE');
   const applySort = (s: string) => {
-    const reapply = sortStr.includes(s);
-    if (reapply && sortStr.includes('asc')) setSortStr(s + '_desc');
-    else if (reapply) setSortStr('NONE');
-    else setSortStr(s + '_asc');
+    if (parentSort && parentStr != null) {
+      const reapply = parentStr.includes(s);
+      if (reapply && parentStr.includes('asc'))
+        parentSort(s + '_dsc');
+      else if (reapply) parentSort('NONE');
+      else parentSort(s + '_asc');
+    }
   };
-  console.log(sortStr);
 
   return (
     <>
@@ -140,12 +144,12 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
               >
                 <>
                   {col.key}
-                  {sortStr === `${col.key.toString()}_asc` && (
+                  {parentStr === `${col.key.toString()}_asc` && (
                     <BsArrowUp
                       style={{ position: 'absolute', right: '8px' }}
                     />
                   )}
-                  {sortStr === `${col.key.toString()}_desc` && (
+                  {parentStr === `${col.key.toString()}_dsc` && (
                     <BsArrowDown
                       style={{
                         position: 'absolute',

@@ -177,7 +177,7 @@ const popoverOptions: FilterPopoverOption[] = [
   },
   {
     header: 'Beds',
-    key: 'beds',
+    key: 'bed',
     inputValues: [
       { displayStr: 'Minimum beds', type: 'number', min: 0 },
       { displayStr: 'Maximum beds', type: 'number', min: 0 },
@@ -219,6 +219,10 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
     // const [filter, setFilter] = useState('&rating=any');
     const [filter, setFilter] = useState('');
 
+    // sortStr: String for current sorting
+    // of the form key_asc or key_dsc
+    const [sortStr, setSortStr] = useState('NONE');
+
     /*
      * TODO: There's a big opportunity for refactor here!!!
      * Specifically, both model tables look nearly identical
@@ -243,7 +247,14 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
       const fetchDataAsync = async () => {
         try {
           let params = `page=${page}&per_page=${PAGE_SIZE}`;
+          if (sortStr !== 'NONE') {
+            params += `&sort=${sortStr.slice(0, -4)}`;
+            if (sortStr.includes('dsc')) {
+              params += '&desc=True';
+            }
+          }
           if (filter) params += filter;
+
           const data = await getAPI({
             model: 'housing',
             params: params,
@@ -265,7 +276,7 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
         }
       };
       fetchDataAsync();
-    }, [page, filter]);
+    }, [page, filter, sortStr]);
 
     if (loading || meta == null)
       return <p>Loading, please be patient.</p>;
@@ -278,6 +289,7 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
               options={popoverOptions}
               setFilter={(e) => {
                 setLoading(testRows == null);
+                setPage(1);
                 setFilter(e);
               }}
             />
@@ -287,6 +299,12 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
         <GenericTable
           columnDefinitions={apartmentTableHeaders}
           data={rows}
+          parentSort={(e) => {
+            setLoading(testRows == null);
+            setPage(1);
+            setSortStr(e);
+          }}
+          parentStr={sortStr}
         />
 
         <PaginationRelay
