@@ -49,7 +49,7 @@ function SearchAmenitiesCard(props:any) {
     return(
         <Card>
             <Card.Body>
-                <a href={"/amenities/id=" + props.hit.amen_id}>
+                <a href={"/amenities" + props.hit.amen_id}>
                     <u>
                         <Card.Title className="card-title-style">
                             {props.hit.amen_name}

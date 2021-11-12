@@ -13,12 +13,15 @@ import SearchHousingCard from './SearchHousingCard';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
+<<<<<<< HEAD
 /* creating search client for our Algolia search application */
 const searchClient = algoliasearch(
   'XS3D8421D0',
   '79178e75bc60777adc2ea95bbbc4195d',
 );
 
+=======
+>>>>>>> fixed search page, now has a drop down option for all models, removed algolia
 /* filter type for search */
 enum SearchType {
   Amenities,
