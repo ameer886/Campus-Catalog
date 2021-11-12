@@ -86,9 +86,8 @@ function getInputElement(
     <Form>
       <Form.Group style={{ display: 'flex', marginBottom: '8px' }}>
         {option.inputValues.map((val, i) => (
-          <>
+          <div key={i} style={{ display: 'flex' }}>
             <Form.Control
-              key={i}
               id={option.key}
               defaultValue={val.__value}
               onChange={(e) => (val.__value = e.target.value)}
@@ -99,11 +98,11 @@ function getInputElement(
               style={{ margin: '0px 2px' }}
             />
             {i < option.inputValues.length - 1 && (
-              <div key={i} className={styles.DashContainer}>
+              <div className={styles.DashContainer}>
                 <p style={{ margin: 0 }}>&#8212;</p>
               </div>
             )}
-          </>
+          </div>
         ))}
       </Form.Group>
     </Form>

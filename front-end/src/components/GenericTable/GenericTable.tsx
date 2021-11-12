@@ -1,7 +1,9 @@
 import React from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Nav from 'react-bootstrap/Nav';
 import Table from 'react-bootstrap/Table';
+import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
 
 import './GenericTable.css';
 
@@ -114,6 +116,15 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
   columnDefinitions,
   data,
 }: GenericTableProps<T, K>): JSX.Element => {
+  const [sortStr, setSortStr] = useState('NONE');
+  const applySort = (s: string) => {
+    const reapply = sortStr.includes(s);
+    if (reapply && sortStr.includes('asc')) setSortStr(s + '_desc');
+    else if (reapply) setSortStr('NONE');
+    else setSortStr(s + '_asc');
+  };
+  console.log(sortStr);
+
   return (
     <>
       <Table className="GenericTable" bordered hover>
@@ -121,8 +132,29 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
         <thead className="bg-dark text-white">
           <tr>
             {columnDefinitions.map((col, index) => (
-              <th className="pointer" key={`TH${index}`}>
-                {col.header}
+              <th
+                className="pointer"
+                key={`TH${index}`}
+                onClick={() => applySort(col.key.toString())}
+                style={{ position: 'relative' }}
+              >
+                <>
+                  {col.key}
+                  {sortStr === `${col.key.toString()}_asc` && (
+                    <BsArrowUp
+                      style={{ position: 'absolute', right: '8px' }}
+                    />
+                  )}
+                  {sortStr === `${col.key.toString()}_desc` && (
+                    <BsArrowDown
+                      style={{
+                        position: 'absolute',
+                        right: '8px',
+                        top: '16px',
+                      }}
+                    />
+                  )}
+                </>
               </th>
             ))}
           </tr>
