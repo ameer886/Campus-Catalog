@@ -25,8 +25,6 @@ const apartmentTableHeaders: ColumnDefinitionType<
   {
     key: 'property_name',
     header: 'Property Name',
-    sortFunc: (a, b) =>
-      a.property_name.localeCompare(b.property_name),
   },
   {
     key: 'city',
@@ -39,11 +37,6 @@ const apartmentTableHeaders: ColumnDefinitionType<
   {
     key: 'rating',
     header: 'Rating',
-    sortFunc: (a, b) => {
-      if (!a.rating) return -1;
-      if (!b.rating) return 1;
-      return a.rating - b.rating;
-    },
     printFunc: (a) => {
       if (a.rating === 0) return 'N/A';
       return a.rating.toString();
@@ -52,26 +45,15 @@ const apartmentTableHeaders: ColumnDefinitionType<
   {
     key: 'walk_score',
     header: 'Walk Score',
-    sortFunc: (a, b) => {
-      if (!a.walk_score) return -1;
-      if (!b.walk_score) return 1;
-      return a.walk_score - b.walk_score;
-    },
   },
   {
     key: 'transit_score',
     header: 'Transit Score',
-    sortFunc: (a, b) => {
-      if (!a.transit_score) return -1;
-      if (!b.transit_score) return 1;
-      return a.transit_score - b.transit_score;
-    },
   },
   {
     // Anti-pattern: rent has two keys but I can only use one
     key: 'max_rent',
     header: 'Rent (Min - Max)',
-    sortFunc: (a, b) => a.max_rent - b.max_rent,
     printFunc: (a) =>
       `${formatNumberToMoney(a.min_rent)} - ${formatNumberToMoney(
         a.max_rent,
