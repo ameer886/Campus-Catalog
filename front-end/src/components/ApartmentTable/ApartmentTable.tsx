@@ -89,29 +89,116 @@ const popoverOptions: FilterPopoverOption[] = [
     header: 'Housing Type',
     key: 'type',
     variant: 'checkbox',
-    values: [
-      { value: 'apartment', displayStr: 'Apartment' },
-      { value: 'condo', displayStr: 'Condo' },
-      { value: 'townhome', displayStr: 'Town home' },
-      { value: 'house', displayStr: 'House' },
+    boxValues: [
+      {
+        value: 'apartment',
+        displayStr: 'Apartment',
+        defaultChecked: true,
+      },
+      { value: 'condo', displayStr: 'Condo', defaultChecked: true },
+      {
+        value: 'townhome',
+        displayStr: 'Town home',
+        defaultChecked: true,
+      },
+      { value: 'house', displayStr: 'House', defaultChecked: true },
     ],
   },
   {
     header: 'City, State',
     key: 'cityState',
-    inputType: 'string',
-    values: [{ displayStr: 'Enter City, ST here' }],
+    inputValues: [{ displayStr: 'Enter City, ST here' }],
   },
   {
     header: 'Rating',
     key: 'rating',
     variant: 'radio',
-    values: [
+    boxValues: [
       { value: 'any', displayStr: 'Any', defaultChecked: true },
       { value: '1', displayStr: '>= 1.0' },
       { value: '2', displayStr: '>= 2.0' },
       { value: '3', displayStr: '>= 3.0' },
       { value: '4', displayStr: '>= 4.0' },
+    ],
+  },
+  {
+    header: 'Walk Score',
+    key: 'walkscore',
+    variant: 'checkbox',
+    boxValues: [
+      {
+        value: '0',
+        displayStr: "Walker's Paradise",
+        defaultChecked: true,
+      },
+      {
+        value: '1',
+        displayStr: 'Very Walkable',
+        defaultChecked: true,
+      },
+      {
+        value: '2',
+        displayStr: 'Somewhat Walkable',
+        defaultChecked: true,
+      },
+      {
+        value: '3',
+        displayStr: 'Car-Dependent',
+        defaultChecked: true,
+      },
+      {
+        value: '4',
+        displayStr: 'Very Car-Dependent',
+        defaultChecked: true,
+      },
+    ],
+  },
+  {
+    header: 'Transit Score',
+    key: 'transitscore',
+    variant: 'checkbox',
+    boxValues: [
+      {
+        value: '0',
+        displayStr: "Rider's Paradise",
+        defaultChecked: true,
+      },
+      {
+        value: '1',
+        displayStr: 'Excellent Transit',
+        defaultChecked: true,
+      },
+      {
+        value: '2',
+        displayStr: 'Good Transit',
+        defaultChecked: true,
+      },
+      {
+        value: '3',
+        displayStr: 'Some Transit',
+        defaultChecked: true,
+      },
+      {
+        value: '4',
+        displayStr: 'Minimal Transit',
+        defaultChecked: true,
+      },
+    ],
+  },
+  {
+    header: 'Rent',
+    key: 'rent',
+    inputValues: [
+      { displayStr: 'Minimum rent', type: 'number', min: 0 },
+      { displayStr: 'Maximum rent', type: 'number', min: 0 },
+    ],
+  },
+  {
+    header: 'Beds',
+    key: 'beds',
+    inputValues: [
+      { displayStr: 'Minimum beds', type: 'number', min: 0 },
+      { displayStr: 'Maximum beds', type: 'number', min: 0 },
     ],
   },
 ];

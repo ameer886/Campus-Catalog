@@ -20,6 +20,7 @@
 
 .OptionHeader {
   color: #555;
+  font-size: 16px;
 }
 
 .CheckboxRow {
@@ -29,4 +30,10 @@
 
 .CheckboxColumn {
   flex: 50%;
+}
+
+.DashContainer {
+  margin: 0 2px;
+  display: flex;
+  align-items: center;
 }

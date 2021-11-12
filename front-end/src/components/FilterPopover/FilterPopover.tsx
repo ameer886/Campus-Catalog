@@ -12,7 +12,7 @@ type FilterPopoverCheckboxOption = {
   header: string;
   key: string;
   variant: 'checkbox' | 'radio';
-  values: Array<{
+  boxValues: Array<{
     value: string;
     displayStr: string;
     defaultChecked?: boolean;
@@ -23,8 +23,10 @@ type FilterPopoverCheckboxOption = {
 type FilterPopoverInputOption = {
   header: string;
   key: string;
-  inputType: 'string' | 'number';
-  values: Array<{
+  inputValues: Array<{
+    type?: 'string' | 'number';
+    min?: number; // Define min and max for number input, if desired
+    max?: number; // These values are ignored for string inputs
     displayStr: string;
     __value?: string; // For internal use only, please don't set this
   }>;
@@ -43,13 +45,13 @@ function isCheckboxOption(x: FilterPopoverOption): boolean {
   return (x as FilterPopoverCheckboxOption).variant != null;
 }
 function isInputOption(x: FilterPopoverOption): boolean {
-  return (x as FilterPopoverInputOption).inputType != null;
+  return (x as FilterPopoverInputOption).inputValues != null;
 }
 
 function getCheckboxElement(
   option: FilterPopoverCheckboxOption,
 ): JSX.Element {
-  const inputs = option.values.map((val, i) => (
+  const inputs = option.boxValues.map((val, i) => (
     <div key={i} className={styles.CheckDiv}>
       <input
         className={styles.Check}
@@ -83,14 +85,25 @@ function getInputElement(
   return (
     <Form>
       <Form.Group style={{ display: 'flex', marginBottom: '8px' }}>
-        {(option as FilterPopoverInputOption).values.map((val, i) => (
-          <Form.Control
-            key={i}
-            id={option.key}
-            defaultValue={val.__value}
-            onChange={(e) => (val.__value = e.target.value)}
-            placeholder={val.displayStr}
-          />
+        {option.inputValues.map((val, i) => (
+          <>
+            <Form.Control
+              key={i}
+              id={option.key}
+              defaultValue={val.__value}
+              onChange={(e) => (val.__value = e.target.value)}
+              placeholder={val.displayStr}
+              type={val.type}
+              min={val.type === 'number' ? val.min : undefined}
+              max={val.type === 'number' ? val.max : undefined}
+              style={{ margin: '0px 2px' }}
+            />
+            {i < option.inputValues.length - 1 && (
+              <div key={i} className={styles.DashContainer}>
+                <p style={{ margin: 0 }}>&#8212;</p>
+              </div>
+            )}
+          </>
         ))}
       </Form.Group>
     </Form>
@@ -107,7 +120,7 @@ const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
       let substr = `${option.key}=`;
 
       if (isCheckboxOption(option)) {
-        (option as FilterPopoverCheckboxOption).values.forEach(
+        (option as FilterPopoverCheckboxOption).boxValues.forEach(
           (val) => {
             if (val.__checked) {
               if (substr.slice(-1) != '=') substr += ',';
@@ -117,7 +130,7 @@ const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
         );
       } else if (isInputOption(option)) {
         const cast = option as FilterPopoverInputOption;
-        cast.values.forEach((val) => {
+        cast.inputValues.forEach((val) => {
           if (val.__value) substr += val.__value;
         });
       }
