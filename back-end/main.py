@@ -261,7 +261,7 @@ def get_all_housing():
     max_bed = request.args.get('max_bed', default=10, type=float)
     rating = request.args.get('rating', default=0.0, type=float)
     walkscore = request.args.get('walk_score', default=[0], type=lambda v: list(map(int,v.split(','))))
-    transitscore = request.args.get('transit_score', default=[0], type=lambda v: list(map(int,v.split(','))).sort())
+    transitscore = request.args.get('transit_score', default=[0], type=lambda v: list(map(int,v.split(','))))
     walkscore_bounds = merge_ranges(walkscore)
     transitscore_bounds = merge_ranges(transitscore)
     # positional filters
