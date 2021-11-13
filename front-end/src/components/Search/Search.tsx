@@ -128,9 +128,9 @@ function Search(q: any) {
   }
 
   return (
-    <div className="Search">
-      <h1 className="search-heading">SEARCH RESULTS</h1>
-      <h2 className="query-style">{q.q}</h2>
+    <div className={styles.Search}>
+      <h1 className={styles.search_heading}>SEARCH RESULTS</h1>
+      <h2 className={styles.query_style}>{q}</h2>
       <br />
       {/* display filter dropdown */}
       <DropdownButton id="dropdown-basic-button" title={filterTitle}>

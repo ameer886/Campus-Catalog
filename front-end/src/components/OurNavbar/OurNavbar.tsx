@@ -11,9 +11,9 @@ import { useState, useEffect } from 'react';
 
 /* the navigation bar which appears on
 all the pages */
-const OurNavbar = (props: any) => {
+const OurNavbar: React.FunctionComponent = () => {
   /* input for search bar */
-  const textInput: any = React.useRef();
+  const [query, setQuery] = useState('');
 
   /* used when pressing search button in navbar */
   function searchOnClick() {
@@ -100,13 +100,14 @@ const OurNavbar = (props: any) => {
                   searchOnClick();
                 }
               }}
+              onChange={(e) => setQuery(e.target.value)}
             />
             {/* search button */}
             <InputGroup.Append style={{ fontSize: '1.1vw' }}>
               <Button
                 style={styles.searchButton}
                 variant="info"
-                onClick={() => searchOnClick()}
+                onClick={() => search()}
               >
                 <AiOutlineSearch />
               </Button>

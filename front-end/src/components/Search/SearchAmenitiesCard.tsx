@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./Search.module.css";
 import { Card } from "react-bootstrap";
-import { Highlight } from "react-instantsearch-dom"
 
 /* displays card for a city result
 in the search page */
@@ -38,9 +37,6 @@ function SearchAmenitiesCard(props:any) {
             <Card.Text className="card-text-style" 
                         key={amenity.attribute_id}>
                 <b>{amenity.name} {" "}</b>
-                <Highlight attribute={amenity.attribute} 
-                            tagName="mark" 
-                            hit={props.hit} />
             </Card.Text>
         ))
         );
