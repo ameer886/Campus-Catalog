@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import styles from './UniversitiesPage.module.css';
 
 import type {
@@ -100,52 +100,23 @@ const UniversityInput: React.FunctionComponent<UniversityInputProps> =
     );
   };
 
-/*
- * This function should be passed a cards array and the order to sort them in
- * It will sort the cards depending on the sortOrder
- * Any unrecognized sortOrder string will not sort at all
- * Otherwise, try to use key_asc or key_desc (it's not required)
- * Definitely make sure each sortOrder has an _ and that desc ends in _desc
- */
-function sortCards(cards: UniversityRowType[], sortOrder: string) {
-  let sortFunc: (
-    a: UniversityRowType,
-    b: UniversityRowType,
-  ) => number;
-  switch (sortOrder.slice(0, sortOrder.indexOf('_'))) {
-    case 'state':
-      sortFunc = (a, b) => {
-        if (!a.state) return -1;
-        if (!b.state) return 1;
-        return a.state.localeCompare(b.state);
-      };
-      break;
-    case 'univName':
-      sortFunc = (a, b) => a.univ_name.localeCompare(b.univ_name);
-      break;
-    case 'rank':
-      sortFunc = (a, b) => a.rank - b.rank;
-      break;
-    case 'tuitionInSt':
-      sortFunc = (a, b) => {
-        return a.tuition_in_st - b.tuition_in_st;
-      };
-      break;
-    case 'tuitionOutSt':
-      sortFunc = (a, b) => {
-        return a.tuition_out_st - b.tuition_out_st;
-      };
-      break;
-    default:
-      return cards;
-  }
-  // Always sort asc
-  cards.sort(sortFunc);
-  // Reverse ascending if ends in _desc
-  if (sortOrder.slice(sortOrder.indexOf('_') + 1) === 'desc')
-    cards.reverse();
-  return cards;
-}
+const UniversityInputPair: React.FunctionComponent<UniversityInputProps> =
+  ({ sortOrder, displayStr, ...props }: UniversityInputProps) => {
+    return (
+      <>
+        <UniversityInput
+          displayStr={displayStr + ' (Ascending)'}
+          sortOrder={sortOrder + '_asc'}
+          {...props}
+        />
+        <UniversityInput
+          displayStr={displayStr + ' (Descending)'}
+          sortOrder={sortOrder + '_dsc'}
+          {...props}
+        />
+      </>
+    );
+  };
 
 /*
  * The Universities page
@@ -153,7 +124,7 @@ function sortCards(cards: UniversityRowType[], sortOrder: string) {
  * Should contain a list of universities in a sortable table/grid
  */
 const UniversitiesPage: React.FunctionComponent = () => {
-  const [sortOrder, setSortOrder] = useState('none');
+  const [sortOrder, setSortOrder] = useState('NONE');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [meta, setMeta] = useState<PaginationMeta | null>(null);
@@ -162,9 +133,15 @@ const UniversitiesPage: React.FunctionComponent = () => {
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
+        let params = `page=${page}&per_page=${PAGE_SIZE}`;
+        if (sortOrder !== 'NONE') {
+          params += `&sort=${sortOrder.slice(0, -4)}`;
+          if (sortOrder.includes('dsc')) params += '&desc=True';
+        }
+
         const data = await getAPI({
           model: 'universities',
-          params: `page=${page}&per_page=${PAGE_SIZE}`,
+          params: params,
         });
         const responseMeta: PaginationMeta = {
           ...data[0],
@@ -187,13 +164,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
       }
     };
     fetchDataAsync();
-  }, [page]);
-
-  // Memoize card sorting because the calculation could get expensive
-  const sortedCards = useMemo(() => {
-    if (sortOrder === 'none') return cards;
-    return sortCards(cards, sortOrder);
-  }, [cards, sortOrder]);
+  }, [page, sortOrder]);
 
   // Note: ALL HOOKS must come before a return
   if (loading || meta == null)
@@ -207,7 +178,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
   // wrapper to change the sort order of the cards
   const updateSort = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSortOrder(e.target.value);
-    setPage(0);
+    setPage(1);
   };
 
   return (
@@ -216,7 +187,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
       <div className={styles.UniversitySplitter}>
         {/* Build the grid on the left */}
         <div className={styles.SplitterGrid}>
-          <UniversityGrid cards={sortedCards} />
+          <UniversityGrid cards={cards} />
           <PaginationRelay
             curPage={page}
             setPage={(e) => {
@@ -237,68 +208,57 @@ const UniversitiesPage: React.FunctionComponent = () => {
             {/* Default sort: do nothing */}
             <UniversityInput
               displayStr="None"
-              sortOrder="none"
+              sortOrder="NONE"
               defaultChecked
               onChange={updateSort}
             />
 
             {/* School Name inputs */}
-            <UniversityInput
-              displayStr="School Name (Ascending)"
-              sortOrder="univName_asc"
-              onChange={updateSort}
-            />
-            <UniversityInput
-              displayStr="School Name (Descending)"
-              sortOrder="univName_desc"
+            <UniversityInputPair
+              displayStr="School Name"
+              sortOrder="univ_name"
               onChange={updateSort}
             />
 
             {/* Rank inputs */}
-            <UniversityInput
-              displayStr="Rank (Ascending)"
-              sortOrder="rank_asc"
+            <UniversityInputPair
+              displayStr="Rank"
+              sortOrder="rank"
               onChange={updateSort}
             />
-            <UniversityInput
-              displayStr="Rank (Descending)"
-              sortOrder="rank_desc"
+
+            {/* City inputs */}
+            <UniversityInputPair
+              displayStr="City"
+              sortOrder="city"
               onChange={updateSort}
             />
 
             {/* State inputs */}
-            <UniversityInput
-              displayStr="State (Ascending)"
-              sortOrder="state_asc"
-              onChange={updateSort}
-            />
-            <UniversityInput
-              displayStr="State (Descending)"
-              sortOrder="state_desc"
+            <UniversityInputPair
+              displayStr="State"
+              sortOrder="state"
               onChange={updateSort}
             />
 
             {/* In-State inputs */}
-            <UniversityInput
-              displayStr="In-State Tuition (Ascending)"
-              sortOrder="tuitionInSt_asc"
-              onChange={updateSort}
-            />
-            <UniversityInput
-              displayStr="In-State Tuition (Descending)"
-              sortOrder="tuitionInSt_desc"
+            <UniversityInputPair
+              displayStr="In-State Tuition"
+              sortOrder="tuition_in_st"
               onChange={updateSort}
             />
 
             {/* Out-of-State inputs */}
-            <UniversityInput
-              displayStr="Out-of-State Tuition (Ascending)"
-              sortOrder="tuitionOutSt_asc"
+            <UniversityInputPair
+              displayStr="Out-of-State Tuition"
+              sortOrder="tuition_out_st"
               onChange={updateSort}
             />
-            <UniversityInput
-              displayStr="Out-of-State Tuition (Descending)"
-              sortOrder="tuitionOutSt_desc"
+
+            {/* Acceptance Rate Inputs */}
+            <UniversityInputPair
+              displayStr="Acceptance Rate"
+              sortOrder="acceptance_rate"
               onChange={updateSort}
             />
           </form>
