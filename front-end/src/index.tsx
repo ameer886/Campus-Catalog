@@ -22,6 +22,20 @@ import InvalidPage from './views/Invalid/InvalidPage';
 
 import reportWebVitals from './reportWebVitals';
 
+// React Popovers don't use React refs and I can't change their code
+// but it causes a StrictMode error every single time the popover is
+// rendered. This floods my console and makes it hard to debug other
+// errors, so this silences that single findDOMNode message.
+// eslint-disable-next-line
+const consoleError = console.error.bind(console);
+// eslint-disable-next-line
+console.error = (errObj, ...args) => {
+  if (args.includes('findDOMNode')) {
+    return;
+  }
+  consoleError(errObj, ...args);
+};
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

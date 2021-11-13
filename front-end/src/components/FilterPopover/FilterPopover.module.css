@@ -9,12 +9,6 @@
   height: 20px;
 }
 
-.CheckDiv {
-  display: flex;
-  align-items: center;
-  margin-left: 8px;
-}
-
 .Check {
   margin: 0 4px;
 }
@@ -26,11 +20,20 @@
 
 .OptionHeader {
   color: #555;
+  font-size: 16px;
 }
 
-.InputLabel {
+.CheckboxRow {
   display: flex;
-  flex-shrink: 0;
-  margin: 0 8px 0 0;
+  margin-bottom: 8px;
+}
+
+.CheckboxColumn {
+  flex: 50%;
+}
+
+.DashContainer {
+  margin: 0 2px;
+  display: flex;
   align-items: center;
 }
