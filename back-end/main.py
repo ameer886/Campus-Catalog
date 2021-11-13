@@ -1,9 +1,10 @@
+import re
 import flask
 import json
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from db import db_init
-from sqlalchemy import text, desc
+from sqlalchemy import text, desc, and_
 from sqlalchemy.sql.schema import MetaData, Column
 from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
@@ -200,9 +201,28 @@ table_columns = (
 )
 all_housing_schema = HousingSchema(only=table_columns, many=True)
 
+def merge_ranges(scores):
+    score_dict = {0: (0, 100), 1: (90, 100), 2: (70, 89), 3: (50, 69), 4: (25, 49), 5: (0, 24)}
+    result = []
+    if 0 in scores:
+        result.append(score_dict[0])
+        return result
+    scores = sorted(scores)
+    stack = []
+    stack.append(score_dict[scores[0]])
+    for i in range(1, len(scores)):
+        if score_dict[scores[i]][1] == stack[0][0] - 1:
+            stack.append((score_dict[scores[i]][0],stack.pop()[1]))
+        else:
+            result.append(stack.pop())
+            stack.append(score_dict[scores[i]])
+    result.append(stack.pop())
+    return result
+
+
 def normalize_query(params):
     unflat_params = params.to_dict()
-    return {k: v for k, v in unflat_params.items() if k in table_columns}
+    return {k: v for k, v in unflat_params.items() if k in ("city", "state")}
 
 def normalize_amenities_query(params):
     unflat_params = params.to_dict()
@@ -211,39 +231,63 @@ def normalize_amenities_query(params):
 @app.route("/housing", methods=["GET"])
 def get_all_housing():
 
-    # retrieve params
+    # pagination params
     page = request.args.get('page', default=1, type=int)
-    per_page = request.args.get('per_page', default=10, type=int)
-    sort_column = request.args.get('sort', default='state', type=str).lower()
-    sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
-
-    # retrieve params for filtering
-    type_filter = request.args.getlist('type')
-
-    type_list = type_filter[0].split(',') if len(type_filter) > 0 else type_filter
-    
-    # positional filters
-    filter_params = normalize_query(request.args)
-    filter_on = bool(filter_params)
-
-    # verify param validity
     if page < 1:
         abort(400, "invalid paramter: page must be greater than 0")
+    per_page = request.args.get('per_page', default=10, type=int)
     if per_page < 1:
         abort(400, "invalid paramter: per_page must be greater than 0")
+
+    # sort params
+    sort_column = request.args.get('sort', default='state', type=str).lower()
     if sort_column not in housing.c:
         abort(400, f"invalid paramter: column {sort_column} not in table")
     if sort_column not in table_columns:
         abort(400, f"invalid paramter: column {sort_column.capitalize()} not in {table_columns}")
-    
+    sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
+    if sort_column == 'bed':
+        if sort_desc == True:
+            sort_column = 'max_bed'
+        else:
+            sort_column = 'min_bed'
+
+    # retrieve params for filtering
+    type_filter = request.args.get('type', default=['apartment','condo','house','townhome'], type=lambda v: v.split(','))
+
+    min_rent = request.args.get('min_rent', default=0, type=int)
+    max_rent = request.args.get('max_rent', default=100000, type=int)
+    min_bed = request.args.get('min_bed', default=0, type=float)
+    max_bed = request.args.get('max_bed', default=10, type=float)
+    rating = request.args.get('rating', default=0.0, type=float)
+    walkscore = request.args.get('walk_score', default=[0], type=lambda v: list(map(int,v.split(','))))
+    transitscore = request.args.get('transit_score', default=[0], type=lambda v: list(map(int,v.split(','))))
+    walkscore_bounds = merge_ranges(walkscore)
+    transitscore_bounds = merge_ranges(transitscore)
+    # positional filters
+    filter_params = normalize_query(request.args)
+    filter_on = bool(filter_params)
+    walkscore_spec = []
+    transit_spec = []
+    for bound in walkscore_bounds:
+        walkscore_spec.append(
+            f'''{getattr(Housing, 'walk_score')} >= {bound[0]} AND 
+                {getattr(Housing, 'walk_score')} <= {bound[1]}''')
+    for bound in transitscore_bounds:
+        transit_spec.append(
+            f'''{getattr(Housing, 'transit_score')} >= {bound[0]} AND 
+                {getattr(Housing, 'transit_score')} <= {bound[1]}''')
     # query and paginate
     try:
         # get Query object
         sql_query = Housing.query
-
         # apply filters if detected
-        if len(type_filter) > 0:
-            sql_query = sql_query.filter(getattr(Housing, 'property_type').in_(type_list)) 
+        sql_query = sql_query.filter(getattr(Housing, 'property_type').in_(type_filter)
+                                    ,getattr(Housing, 'min_bed') >= min_bed, getattr(Housing, 'max_bed') <= max_bed
+                                    ,getattr(Housing, 'min_rent') >= min_rent, getattr(Housing, 'max_rent') <= max_rent
+                                    ,getattr(Housing, 'rating') >= rating
+                                    ,text(' OR '.join(walkscore_spec))
+                                    ,text(' OR '.join(transit_spec)))
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
         
