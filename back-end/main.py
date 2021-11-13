@@ -575,7 +575,7 @@ def get_all_amenities():
         abort(400, "invalid parameter: per_page must be greater than 0")
     if sort_column not in amenities.c:
         abort(400, f"invalid parameter: column {sort_column} not in table")
-    if sort_column not in table_columns:
+    if sort_column not in amenities_table_columns:
         abort(400, f"invalid parameter: column {sort_column.capitalize()} not in {amenities_table_columns}")
 
     
