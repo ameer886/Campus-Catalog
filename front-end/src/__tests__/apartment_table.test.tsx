@@ -11,9 +11,14 @@ configure({ adapter: new Adapter() });
 
 const EXAMPLE_ROWS: Array<ApartmentRowType> = [
   {
+    bed: {
+      min: 1,
+      max: 2,
+    },
     city: 'Auburn',
     max_rent: 800,
     max_sqft: 1000.0,
+    min_rent: 0,
     property_id: '35erbsf',
     property_name: '343 S Gay St',
     property_type: 'condo',
@@ -25,9 +30,14 @@ const EXAMPLE_ROWS: Array<ApartmentRowType> = [
     id: '35erbsf',
   },
   {
+    bed: {
+      min: 2,
+      max: 2,
+    },
     city: 'Burlington',
     max_rent: 1100,
     max_sqft: 220.0,
+    min_rent: 999,
     property_id: 'sqj5kb7',
     property_name: '161 S Prospect St',
     property_type: 'condo',
@@ -39,9 +49,14 @@ const EXAMPLE_ROWS: Array<ApartmentRowType> = [
     id: 'sqj5kb7',
   },
   {
+    bed: {
+      min: 0,
+      max: 4,
+    },
     city: 'Tempe',
     max_rent: 1350,
     max_sqft: 840.0,
+    min_rent: 600,
     property_id: 'z7hmtvy',
     property_name: '700 W University Dr',
     property_type: 'condo',
@@ -53,7 +68,6 @@ const EXAMPLE_ROWS: Array<ApartmentRowType> = [
     id: 'z7hmtvy',
   },
 ];
-const NUM_COLUMNS = 5;
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -88,76 +102,6 @@ describe('Apartment Table Test Suite', () => {
       expect(aptLink).not.toBeNull();
       expect(aptLink.getAttribute('href')).toBe(
         `/housing/${EXAMPLE_ROWS[i].id}`,
-      );
-    }
-  });
-
-  // Only tests property name
-  // it's too much code to test all five columns...
-  it('sort function works', () => {
-    render(<ApartmentTable testRows={EXAMPLE_ROWS} />);
-
-    let tableBody = screen.getByRole('table')?.children[1];
-    expect(tableBody).not.toBeNull();
-    expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
-      const row = tableBody.children[i];
-      expect(row).not.toBeNull();
-      expect(row.childElementCount).toBe(NUM_COLUMNS);
-      expect(row.children[0].textContent).toEqual(
-        EXAMPLE_ROWS[i].property_name,
-      );
-    }
-
-    const thead = screen.getByRole('columnheader', {
-      name: 'Property Name',
-    });
-    expect(thead).not.toBeNull();
-
-    // Copy avoids sorting original array
-    const copy: Array<ApartmentRowType> = JSON.parse(
-      JSON.stringify(EXAMPLE_ROWS),
-    );
-    fireEvent.click(thead);
-    tableBody = screen.getByRole('table')?.children[1];
-    expect(tableBody).not.toBeNull();
-    expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    const sortedRows = copy.sort((a, b) =>
-      a.property_name.localeCompare(b.property_name),
-    );
-    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
-      const row = tableBody.children[i];
-      expect(row).not.toBeNull();
-      expect(row.childElementCount).toBe(NUM_COLUMNS);
-      expect(row.children[0].textContent).toEqual(
-        sortedRows[i].property_name,
-      );
-    }
-
-    fireEvent.click(thead);
-    tableBody = screen.getByRole('table')?.children[1];
-    expect(tableBody).not.toBeNull();
-    expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    sortedRows.reverse();
-    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
-      const row = tableBody.children[i];
-      expect(row).not.toBeNull();
-      expect(row.childElementCount).toBe(NUM_COLUMNS);
-      expect(row.children[0].textContent).toEqual(
-        sortedRows[i].property_name,
-      );
-    }
-
-    fireEvent.click(thead);
-    tableBody = screen.getByRole('table')?.children[1];
-    expect(tableBody).not.toBeNull();
-    expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
-      const row = tableBody.children[i];
-      expect(row).not.toBeNull();
-      expect(row.childElementCount).toBe(NUM_COLUMNS);
-      expect(row.children[0].textContent).toEqual(
-        EXAMPLE_ROWS[i].property_name,
       );
     }
   });

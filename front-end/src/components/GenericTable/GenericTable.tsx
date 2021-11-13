@@ -143,7 +143,7 @@ const GenericTable = <T extends RowWithIndex, K extends keyof T>({
                 style={{ position: 'relative' }}
               >
                 <>
-                  {col.key}
+                  {col.header}
                   {parentStr === `${col.key.toString()}_asc` && (
                     <BsArrowUp
                       style={{ position: 'absolute', right: '8px' }}

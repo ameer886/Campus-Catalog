@@ -50,7 +50,6 @@ const EXAMPLE_ROWS: Array<EntertainmentRowType> = [
     id: 462165312,
   },
 ];
-const NUM_COLUMNS = 6;
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -59,7 +58,7 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-describe('Apartment Table Test Suite', () => {
+describe('Amenity Table Test Suite', () => {
   it('snapshot test', () => {
     const snap = shallow(
       <EntertainmentTable testRows={EXAMPLE_ROWS} />,
@@ -87,76 +86,6 @@ describe('Apartment Table Test Suite', () => {
       expect(aptLink).not.toBeNull();
       expect(aptLink.getAttribute('href')).toBe(
         `/amenities/${EXAMPLE_ROWS[i].id}`,
-      );
-    }
-  });
-
-  // Only tests amenity name
-  // it's too much code to test all five columns...
-  it('sort function works', () => {
-    render(<EntertainmentTable testRows={EXAMPLE_ROWS} />);
-
-    let tableBody = screen.getByRole('table')?.children[1];
-    expect(tableBody).not.toBeNull();
-    expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
-      const row = tableBody.children[i];
-      expect(row).not.toBeNull();
-      expect(row.childElementCount).toBe(NUM_COLUMNS);
-      expect(row.children[0].textContent).toEqual(
-        EXAMPLE_ROWS[i].amen_name,
-      );
-    }
-
-    const thead = screen.getByRole('columnheader', {
-      name: 'Amenity Name',
-    });
-    expect(thead).not.toBeNull();
-
-    // Copy avoids sorting original array
-    const copy: Array<EntertainmentRowType> = JSON.parse(
-      JSON.stringify(EXAMPLE_ROWS),
-    );
-    fireEvent.click(thead);
-    tableBody = screen.getByRole('table')?.children[1];
-    expect(tableBody).not.toBeNull();
-    expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    const sortedRows = copy.sort((a, b) =>
-      a.amen_name.localeCompare(b.amen_name),
-    );
-    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
-      const row = tableBody.children[i];
-      expect(row).not.toBeNull();
-      expect(row.childElementCount).toBe(NUM_COLUMNS);
-      expect(row.children[0].textContent).toEqual(
-        sortedRows[i].amen_name,
-      );
-    }
-
-    fireEvent.click(thead);
-    tableBody = screen.getByRole('table')?.children[1];
-    expect(tableBody).not.toBeNull();
-    expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    sortedRows.reverse();
-    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
-      const row = tableBody.children[i];
-      expect(row).not.toBeNull();
-      expect(row.childElementCount).toBe(NUM_COLUMNS);
-      expect(row.children[0].textContent).toEqual(
-        sortedRows[i].amen_name,
-      );
-    }
-
-    fireEvent.click(thead);
-    tableBody = screen.getByRole('table')?.children[1];
-    expect(tableBody).not.toBeNull();
-    expect(tableBody.childElementCount).toBe(EXAMPLE_ROWS.length);
-    for (let i = 0; i < EXAMPLE_ROWS.length; i++) {
-      const row = tableBody.children[i];
-      expect(row).not.toBeNull();
-      expect(row.childElementCount).toBe(NUM_COLUMNS);
-      expect(row.children[0].textContent).toEqual(
-        EXAMPLE_ROWS[i].amen_name,
       );
     }
   });
