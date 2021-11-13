@@ -150,7 +150,7 @@ class HousingSchema(ma.Schema):
     )
     
     def format_rent(self, property):
-        return {"min_rent": property.min_rent, "max_rent": property.max_rent}
+        return {"min": property.min_rent, "max": property.max_rent}
 
     def format_bedroom(self, property):
         if property.max_bed is None:

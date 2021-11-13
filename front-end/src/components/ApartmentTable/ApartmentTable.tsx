@@ -51,12 +51,11 @@ const apartmentTableHeaders: ColumnDefinitionType<
     header: 'Transit Score',
   },
   {
-    // Anti-pattern: rent has two keys but I can only use one
-    key: 'max_rent',
+    key: 'rent',
     header: 'Rent (Min - Max)',
     printFunc: (a) =>
-      `${formatNumberToMoney(a.min_rent)} - ${formatNumberToMoney(
-        a.max_rent,
+      `${formatNumberToMoney(a.rent.min)} - ${formatNumberToMoney(
+        a.rent.max,
       )}`,
   },
   {
