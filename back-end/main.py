@@ -129,6 +129,7 @@ class HousingSchema(ma.Schema):
     transit_score = fields.Int()
     min_rent = fields.Int(required=True)
     max_rent = fields.Int()
+    rent = fields.Method("format_rent")
     bed = fields.Method("format_bedroom")
     bath = fields.Method("format_bathroom")
     min_sqft = fields.Float()
@@ -147,6 +148,9 @@ class HousingSchema(ma.Schema):
     universities_nearby = fields.List(
         fields.Dict(keys=fields.Str(), values=fields.Str())
     )
+    
+    def format_rent(self, property):
+        return {"min_rent": property.min_rent, "max_rent": property.max_rent}
 
     def format_bedroom(self, property):
         if property.max_bed is None:
@@ -195,8 +199,7 @@ table_columns = (
     "rating",
     "walk_score",
     "transit_score",
-    "min_rent",
-    "max_rent",
+    "rent",
     "bed"
 )
 all_housing_schema = HousingSchema(only=table_columns, many=True)
@@ -245,24 +248,26 @@ def get_all_housing():
 
     # sort params
     sort_column = request.args.get('sort', default='state', type=str).lower()
-    if sort_column not in housing.c:
-        abort(400, f"invalid paramter: column {sort_column} not in table")
-    if sort_column not in table_columns:
-        abort(400, f"invalid paramter: column {sort_column.capitalize()} not in {table_columns}")
     sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
     if sort_column == 'bed':
         if sort_desc == True:
             sort_column = 'max_bed'
         else:
             sort_column = 'min_bed'
-
+    if sort_column == 'rent':
+        if sort_desc == True:
+            sort_column = 'max_rent'
+        else:
+            sort_column = 'min_rent'
+    if sort_column not in housing.c:
+        abort(400, f"invalid paramter: column {sort_column} not in table")
     # retrieve params for filtering
     type_filter = request.args.get('type', default=['apartment','condo','house','townhome'], type=lambda v: v.split(','))
 
     min_rent = request.args.get('min_rent', default=0, type=int)
     max_rent = request.args.get('max_rent', default=100000, type=int)
     min_bed = request.args.get('min_bed', default=0, type=float)
-    max_bed = request.args.get('max_bed', default=10, type=float)
+    max_bed = request.args.get('max_bed', default=100, type=float)
     rating = request.args.get('rating', default=0.0, type=float)
     walkscore = request.args.get('walk_score', default=[0], type=lambda v: list(map(int,v.split(','))))
     transitscore = request.args.get('transit_score', default=[0], type=lambda v: list(map(int,v.split(','))))
