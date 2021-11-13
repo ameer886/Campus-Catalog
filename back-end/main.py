@@ -228,6 +228,10 @@ def normalize_amenities_query(params):
     unflat_params = params.to_dict()
     return {k: v for k, v in unflat_params.items() if k in amenities_table_columns}
 
+def normalize_university_query(params):
+    unflat_params = params.to_dict()
+    return {k: v for k, v in unflat_params.items() if k in univ_columns}
+
 @app.route("/housing", methods=["GET"])
 def get_all_housing():
 
@@ -459,31 +463,56 @@ univ_columns = (
     "state",
     "ownership_id",
     "acceptance_rate",
+    "graduation_rate",
     "tuition_in_st",
     "tuition_out_st",
     "avg_cost_attendance",
-    "image",
 )
 all_univ_schema = UniversitySchema(only=univ_columns, many=True)
 
 
 @app.route("/universities", methods=["GET"])
 def get_all_universities():
-
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
+    sort_column = request.args.get('sort', default='state', type=str).lower()
+    sort_desc = request.args.get('desc', default=False, type=lambda v: v.lower() == 'true')
 
+    # retrieve params for filtering
+    ownership = request.args.get('ownership_id')
+    accept = request.args.get('accept', type=float)
+    grad = request.args.get('grad', type=float)
+    
+    # positional filters
+    filter_params = normalize_university_query(request.args)
+    filter_on = bool(filter_params)
+    # verify param validity
     if page < 1:
-        abort(400, "invalid paramter: page must be greater than 0")
+        abort(400, "invalid parameter: page must be greater than 0")
     if per_page < 1:
-        abort(400, "invalid paramter: per_page must be greater than 0")
+        abort(400, "invalid parameter: per_page must be greater than 0")
+    if sort_column not in university.c:
+        abort(400, f"invalid parameter: column {sort_column} not in table")
+    if sort_column not in univ_columns:
+        abort(400, f"invalid parameter: column {sort_column.capitalize()} not in {univ_columns}")
+    
     
     try:
-        paginated_response = University.query.paginate(page, max_per_page=per_page)
+        sql_query = University.query
+        if ownership != None:
+            sql_query = sql_query.filter(University.ownership_id == ownership)
+        if filter_on:
+            sql_query = sql_query.filter_by(**filter_params)
+        if accept != None:
+            sql_query = sql_query.filter(University.acceptance_rate >= accept)
+        if grad != None:
+            sql_query = sql_query.filter(University.graduation_rate >= grad)
+        order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
+        paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
         all_univ = paginated_response.items
-    except Exception:
+    except Exception as e:
         err = flask.Response(
-            json.dumps({"error": f"{page} not found"}), 404, mimetype="application/json"
+            json.dumps({"error": f"{e}, {page} not found"}), 404, mimetype="application/json"
         )
         return err
 
