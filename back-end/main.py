@@ -3,12 +3,14 @@ import json
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from db import db_init
-from sqlalchemy import text, desc
+from sqlalchemy import text, desc, or_
 from sqlalchemy.sql.schema import MetaData, Column
 from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, validate
 import queries
+import re
+import sqlalchemy
 
 app = Flask(__name__)
 CORS(app)
@@ -472,6 +474,35 @@ def get_univ_by_id(id):
         return err
     return jsonify(single_univ_schema.dump(univ))
 
+def amenities_search(query):
+    sql_query = Amenities.query
+    # Check if query is float or int
+    if re.match('^\d+(\.\d+)?$', query):
+        if query.isdigit():
+            sql_query = sql_query.filter(or_(
+                Amenities.num_review == int(query), 
+                sqlalchemy.func.abs(Amenities.rating - float(query)) <= 1e-6, 
+                Amenities.amen_name.ilike(f'%{query}%') | 
+                Amenities.pricing.ilike(f'%{query}%') |
+                Amenities.state.ilike(f'%{query}%') |
+                Amenities.city.ilike(f'%{query}%') )
+            )
+        else:
+            sql_query = sql_query.filter(or_(
+                    sqlalchemy.func.abs(Amenities.rating - float(query)) <= 1e-6, 
+                    Amenities.amen_name.ilike(f'%{query}%') | 
+                    Amenities.pricing.ilike(f'%{query}%') |
+                    Amenities.state.ilike(f'%{query}%') |
+                    Amenities.city.ilike(f'%{query}%') )
+                )
+    else:
+        sql_query = sql_query.filter(
+            Amenities.amen_name.ilike(f'%{query}%') | 
+            Amenities.pricing.ilike(f'%{query}%') |
+            Amenities.state.ilike(f'%{query}%') |
+            Amenities.city.ilike(f'%{query}%') 
+        )
+    return sql_query
 
 @app.route("/amenities", methods=["GET"])
 def get_all_amenities():
@@ -486,6 +517,8 @@ def get_all_amenities():
     reviews = request.args.get('reviews', type=int)
 
     rating = request.args.get('rate', type=float)
+
+    search = request.args.get('search', type=str)
 
     # positional filters
     filter_params = normalize_amenities_query(request.args)
@@ -512,7 +545,9 @@ def get_all_amenities():
             sql_query = sql_query.filter(Amenities.num_review >= reviews)
         if rating != None:
             sql_query = sql_query.filter(Amenities.rating >= rating)
-
+        if search != None:
+            sql_query = amenities_search(search)
+            
         order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
         paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
         all_amenities = paginated_response.items
