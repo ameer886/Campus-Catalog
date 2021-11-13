@@ -1,5 +1,5 @@
 import React from "react";
-import "./Search.css";
+import styles from "./Search.module.css";
 import { Card } from "react-bootstrap";
 import { Highlight } from "react-instantsearch-dom"
 
