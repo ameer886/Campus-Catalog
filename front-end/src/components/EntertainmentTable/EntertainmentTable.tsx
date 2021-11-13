@@ -75,7 +75,7 @@ const popoverOptions: FilterPopoverOption[] = [
   },
   {
     header: 'Rating',
-    key: 'rating',
+    key: 'rate',
     variant: 'radio',
     boxValues: [
       { value: '0', displayStr: 'Any', __checked: true },
@@ -152,6 +152,7 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
     );
     const [page, setPage] = useState(1); // Pages are 1-indexed
     const [filter, setFilter] = useState('');
+    const [sortStr, setSortStr] = useState('NONE');
 
     useEffect(() => {
       if (testRows) {
@@ -164,8 +165,11 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
       const fetchDataAsync = async () => {
         try {
           let params = `page=${page}&per_page=${PAGE_SIZE}`;
+          if (sortStr !== 'NONE') {
+            params += `&sort=${sortStr.slice(0, -4)}`;
+            if (sortStr.includes('dsc')) params += '&desc=True';
+          }
           if (filter) params += filter;
-          console.log(params);
 
           const data = await getAPI({
             model: 'amenities',
@@ -188,7 +192,7 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
         }
       };
       fetchDataAsync();
-    }, [page, filter]);
+    }, [page, filter, sortStr]);
 
     if (loading || meta == null)
       return <p>Loading, please be patient.</p>;
@@ -212,6 +216,12 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
         <GenericTable
           columnDefinitions={entertainmentTableHeaders}
           data={rows}
+          parentSort={(e) => {
+            setLoading(testRows == null);
+            setPage(1);
+            setSortStr(e);
+          }}
+          parentStr={sortStr}
         />
 
         <PaginationRelay

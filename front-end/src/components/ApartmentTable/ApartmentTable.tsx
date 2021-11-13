@@ -268,9 +268,7 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
           let params = `page=${page}&per_page=${PAGE_SIZE}`;
           if (sortStr !== 'NONE') {
             params += `&sort=${sortStr.slice(0, -4)}`;
-            if (sortStr.includes('dsc')) {
-              params += '&desc=True';
-            }
+            if (sortStr.includes('dsc')) params += '&desc=True';
           }
           if (filter) params += filter;
 
