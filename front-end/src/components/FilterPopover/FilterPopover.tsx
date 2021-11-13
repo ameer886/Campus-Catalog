@@ -92,7 +92,12 @@ function getInputElement(
 ): JSX.Element {
   return (
     <Form>
-      <Form.Group style={{ display: 'flex', marginBottom: '8px' }}>
+      <Form.Group
+        style={{
+          display: option.inputValues.length === 1 ? 'block' : 'flex',
+          marginBottom: '8px',
+        }}
+      >
         {option.inputValues.map((val, i) => (
           <div key={i} style={{ display: 'flex' }}>
             <Form.Control
@@ -129,7 +134,11 @@ const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
       if (isCheckboxOption(option)) {
         (option as FilterPopoverCheckboxOption).boxValues.forEach(
           (val) => {
-            if (val.__checked) {
+            if (val.__checked && val.value) {
+              // Note: you can specify value = '' to make this
+              // not run if you want no substr to be generated
+              // This is useful, for example, if you have a boolean
+              // decision like "has takeout", "does not have", or "any"
               if (substr.slice(-1) != '=') substr += ',';
               substr += val.value;
             }
