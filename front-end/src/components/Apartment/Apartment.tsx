@@ -67,8 +67,8 @@ const Apartment: React.FunctionComponent<ApartmentProps> = ({
 
       <p>
         The price of this location ranges from{' '}
-        {formatNumberToMoney(aptQuery.min_rent)} to{' '}
-        {formatNumberToMoney(aptQuery.max_rent)}. Utilities are
+        {formatNumberToMoney(aptQuery.rent.min)} to{' '}
+        {formatNumberToMoney(aptQuery.rent.max)}. Utilities are
         {aptQuery.util_included ? '' : ' not'} included.
       </p>
 
