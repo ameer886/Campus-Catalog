@@ -15,8 +15,10 @@ type FilterPopoverCheckboxOption = {
   boxValues: Array<{
     value: string;
     displayStr: string;
-    defaultChecked?: boolean;
-    __checked?: boolean; // For internal use only, please don't set this
+    // Generally __checked is for internal use only.
+    // However, if you want a component to default to being checked,
+    // you can set this to true.
+    __checked?: boolean;
   }>;
 };
 
@@ -27,6 +29,7 @@ type FilterPopoverInputOption = {
     type?: 'string' | 'number';
     min?: number; // Define min and max for number input, if desired
     max?: number; // These values are ignored for string inputs
+    cleanFunc?: (e: string) => string; // cleans a user string if desired; ignored if type is number
     displayStr: string;
     __value?: string; // For internal use only, please don't set this
   }>;
@@ -56,11 +59,16 @@ function getCheckboxElement(
       <input
         className={styles.Check}
         type={option.variant ?? 'checkbox'}
-        defaultChecked={val.__checked ?? val.defaultChecked}
+        defaultChecked={val.__checked}
         value={val.value}
         id={option.key + '-' + val.value}
         name={option.header}
         onClick={() => {
+          if (option.variant === 'radio') {
+            option.boxValues.forEach(
+              (button) => (button.__checked = false),
+            );
+          }
           val.__checked = !val.__checked;
         }}
       />
@@ -129,14 +137,33 @@ const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
         );
       } else if (isInputOption(option)) {
         const cast = option as FilterPopoverInputOption;
-        cast.inputValues.forEach((val) => {
-          if (val.__value) substr += val.__value;
-        });
+        if (
+          cast.inputValues.length == 2 &&
+          cast.inputValues[0].type === 'number' &&
+          cast.inputValues[1].type === 'number'
+        ) {
+          // NOTE: Assumed here that a 2 number input is a min/max pair
+          const k = cast.key;
+          const v1 = cast.inputValues[0].__value;
+          const v2 = cast.inputValues[1].__value;
+          substr = '';
+          if (v1) substr += `min_${k}=${v1}`;
+          if (v1 && v2) substr += '&';
+          if (v2) substr += `max_${k}=${v2}`;
+        } else {
+          cast.inputValues.forEach((val) => {
+            if (val.__value) {
+              if (val.cleanFunc) substr += val.cleanFunc(val.__value);
+              else substr += val.__value;
+            }
+          });
+        }
       }
 
-      if (substr.slice(-1) != '=') output += '&' + substr;
+      if (substr.length > 0 && substr.slice(-1) != '=')
+        output += '&' + substr;
     });
-    setFilter(output);
+    if (output) setFilter(output);
   };
 
   const pop = (

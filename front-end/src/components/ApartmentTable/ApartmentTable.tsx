@@ -75,95 +75,115 @@ const popoverOptions: FilterPopoverOption[] = [
       {
         value: 'apartment',
         displayStr: 'Apartment',
-        defaultChecked: true,
+        __checked: true,
       },
-      { value: 'condo', displayStr: 'Condo', defaultChecked: true },
+      { value: 'condo', displayStr: 'Condo', __checked: true },
       {
         value: 'townhome',
         displayStr: 'Town home',
-        defaultChecked: true,
+        __checked: true,
       },
-      { value: 'house', displayStr: 'House', defaultChecked: true },
+      { value: 'house', displayStr: 'House', __checked: true },
     ],
   },
   {
-    header: 'City, State',
-    key: 'cityState',
-    inputValues: [{ displayStr: 'Enter City, ST here' }],
+    header: 'City',
+    key: 'city',
+    inputValues: [
+      {
+        displayStr: 'Enter City here',
+        // Capitalize only the first letter
+        cleanFunc: (e) =>
+          e
+            .trim()
+            .toLowerCase()
+            .replace(/^\w/, (c) => c.toUpperCase()),
+      },
+    ],
+  },
+  {
+    header: 'State',
+    key: 'state',
+    inputValues: [
+      {
+        displayStr: 'Enter state here (ex: TX)',
+        cleanFunc: (e) => e.trim().toUpperCase(),
+      },
+    ],
   },
   {
     header: 'Rating',
     key: 'rating',
     variant: 'radio',
     boxValues: [
-      { value: 'any', displayStr: 'Any', defaultChecked: true },
-      { value: '1', displayStr: '>= 1.0' },
-      { value: '2', displayStr: '>= 2.0' },
-      { value: '3', displayStr: '>= 3.0' },
-      { value: '4', displayStr: '>= 4.0' },
+      { value: '0', displayStr: 'Any', __checked: true },
+      { value: '1.0', displayStr: '>= 1.0' },
+      { value: '2.0', displayStr: '>= 2.0' },
+      { value: '3.0', displayStr: '>= 3.0' },
+      { value: '4.0', displayStr: '>= 4.0' },
     ],
   },
   {
     header: 'Walk Score',
-    key: 'walkscore',
+    key: 'walk_score',
     variant: 'checkbox',
     boxValues: [
       {
-        value: '0',
-        displayStr: "Walker's Paradise",
-        defaultChecked: true,
-      },
-      {
         value: '1',
-        displayStr: 'Very Walkable',
-        defaultChecked: true,
+        displayStr: "Walker's Paradise",
+        __checked: true,
       },
       {
         value: '2',
-        displayStr: 'Somewhat Walkable',
-        defaultChecked: true,
+        displayStr: 'Very Walkable',
+        __checked: true,
       },
       {
         value: '3',
-        displayStr: 'Car-Dependent',
-        defaultChecked: true,
+        displayStr: 'Somewhat Walkable',
+        __checked: true,
       },
       {
         value: '4',
+        displayStr: 'Car-Dependent',
+        __checked: true,
+      },
+      {
+        value: '5',
         displayStr: 'Very Car-Dependent',
-        defaultChecked: true,
+        __checked: true,
       },
     ],
   },
   {
     header: 'Transit Score',
-    key: 'transitscore',
+    key: 'transit_score',
     variant: 'checkbox',
     boxValues: [
       {
-        value: '0',
-        displayStr: "Rider's Paradise",
-        defaultChecked: true,
-      },
-      {
         value: '1',
-        displayStr: 'Excellent Transit',
-        defaultChecked: true,
+        displayStr: "Rider's Paradise",
+        __checked: true,
       },
       {
         value: '2',
-        displayStr: 'Good Transit',
-        defaultChecked: true,
+        displayStr: 'Excellent Transit',
+        __checked: true,
       },
       {
         value: '3',
-        displayStr: 'Some Transit',
-        defaultChecked: true,
+        displayStr: 'Good Transit',
+        __checked: true,
       },
       {
         value: '4',
+        displayStr: 'Some Transit',
+        __checked: true,
+      },
+      {
+        value: '5',
         displayStr: 'Minimal Transit',
-        defaultChecked: true,
+        __checked: true,
       },
     ],
   },
@@ -288,6 +308,7 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
             <FilterPopover
               options={popoverOptions}
               setFilter={(e) => {
+                if (filter === e) return;
                 setLoading(testRows == null);
                 setPage(1);
                 setFilter(e);
