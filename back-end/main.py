@@ -211,12 +211,12 @@ def search():
     # models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
     query_terms = request.args.get('q', default=[], type=lambda v: v.split(' '))
     # pagination params
-    page = request.args.get('housing_page', default=1, type=int)
-    per_page = request.args.get('per_page', default=10, type=int)
+    housing_page = request.args.get('housing_page', default=1, type=int)
+    housing_per_page = request.args.get('housing_per_page', default=10, type=int)
 
-    paginated_response = search_housing(query_terms).paginate(page, max_per_page=per_page)
-    pagination_header = {"housing_page": page, 
-                    "per_page": paginated_response.per_page,
+    paginated_response = search_housing(query_terms).paginate(housing_page, max_per_page=housing_per_page)
+    pagination_header = {"housing_page": housing_page, 
+                    "per_page": paginated_response.housing_per_page,
                     "max_page": paginated_response.pages,
                     "total_items": paginated_response.total}
     return jsonify(pagination_header, {"properties": all_housing_schema.dump(paginated_response.items)})
