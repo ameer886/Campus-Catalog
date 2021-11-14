@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from sqlalchemy.sql.sqltypes import VARCHAR
 from db import db_init
-from sqlalchemy import text, desc, cast
+from sqlalchemy import text, desc, cast, or_
 from sqlalchemy.sql.schema import MetaData, Column
 from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
@@ -210,18 +210,37 @@ all_housing_schema = HousingSchema(only=table_columns, many=True)
 @app.route('/search', methods=['GET'])
 def search():
     # TODO: extend to other models
-    # models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
+    models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
+    models = [model.capitalize() for model in models]
     query_terms = request.args.get('q', default=[], type=lambda v: v.split(' '))
     # pagination params
+    
     housing_page = request.args.get('housing_page', default=1, type=int)
     housing_per_page = request.args.get('housing_per_page', default=10, type=int)
+    housing = {}
+    housing_pagination_header = {}
+    if 'Housing' in models:
+        paginated_response = search_housing(query_terms).paginate(housing_page, max_per_page=housing_per_page)
+        housing = {"properties": all_housing_schema.dump(paginated_response.items)}
+        housing_pagination_header = {"housing_page": housing_page, 
+                        "per_page": housing_per_page,
+                        "max_page": paginated_response.pages,
+                        "total_items": paginated_response.total}
+    
+    amenities_page = request.args.get('amenities_page', default=1, type=int)
+    amenities_per_page = request.args.get('amenities_per_page', default=10, type=int)
+    amenities = {}
+    amenities_paginated_response = {}
+    if 'Amenities' in models:
+        amenities_query = search_amenities(query_terms)
+        amenities_paginated_response = amenities_query.paginate(amenities_page, max_per_page=amenities_per_page)
+        amenities = {"amenities": all_amenities_schema.dump(amenities_paginated_response.items)}
+        amenities_pagination_header = {"amenities_page": amenities_page, 
+                        "per_page": amenities_per_page,
+                        "max_page": amenities_paginated_response.pages,
+                        "total_items": amenities_paginated_response.total}
 
-    paginated_response = search_housing(query_terms).paginate(housing_page, max_per_page=housing_per_page)
-    pagination_header = {"housing_page": housing_page, 
-                    "per_page": paginated_response.housing_per_page,
-                    "max_page": paginated_response.pages,
-                    "total_items": paginated_response.total}
-    return jsonify(pagination_header, {"properties": all_housing_schema.dump(paginated_response.items)})
+    return jsonify({**amenities_pagination_header, **amenities}, {**housing_pagination_header, **housing})
 
 def search_housing(query_terms):
     sql = Housing.query
@@ -586,7 +605,7 @@ def get_univ_by_id(id):
         return err
     return jsonify(single_univ_schema.dump(univ))
 
-def amenities_search(query):
+def search_amenities(query):
     sql_query = Amenities.query
     searches = []
     for term in query:
@@ -628,7 +647,6 @@ def get_all_amenities():
     if sort_column not in amenities_table_columns:
         abort(400, f"invalid parameter: column {sort_column.capitalize()} not in {amenities_table_columns}")
 
-    
     # query and paginate
     try:
         sql_query = Amenities.query
@@ -687,22 +705,6 @@ def get_amenities_by_id(amen_id):
     amenity["images"] = images
     amenity["categories"] = categories
     return jsonify(amenity)
-
-@app.route('/search', methods=['GET'])
-def search():
-    page = request.args.get('page', default=1, type=int)
-    per_page = request.args.get('per_page', default=10, type=int)
-    query = request.args.get('q', default=[], type=lambda v: v.split(' '))
-    models = request.args.get('models', default=[], type=lambda v: v.split(','))
-    amenities = {}
-    housing = {}
-    universities = {}
-    if 'amenities' in models:
-        amenities_query = amenities_search(query)
-        paginated_response = amenities_query.paginate(page, max_per_page=per_page)
-        amenities = {"amenities": all_amenities_schema.dump(paginated_response.items)}
-
-    return jsonify({**amenities, **housing, **universities})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
