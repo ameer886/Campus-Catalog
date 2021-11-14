@@ -512,6 +512,7 @@ def get_all_universities():
             sql_query = sql_query.filter(University.acceptance_rate >= accept)
         if grad != None:
             sql_query = sql_query.filter(University.graduation_rate >= grad)
+        sql_query = sql_query.filter(University.rank != None)
         order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
         paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
         all_univ = paginated_response.items
