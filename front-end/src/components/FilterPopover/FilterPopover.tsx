@@ -29,7 +29,7 @@ type FilterPopoverInputOption = {
     type?: 'string' | 'number';
     min?: number; // Define min and max for number input, if desired
     max?: number; // These values are ignored for string inputs
-    cleanFunc?: (e: string) => string; // cleans a user string if desired; ignored if type is number
+    cleanFunc?: (e: string) => string; // cleans a user input if needed
     displayStr: string;
     __value?: string; // For internal use only, please don't set this
   }>;
