@@ -3,8 +3,9 @@ import flask
 import json
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
+from sqlalchemy.sql.sqltypes import VARCHAR
 from db import db_init
-from sqlalchemy import text, desc, and_
+from sqlalchemy import text, desc, cast
 from sqlalchemy.sql.schema import MetaData, Column
 from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
@@ -204,6 +205,28 @@ table_columns = (
 )
 all_housing_schema = HousingSchema(only=table_columns, many=True)
 
+@app.route('/search', methods=['GET'])
+def search():
+    # TODO: extend to other models
+    # models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
+    query_terms = request.args.get('q', default=[], type=lambda v: v.split(' '))
+    return jsonify(search_housing(query_terms))
+
+def search_housing(query_terms):
+    sql = Housing.query
+    for term in query_terms:
+        sql = sql.filter(
+            Housing.property_name.ilike(f'%{term}%') |
+            Housing.property_type.match(term) |
+            Housing.city.ilike(term) | Housing.state.ilike(term) |
+            cast(Housing.walk_score, VARCHAR).ilike(f'{term}') |
+            cast(Housing.transit_score, VARCHAR).ilike(f'{term}') |
+            cast(Housing.max_bed, VARCHAR).ilike(term) | cast(Housing.min_bed, VARCHAR).ilike(term) |
+            cast(Housing.max_rent, VARCHAR).ilike(term) | cast(Housing.min_rent, VARCHAR).ilike(term)
+            )
+
+    return all_housing_schema.dump(sql.all())
+
 def merge_ranges(scores):
     score_dict = {0: (0, 100), 1: (90, 100), 2: (70, 89), 3: (50, 69), 4: (25, 49), 5: (0, 24)}
     result = []
@@ -261,9 +284,9 @@ def get_all_housing():
             sort_column = 'min_rent'
     if sort_column not in housing.c:
         abort(400, f"invalid paramter: column {sort_column} not in table")
+
     # retrieve params for filtering
     type_filter = request.args.get('type', default=['apartment','condo','house','townhome'], type=lambda v: v.split(','))
-
     min_rent = request.args.get('min_rent', default=0, type=int)
     max_rent = request.args.get('max_rent', default=100000, type=int)
     min_bed = request.args.get('min_bed', default=0, type=float)
@@ -273,6 +296,7 @@ def get_all_housing():
     transitscore = request.args.get('transit_score', default=[0], type=lambda v: list(map(int,v.split(','))))
     walkscore_bounds = merge_ranges(walkscore)
     transitscore_bounds = merge_ranges(transitscore)
+
     # positional filters
     filter_params = normalize_query(request.args)
     filter_on = bool(filter_params)
