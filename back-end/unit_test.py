@@ -58,7 +58,6 @@ class TestBackEnd(unittest.TestCase):
         dummy["num_graduate"] = 0
         dummy["avg_cost_attendance"] = 0
         dummy["ownership_id"] = 1
-        dummy["mascot_name"] = "me"
         dummy["acceptance_rate"] = 0.0
         dummy["graduation_rate"] = 100.0
         dummy["tuition_in_st"] = 0
@@ -189,16 +188,14 @@ class TestBackEnd(unittest.TestCase):
         url = "https://api.campuscatalog.me/universities"
         r = urllib.request.urlopen(url)
         data = json.loads(r.read())
-        self.assertEqual(data["universities"][0]["acceptance_rate"], 0.9175)
-        self.assertEqual(data["universities"][0]["avg_cost_attendance"], 23053.0)
-        self.assertEqual(data["universities"][0]["city"], "Normal")
+        self.assertEqual(data["universities"][0]["city"], "Haverhill")
         self.assertEqual(data["universities"][0]["ownership_id"], "Public")
-        self.assertEqual(data["universities"][0]["state"], "AL")
-        self.assertEqual(data["universities"][0]["tuition_in_st"], 10024)
-        self.assertEqual(data["universities"][0]["tuition_out_st"], 18634)
-        self.assertEqual(data["universities"][0]["univ_id"], "100654")
+        self.assertEqual(data["universities"][0]["state"], "MA")
+        self.assertEqual(data["universities"][0]["tuition_in_st"], 5280)
+        self.assertEqual(data["universities"][0]["tuition_out_st"], 11064)
+        self.assertEqual(data["universities"][0]["univ_id"], "167376")
         self.assertEqual(
-            data["universities"][0]["univ_name"], "Alabama A & M University"
+            data["universities"][0]["univ_name"], "Northern Essex Community College"
         )
 
     def test_endpoint4(self):

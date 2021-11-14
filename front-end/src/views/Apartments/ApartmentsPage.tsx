@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import './ApartmentsPage.css';
 
 import type {
@@ -8,8 +7,6 @@ import type {
   Address,
   UniversityKey,
 } from '../../universalTypes';
-import { getAPI } from '../../APIClient';
-import { IntentionallyAny } from '../../utilities';
 
 import ApartmentTable from '../../components/ApartmentTable/ApartmentTable';
 
@@ -25,12 +22,11 @@ export type ApartmentType = {
   images: Array<string>;
   max_num_cat: number;
   max_num_dog: number;
-  max_rent: number;
-  min_rent: number;
   property_id: string;
   property_name: string;
   property_type: string;
   rating: number;
+  rent: MinMaxPair;
   sqft: MinMaxPair;
   transit_score: number;
   util_included?: boolean | null;
@@ -41,13 +37,13 @@ export type ApartmentType = {
 };
 
 export type ApartmentRowType = {
+  bed: MinMaxPair;
   city: string;
-  max_rent: number;
-  max_sqft: number;
   property_id: string;
   property_name: string;
   property_type: string;
   rating: number;
+  rent: MinMaxPair;
   state: string;
   transit_score: number;
   walk_score: number;
@@ -61,41 +57,10 @@ export type ApartmentRowType = {
  * Should contain a list of apartments in a sortable table/grid
  */
 const ApartmentsPage: React.FunctionComponent = () => {
-  const [loading, setLoading] = useState(true);
-  const [rows, setRows] = useState<Array<ApartmentRowType>>([]);
-
-  useEffect(() => {
-    const fetchDataAsync = async () => {
-      try {
-        const data = await getAPI({ model: 'housing' });
-        const responseRows = data.properties.map(
-          (apt: IntentionallyAny) => {
-            return {
-              id: apt.property_id,
-              ...apt,
-            };
-          },
-        );
-        setRows(responseRows);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchDataAsync();
-  }, []);
-
-  if (loading)
-    return (
-      <div className="Apartments">
-        <p>Loading responses, please be patient.</p>
-      </div>
-    );
-
   return (
     <div className="Apartments">
       <h1>Housing</h1>
-      <ApartmentTable rows={rows} />
+      <ApartmentTable />
     </div>
   );
 };

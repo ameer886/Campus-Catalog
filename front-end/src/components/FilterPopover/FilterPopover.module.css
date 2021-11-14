@@ -1,0 +1,39 @@
+.PopoverButton {
+  background-color: white;
+}
+
+.IconAdjust {
+  margin-top: -4px;
+  color: black;
+  width: 20px;
+  height: 20px;
+}
+
+.Check {
+  margin: 0 4px;
+}
+
+.TitleSplitter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.OptionHeader {
+  color: #555;
+  font-size: 16px;
+}
+
+.CheckboxRow {
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.CheckboxColumn {
+  flex: 50%;
+}
+
+.DashContainer {
+  margin: 0 2px;
+  display: flex;
+  align-items: center;
+}
