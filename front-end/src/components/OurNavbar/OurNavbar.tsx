@@ -87,7 +87,7 @@ const OurNavbar: React.FunctionComponent = () => {
             e.preventDefault();
           }}
         >
-          <InputGroup>
+          <InputGroup className={styles.bar}>
             {/* search bar */}
             <FormControl
               className="mr-sm-2"
@@ -105,7 +105,7 @@ const OurNavbar: React.FunctionComponent = () => {
             {/* search button */}
             <InputGroup.Append style={{ fontSize: '1.1vw' }}>
               <Button
-                style={styles.searchButton}
+                className={styles.searchButton}
                 variant="info"
                 onClick={() => search()}
               >
