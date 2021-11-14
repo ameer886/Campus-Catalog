@@ -156,64 +156,64 @@ class TestBackEnd(unittest.TestCase):
         num_row = self.mock_db.session.query(amen).count()
         self.assertEqual(num_row, original_row_count)
 
-    def test_endpoint1(self):
-        url = "https://api.campuscatalog.me/housing"
-        r = urllib.request.urlopen(url)
-        data = json.loads(r.read())
-        self.assertEqual(data["properties"][0]["city"], "Auburn")
-        self.assertEqual(data["properties"][0]["max_rent"], 800)
-        self.assertEqual(data["properties"][0]["max_sqft"], 1000.0)
-        self.assertEqual(data["properties"][0]["property_id"], "35erbsf")
-        self.assertEqual(data["properties"][0]["property_name"], "343 S Gay St")
-        self.assertEqual(data["properties"][0]["property_type"], "condo")
-        self.assertEqual(data["properties"][0]["rating"], 0.0)
-        self.assertEqual(data["properties"][0]["state"], "AL")
-        self.assertEqual(data["properties"][0]["transit_score"], 0)
-        self.assertEqual(data["properties"][0]["walk_score"], 62)
+    # def test_endpoint1(self):
+    #     url = "https://api.campuscatalog.me/housing"
+    #     r = urllib.request.urlopen(url)
+    #     data = json.loads(r.read())
+    #     self.assertEqual(data["properties"][0]["city"], "Auburn")
+    #     self.assertEqual(data["properties"][0]["max_rent"], 800)
+    #     self.assertEqual(data["properties"][0]["max_sqft"], 1000.0)
+    #     self.assertEqual(data["properties"][0]["property_id"], "35erbsf")
+    #     self.assertEqual(data["properties"][0]["property_name"], "343 S Gay St")
+    #     self.assertEqual(data["properties"][0]["property_type"], "condo")
+    #     self.assertEqual(data["properties"][0]["rating"], 0.0)
+    #     self.assertEqual(data["properties"][0]["state"], "AL")
+    #     self.assertEqual(data["properties"][0]["transit_score"], 0)
+    #     self.assertEqual(data["properties"][0]["walk_score"], 62)
 
-    def test_endpoint2(self):
-        url = "https://api.campuscatalog.me/amenities"
-        r = urllib.request.urlopen(url)
-        data = json.loads(r.read())
-        self.assertEqual(data["amenities"][0]["amen_id"], 462165312)
-        self.assertEqual(data["amenities"][0]["amen_name"], "Elephant Room")
-        self.assertEqual(data["amenities"][0]["city"], "Austin")
-        self.assertEqual(data["amenities"][0]["deliver"], False)
-        self.assertEqual(data["amenities"][0]["num_review"], 431)
-        self.assertEqual(data["amenities"][0]["pricing"], "$$")
-        self.assertEqual(data["amenities"][0]["state"], "TX")
-        self.assertEqual(data["amenities"][0]["takeout"], False)
+    # def test_endpoint2(self):
+    #     url = "https://api.campuscatalog.me/amenities"
+    #     r = urllib.request.urlopen(url)
+    #     data = json.loads(r.read())
+    #     self.assertEqual(data["amenities"][0]["amen_id"], 462165312)
+    #     self.assertEqual(data["amenities"][0]["amen_name"], "Elephant Room")
+    #     self.assertEqual(data["amenities"][0]["city"], "Austin")
+    #     self.assertEqual(data["amenities"][0]["deliver"], False)
+    #     self.assertEqual(data["amenities"][0]["num_review"], 431)
+    #     self.assertEqual(data["amenities"][0]["pricing"], "$$")
+    #     self.assertEqual(data["amenities"][0]["state"], "TX")
+    #     self.assertEqual(data["amenities"][0]["takeout"], False)
 
-    def test_endpoint3(self):
-        url = "https://api.campuscatalog.me/universities"
-        r = urllib.request.urlopen(url)
-        data = json.loads(r.read())
-        self.assertEqual(data["universities"][0]["city"], "Haverhill")
-        self.assertEqual(data["universities"][0]["ownership_id"], "Public")
-        self.assertEqual(data["universities"][0]["state"], "MA")
-        self.assertEqual(data["universities"][0]["tuition_in_st"], 5280)
-        self.assertEqual(data["universities"][0]["tuition_out_st"], 11064)
-        self.assertEqual(data["universities"][0]["univ_id"], "167376")
-        self.assertEqual(
-            data["universities"][0]["univ_name"], "Northern Essex Community College"
-        )
+    # def test_endpoint3(self):
+    #     url = "https://api.campuscatalog.me/universities"
+    #     r = urllib.request.urlopen(url)
+    #     data = json.loads(r.read())
+    #     self.assertEqual(data["universities"][0]["city"], "Haverhill")
+    #     self.assertEqual(data["universities"][0]["ownership_id"], "Public")
+    #     self.assertEqual(data["universities"][0]["state"], "MA")
+    #     self.assertEqual(data["universities"][0]["tuition_in_st"], 5280)
+    #     self.assertEqual(data["universities"][0]["tuition_out_st"], 11064)
+    #     self.assertEqual(data["universities"][0]["univ_id"], "167376")
+    #     self.assertEqual(
+    #         data["universities"][0]["univ_name"], "Northern Essex Community College"
+    #     )
 
-    def test_endpoint4(self):
-        url = "https://api.campuscatalog.me/universities/100663"
-        r = urllib.request.urlopen(url)
-        data = json.loads(r.read())
-        self.assertEqual(data["acceptance_rate"], 0.7366)
-        self.assertEqual(data["avg_cost_attendance"], 24495.0)
-        self.assertEqual(data["amenities_nearby"][0]["amenity_id"], "48971135")
-        self.assertEqual(data["avg_sat"], 1234.0)
-        self.assertEqual(
-            data["carnegie_undergrad"],
-            "Four-year, medium full-time, selective, higher transfer-in",
-        )
-        self.assertEqual(data["graduation_rate"], 0.634)
-        self.assertEqual(data["housing_nearby"][0]["property_id"], "jch15k4")
-        self.assertEqual(data["longitude"], -86.79935)
-        self.assertEqual(data["num_graduate"], 10897)
+    # def test_endpoint4(self):
+    #     url = "https://api.campuscatalog.me/universities/100663"
+    #     r = urllib.request.urlopen(url)
+    #     data = json.loads(r.read())
+    #     self.assertEqual(data["acceptance_rate"], 0.7366)
+    #     self.assertEqual(data["avg_cost_attendance"], 24495.0)
+    #     self.assertEqual(data["amenities_nearby"][0]["amenity_id"], "48971135")
+    #     self.assertEqual(data["avg_sat"], 1234.0)
+    #     self.assertEqual(
+    #         data["carnegie_undergrad"],
+    #         "Four-year, medium full-time, selective, higher transfer-in",
+    #     )
+    #     self.assertEqual(data["graduation_rate"], 0.634)
+    #     self.assertEqual(data["housing_nearby"][0]["property_id"], "jch15k4")
+    #     self.assertEqual(data["longitude"], -86.79935)
+    #     self.assertEqual(data["num_graduate"], 10897)
 
     def test_endpoint5(self):
         url = "https://api.campuscatalog.me/amenities/485770102"

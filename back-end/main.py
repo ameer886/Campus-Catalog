@@ -216,7 +216,7 @@ def search():
 
     paginated_response = search_housing(query_terms).paginate(housing_page, max_per_page=housing_per_page)
     pagination_header = {"housing_page": housing_page, 
-                    "per_page": paginated_response.housing_per_page,
+                    "per_page": paginated_response.per_page,
                     "max_page": paginated_response.pages,
                     "total_items": paginated_response.total}
     return jsonify(pagination_header, {"properties": all_housing_schema.dump(paginated_response.items)})
