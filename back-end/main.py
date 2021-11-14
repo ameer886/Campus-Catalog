@@ -210,7 +210,16 @@ def search():
     # TODO: extend to other models
     # models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
     query_terms = request.args.get('q', default=[], type=lambda v: v.split(' '))
-    return jsonify(search_housing(query_terms))
+    # pagination params
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+
+    paginated_response = search_housing(query_terms).paginate(page, max_per_page=per_page)
+    pagination_header = {"page": page, 
+                    "per_page": paginated_response.per_page,
+                    "max_page": paginated_response.pages,
+                    "total_items": paginated_response.total}
+    return jsonify(pagination_header, {"properties": all_housing_schema.dump(paginated_response.items)})
 
 def search_housing(query_terms):
     sql = Housing.query
@@ -225,7 +234,7 @@ def search_housing(query_terms):
             cast(Housing.max_rent, VARCHAR).ilike(term) | cast(Housing.min_rent, VARCHAR).ilike(term)
             )
 
-    return all_housing_schema.dump(sql.all())
+    return sql
 
 def merge_ranges(scores):
     score_dict = {0: (0, 100), 1: (90, 100), 2: (70, 89), 3: (50, 69), 4: (25, 49), 5: (0, 24)}
