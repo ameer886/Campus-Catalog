@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Search from "./views/About/Search/Search";
+import Search from "./views/Search/Search";
 
 import Navbar from './components/OurNavbar/OurNavbar';
 import CampCatSplashPage from './views/SplashPage/CampCatSplashPage';
