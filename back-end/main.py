@@ -211,11 +211,11 @@ def search():
     # models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
     query_terms = request.args.get('q', default=[], type=lambda v: v.split(' '))
     # pagination params
-    page = request.args.get('page', default=1, type=int)
+    page = request.args.get('housing_page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
 
     paginated_response = search_housing(query_terms).paginate(page, max_per_page=per_page)
-    pagination_header = {"page": page, 
+    pagination_header = {"housing_page": page, 
                     "per_page": paginated_response.per_page,
                     "max_page": paginated_response.pages,
                     "total_items": paginated_response.total}
