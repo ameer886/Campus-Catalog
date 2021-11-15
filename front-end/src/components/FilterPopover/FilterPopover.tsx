@@ -41,7 +41,9 @@ export type FilterPopoverOption =
 
 export type FilterPopoverProps = {
   options: Array<FilterPopoverOption>;
-  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  setFilter:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((value: string) => void);
 };
 
 function isCheckboxOption(x: FilterPopoverOption): boolean {
@@ -226,7 +228,7 @@ const FilterPopover: React.FunctionComponent<FilterPopoverProps> = ({
         trigger="click"
         rootClose // Closes popover when clicking outside
       >
-        <Button className={styles.PopoverButton}>
+        <Button aria-label="Show" className={styles.PopoverButton}>
           <BsFilterCircle className={styles.IconAdjust} />
         </Button>
       </OverlayTrigger>

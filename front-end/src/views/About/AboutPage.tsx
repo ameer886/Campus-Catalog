@@ -90,7 +90,7 @@ const AboutPage: React.FunctionComponent = () => {
       username: 'RG8452',
       commits: 0,
       issues: 0,
-      unitTests: 15,
+      unitTests: 29,
       color: '#31052f',
       role: 'Frontend Lead Developr',
       img: RyanGahaganImg,

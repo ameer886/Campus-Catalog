@@ -47,7 +47,8 @@ const entertainmentTableHeaders: ColumnDefinitionType<
   },
 ];
 
-const popoverOptions: FilterPopoverOption[] = [
+// This is exported for unit tests. You should not need to import it.
+export const popoverOptions: FilterPopoverOption[] = [
   {
     header: 'City',
     key: 'city',
@@ -203,7 +204,7 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
           <div className={styles.FilterButton}>
             <FilterPopover
               options={popoverOptions}
-              setFilter={(e) => {
+              setFilter={(e: string) => {
                 if (filter === e) return;
                 setLoading(testRows == null);
                 setPage(1);
@@ -216,7 +217,7 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
         <GenericTable
           columnDefinitions={entertainmentTableHeaders}
           data={rows}
-          parentSort={(e) => {
+          parentSort={(e: string) => {
             setLoading(testRows == null);
             setPage(1);
             setSortStr(e);
