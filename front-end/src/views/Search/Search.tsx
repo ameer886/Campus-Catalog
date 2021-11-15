@@ -6,6 +6,8 @@ import type { ApartmentRowType } from '../Apartments/ApartmentsPage';
 // import type { UniversityRowType } from '../Universities/UniversitiesPage';
 import type { EntertainmentRowType } from '../Entertainments/EntertainmentsPage';
 
+import SearchAmenitiesColumn from './SearchAmenitiesColumn';
+
 import { getAPI } from '../../APIClient';
 
 import styles from './Search.module.css';
@@ -117,15 +119,16 @@ const Search: React.FunctionComponent<SearchProps> = ({
     };
   };
 
-  if (loading) return <p>Loading, please wait.</p>;
-
   return (
     <div className={styles.Search}>
       <h1 className={styles.search_heading}>SEARCH RESULTS</h1>
       <h2 className={styles.query_style}>{q}</h2>
 
       <h1>Select which models you would like to search from:</h1>
-      <div style={{ display: 'flex' }}>
+      <div
+        className={styles.Centering}
+        style={{ marginBottom: '24px' }}
+      >
         {OPTIONS.map((name, index) => (
           <div
             key={index}
@@ -136,6 +139,33 @@ const Search: React.FunctionComponent<SearchProps> = ({
             <h2>{name}</h2>
           </div>
         ))}
+      </div>
+
+      <div className={styles.Centering}>
+        {filterState[0] && (
+          <div className={styles.Column}>
+            {loading ? (
+              'Loading housing results, please wait'
+            ) : (
+              <p>Test 1</p>
+            )}
+          </div>
+        )}
+        {filterState[1] && (
+          <div className={styles.Column}>
+            {loading ? (
+              'Loading university results, please wait'
+            ) : (
+              <p>Test 2</p>
+            )}
+          </div>
+        )}
+        {filterState[2] && (
+          <SearchAmenitiesColumn
+            loading={loading}
+            rows={amenityRows}
+          />
+        )}
       </div>
     </div>
   );

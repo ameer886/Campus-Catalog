@@ -91,3 +91,19 @@
 .ModelButton:hover {
   cursor: pointer;
 }
+
+.Centering {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Column {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.SearchCard {
+  margin: 8px;
+  border: solid 2px;
+}
