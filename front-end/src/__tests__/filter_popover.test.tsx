@@ -304,4 +304,118 @@ describe('Filter Popover Test Suite', () => {
     await clickApply();
     expect(s).toEqual('&min_number=0&max_number=1');
   });
+
+  it('input test: checkboxes', async () => {
+    const options: FilterPopoverOption[] = [
+      {
+        header: 'Basic String',
+        key: 'enums',
+        variant: 'checkbox',
+        boxValues: [
+          { displayStr: '1', value: '1', __checked: true },
+          { displayStr: '2', value: '2', __checked: true },
+          { displayStr: '3', value: '3' },
+        ],
+      },
+    ];
+
+    let s = '';
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
+      />,
+    );
+
+    await openPopover();
+    let boxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
+    expect(boxes).not.toBeNull();
+    expect(boxes).toHaveLength(3);
+    expect(boxes[0].checked).toBe(true);
+    expect(boxes[1].checked).toBe(true);
+    expect(boxes[2].checked).toBe(false);
+
+    fireEvent.click(boxes[0]);
+    await clickApply();
+    expect(s).toEqual('&enums=2');
+
+    cleanup();
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
+      />,
+    );
+
+    await openPopover();
+    boxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
+    expect(boxes[0].checked).toBe(false);
+    expect(boxes[1].checked).toBe(true);
+    expect(boxes[2].checked).toBe(false);
+    fireEvent.click(boxes[0]);
+    fireEvent.click(boxes[2]);
+    await clickApply();
+    expect(s).toEqual('&enums=1,2,3');
+  });
+
+  it('input test: radio', async () => {
+    const options: FilterPopoverOption[] = [
+      {
+        header: 'Basic String',
+        key: 'enums',
+        variant: 'radio',
+        boxValues: [
+          { displayStr: '1', value: '1' },
+          { displayStr: '2', value: '2', __checked: true },
+          { displayStr: '3', value: '3' },
+        ],
+      },
+    ];
+
+    let s = '';
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
+      />,
+    );
+
+    await openPopover();
+    let boxes = screen.getAllByRole('radio') as HTMLInputElement[];
+    expect(boxes).not.toBeNull();
+    expect(boxes).toHaveLength(3);
+    expect(boxes[0].checked).toBe(false);
+    expect(boxes[1].checked).toBe(true);
+    expect(boxes[2].checked).toBe(false);
+
+    fireEvent.click(boxes[0]);
+    await clickApply();
+    expect(s).toEqual('&enums=1');
+
+    cleanup();
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
+      />,
+    );
+
+    await openPopover();
+    boxes = screen.getAllByRole('radio') as HTMLInputElement[];
+    expect(boxes[0].checked).toBe(true);
+    expect(boxes[1].checked).toBe(false);
+    expect(boxes[2].checked).toBe(false);
+    fireEvent.click(boxes[1]);
+    fireEvent.click(boxes[2]);
+    await clickApply();
+    expect(s).toEqual('&enums=3');
+  });
 });
