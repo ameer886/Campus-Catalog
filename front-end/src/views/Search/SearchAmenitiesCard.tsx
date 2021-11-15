@@ -3,6 +3,8 @@ import { Card } from 'react-bootstrap';
 
 import type { EntertainmentRowType } from '../Entertainments/EntertainmentsPage';
 
+import { getHighlightHTML } from './Search';
+
 import styles from './Search.module.css';
 
 /* attributes of a city */
@@ -27,19 +29,21 @@ const amenities_attributes = [
 
 type AmenCardProps = {
   row: EntertainmentRowType;
+  query: string;
 };
 
 /* displays card for a city result
 in the search page */
 const SearchAmenitiesCard: React.FunctionComponent<AmenCardProps> = ({
   row,
+  query,
 }: AmenCardProps) => {
   /* map the attribute data to text in the card */
   const displayCardText = (row: EntertainmentRowType) => {
     return amenities_attributes.map((amenity, index) => (
       <Card.Text className="card-text-style" key={index}>
         <b>{amenity.name} </b>
-        <span>{row[amenity.attribute]}</span>
+        {getHighlightHTML(row[amenity.attribute].toString(), query)}
       </Card.Text>
     ));
   };

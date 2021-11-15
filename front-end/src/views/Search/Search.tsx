@@ -32,6 +32,33 @@ function getQueryFromFilter(filter: Array<boolean>): string {
   return output;
 }
 
+export function getHighlightHTML(s: string, q: string): JSX.Element {
+  let textArr: string[];
+  try {
+    textArr = s.split(new RegExp(`(?=${q})|(?<=${q})`, 'ig'));
+  } catch {
+    textArr = [s];
+  }
+
+  const output = (
+    <>
+      {textArr.map((elt, index) => (
+        <>
+          {!(elt.toLowerCase() === q.toLowerCase()) && (
+            <span key={index}>{elt}</span>
+          )}
+          {elt.toLowerCase() === q.toLowerCase() && (
+            <mark style={{ padding: 0, backgroundColor: 'yellow' }}>
+              {elt}
+            </mark>
+          )}
+        </>
+      ))}
+    </>
+  );
+  return output;
+}
+
 /* takes in query that the user searches and returns search results */
 const Search: React.FunctionComponent<SearchProps> = ({
   q,
@@ -163,6 +190,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
         {filterState[2] && (
           <SearchAmenitiesColumn
             loading={loading}
+            query={q}
             rows={amenityRows}
           />
         )}
