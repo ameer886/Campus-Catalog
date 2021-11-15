@@ -291,7 +291,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
         <div className={styles.SplitterInfo}>
           <FilterPopover
             options={popoverOptions}
-            setFilter={(e) => {
+            setFilter={(e: string) => {
               setPage(1);
               setLoading(true);
               setFilter(e);

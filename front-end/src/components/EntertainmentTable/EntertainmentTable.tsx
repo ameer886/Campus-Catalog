@@ -204,7 +204,7 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
           <div className={styles.FilterButton}>
             <FilterPopover
               options={popoverOptions}
-              setFilter={(e) => {
+              setFilter={(e: string) => {
                 if (filter === e) return;
                 setLoading(testRows == null);
                 setPage(1);
