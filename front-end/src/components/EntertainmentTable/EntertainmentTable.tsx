@@ -47,7 +47,8 @@ const entertainmentTableHeaders: ColumnDefinitionType<
   },
 ];
 
-const popoverOptions: FilterPopoverOption[] = [
+// This is exported for unit tests. You should not need to import it.
+export const popoverOptions: FilterPopoverOption[] = [
   {
     header: 'City',
     key: 'city',
