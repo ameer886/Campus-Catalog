@@ -74,16 +74,25 @@
   font-size: 20px;
 }
 
-.query-style {
+.query_style {
   font-size: 50px;
 }
 
-.ais-Highlight-highlighted {
+.ais_Highlight_highlighted {
   background-color: rgb(241, 152, 157);
 }
 
-.btn-primary {
+.btn_primary {
   background-color: black;
   border-color: black;
   font-size: 20px;
+}
+
+.ModelButton {
+  flex: 33%;
+  margin: 0 24px;
+}
+
+.ModelButton:hover {
+  cursor: pointer;
 }

@@ -1,101 +1,32 @@
 import React from 'react';
-import algoliasearch from 'algoliasearch/lite';
-import { Index, InstantSearch } from 'react-instantsearch-dom';
-import { SearchBox, connectHits } from 'react-instantsearch-dom';
-import { connectStateResults } from 'react-instantsearch-dom';
-import './Search.css';
-import Navbar from '../OurNavbar/OurNavbar';
-import Image from 'react-bootstrap/Image';
+import { useState } from 'react';
+import styles from './Search.module.css';
 import WebFont from 'webfontloader';
-import SearchUniversitiesCard from './SearchUniversitiesCard';
-import SearchAmenitiesCard from './SearchAmenitiesCard';
-import SearchHousingCard from './SearchHousingCard';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
 
-/* creating search client for our Algolia search application */
-const searchClient = algoliasearch(
-  'XS3D8421D0',
-  '79178e75bc60777adc2ea95bbbc4195d',
-);
+const OPTIONS = ['Housing', 'Universities', 'Amenities'];
 
-/* filter type for search */
-enum SearchType {
-  Amenities,
-  Housing,
-  Universities,
-  All,
+type SearchProps = {
+  q: string;
+};
+
+function getQueryFromFilter(filter: Array<boolean>): string {
+  let output = 'model=';
+  if (filter[0]) output += OPTIONS[0];
+  if (filter[1]) {
+    if (output.slice(-1) !== '=') output += ',';
+    output += OPTIONS[1];
+  }
+  if (filter[2]) {
+    if (output.slice(-1) !== '=') output += ',';
+    output += OPTIONS[2];
+  }
+  return output;
 }
 
-/* custom display of the amenities results */
-const amenitiesHits = ({ hits }) => (
-  <div className="row">
-    {hits.map((hit) => (
-      <div className="search-columns" key={hit.amen_id}>
-        <SearchAmenitiesCard hit={hit} />
-      </div>
-    ))}
-  </div>
-);
-const CustomAmenitiesHits = connectHits(amenitiesHits);
-
-const AmenitiesContent = connectStateResults(({ searchState }) =>
-  searchState && searchState.query ? (
-    <div className="content">
-      <CustomAmenitiesHits />
-    </div>
-  ) : null,
-);
-
-/* custom display of the universities results */
-const universitiesHits = ({ hits }) => (
-  <div className="row">
-    {hits.map((hit) => (
-      <div className="search-columns" key={hit.univ_id}>
-        <SearchUniversitiesCard hit={hit} />
-      </div>
-    ))}
-  </div>
-);
-const CustomUniversitiesHits = connectHits(universitiesHits);
-
-const UniversitiesContent = connectStateResults(({ searchState }) =>
-  searchState && searchState.query ? (
-    <div className="content">
-      <CustomUniversitiesHits />
-    </div>
-  ) : null,
-);
-
-/* custom display of the housing results */
-const housingHits = ({ hits }) => (
-  <div className="row">
-    {hits.map((hit) => (
-      <div className="search-columns" key={hit.property_id}>
-        <SearchHousingCard hit={hit} />
-      </div>
-    ))}
-  </div>
-);
-const CustomHousingHits = connectHits(housingHits);
-
-const HousingContent = connectStateResults(({ searchState }) =>
-  searchState && searchState.query ? (
-    <div className="content">
-      <CustomHousingHits />
-    </div>
-  ) : null,
-);
-
 /* takes in query that the user searches and returns search results */
-function Search(q: any) {
-  /* type of filter and text displayed in dropdown */
-  const [filterType, setFilterType] = React.useState<number>(
-    SearchType.All,
-  );
-  const [filterTitle, setFilterTitle] =
-    React.useState<string>('Filter by Model');
-
+const Search: React.FunctionComponent<SearchProps> = ({
+  q,
+}: SearchProps) => {
   /* load in fonts */
   WebFont.load({
     google: {
@@ -103,71 +34,47 @@ function Search(q: any) {
     },
   });
 
-  /* when amenities filter is clicked */
-  function amenitiesOnClick() {
-    setFilterType(SearchType.Amenities);
-    setFilterTitle('Filter by Amenities');
-  }
+  const [filterState, setFilterState] = useState([true, true, true]);
+  console.log(getQueryFromFilter(filterState));
 
-  /* when housing filter is clicked */
-  function housingOnClick() {
-    setFilterType(SearchType.Housing);
-    setFilterTitle('Filter by Housing');
-  }
+  const toggleItem = (i: number) => {
+    let count = 0;
+    filterState.forEach((v) => {
+      if (v) count++;
+    });
+    if (count === 1 && filterState[i]) return;
 
-  /* when universities filter is clicked */
-  function OnClick() {
-    setFilterType(SearchType.Universities);
-    setFilterTitle('Filter by Universities');
-  }
+    const copy = JSON.parse(JSON.stringify(filterState));
+    copy[i] = !copy[i];
+    setFilterState(copy);
+  };
 
-  /* when none filter is clicked */
-  function noneOnClick() {
-    setFilterType(SearchType.All);
-    setFilterTitle('Filter by Model');
-  }
+  const buildStyle = (i: number) => {
+    return {
+      border: filterState[i] ? '2px solid cyan' : '1px solid #aaa',
+    };
+  };
 
   return (
     <div className={styles.Search}>
       <h1 className={styles.search_heading}>SEARCH RESULTS</h1>
       <h2 className={styles.query_style}>{q}</h2>
-      <br />
-      {/* display filter dropdown */}
-      <DropdownButton id="dropdown-basic-button" title={filterTitle}>
-        <Dropdown.Item>amenities</Dropdown.Item>
-        <Dropdown.Item>All</Dropdown.Item>
-      </DropdownButton>
-      <br />
-      <InstantSearch
-        indexName="amenities_index"
-        searchClient={searchClient}
-        searchState={{ query: q.q }}
-      >
-        <div style={{ display: 'none' }}>
-          <SearchBox />
-        </div>
-        {/* index containing all amenities data  */}
-        <Index indexName="amenities_index">
-          {filterType === SearchType.Amenities ||
-          filterType === SearchType.All ? (
-            <div>
-              <h1 className="section-title">amenities</h1>
-              <p className="section-subtitle">
-                Learn about amenities.{' '}
-              </p>
-              <br />
-              <main>
-                <AmenitiesContent />
-              </main>
-            </div>
-          ) : (
-            <div></div>
-          )}
-        </Index>
-      </InstantSearch>
-      <br />
+
+      <h1>Select which models you would like to search from:</h1>
+      <div style={{ display: 'flex' }}>
+        {OPTIONS.map((name, index) => (
+          <div
+            key={index}
+            onClick={() => toggleItem(index)}
+            className={styles.ModelButton}
+            style={buildStyle(index)}
+          >
+            <h2>{name}</h2>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
 
 export default Search;
