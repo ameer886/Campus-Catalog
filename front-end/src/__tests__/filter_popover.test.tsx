@@ -418,4 +418,49 @@ describe('Filter Popover Test Suite', () => {
     await clickApply();
     expect(s).toEqual('&enums=3');
   });
+
+  it('input test: order omitted', async () => {
+    const options: FilterPopoverOption[] = [
+      {
+        header: 'Basic String',
+        key: 'enums',
+        variant: 'radio',
+        boxValues: [
+          { displayStr: 'on', value: '1' },
+          { displayStr: 'off', value: '2' },
+          { displayStr: 'any', value: '', __checked: true },
+        ],
+      },
+    ];
+
+    let s = '';
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
+      />,
+    );
+
+    await openPopover();
+    await clickApply();
+    expect(s).toEqual('');
+
+    cleanup();
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
+      />,
+    );
+
+    await openPopover();
+    const boxes = screen.getAllByRole('radio') as HTMLInputElement[];
+    fireEvent.click(boxes[0]);
+    await clickApply();
+    expect(s).toEqual('&enums=1');
+  });
 });
