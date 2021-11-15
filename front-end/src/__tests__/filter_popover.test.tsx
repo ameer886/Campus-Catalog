@@ -156,6 +156,42 @@ describe('Filter Popover Test Suite', () => {
     expect(textInput.value).toEqual('value');
   });
 
+  it('clean func works', async () => {
+    const options: FilterPopoverOption[] = [
+      {
+        header: 'Basic String',
+        key: 'key',
+        inputValues: [
+          {
+            displayStr: 'Placeholder Text',
+            cleanFunc: (s) => s.slice(0, 5),
+          },
+        ],
+      },
+    ];
+
+    let s = '';
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
+      />,
+    );
+
+    await openPopover();
+    const textInput = screen.getByRole('textbox') as HTMLInputElement;
+    expect(textInput).not.toBeNull();
+
+    fireEvent.change(textInput, {
+      target: { value: '0123456789abcdef' },
+    });
+    await clickApply();
+
+    expect(s).toEqual('&key=01234');
+  });
+
   it('input test: basic number', async () => {
     const min = 0;
     const max = 5;
@@ -211,5 +247,61 @@ describe('Filter Popover Test Suite', () => {
     // Max/min should also work
     expect(textInput.min).toEqual(min.toString());
     expect(textInput.max).toEqual(max.toString());
+  });
+
+  it('input test: min-max pair', async () => {
+    const options: FilterPopoverOption[] = [
+      {
+        header: 'Basic String',
+        key: 'number',
+        inputValues: [
+          {
+            displayStr: 'min',
+            type: 'number',
+          },
+          {
+            displayStr: 'max',
+            type: 'number',
+          },
+        ],
+      },
+    ];
+
+    let s = '';
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
+      />,
+    );
+
+    await openPopover();
+    let textInput = screen.getAllByRole(
+      'spinbutton',
+    ) as HTMLInputElement[];
+    expect(textInput).not.toBeNull();
+    expect(textInput).toHaveLength(2);
+
+    // LHS works
+    fireEvent.change(textInput[0], { target: { value: '2' } });
+    await clickApply();
+    expect(s).toEqual('&min_number=2');
+
+    // Note: we could test RHS alone here but that would require
+    // way more processing than it's worth (i.e. a cleanup, a render,
+    // a new options object, etc) because of how the data persists
+
+    // both work
+    s = '';
+    await openPopover();
+    textInput = screen.getAllByRole(
+      'spinbutton',
+    ) as HTMLInputElement[];
+    fireEvent.change(textInput[0], { target: { value: '0' } });
+    fireEvent.change(textInput[1], { target: { value: '1' } });
+    await clickApply();
+    expect(s).toEqual('&min_number=0&max_number=1');
   });
 });
