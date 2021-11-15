@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import WebFont from 'webfontloader';
 
+import type { ApartmentRowType } from '../Apartments/ApartmentsPage';
+// import type { UniversityRowType } from '../Universities/UniversitiesPage';
+import type { EntertainmentRowType } from '../Entertainments/EntertainmentsPage';
+
 import { getAPI } from '../../APIClient';
 
 import styles from './Search.module.css';
@@ -36,8 +40,21 @@ const Search: React.FunctionComponent<SearchProps> = ({
       families: ['serif', 'Oswald', 'sans-serif'],
     },
   });
+  const [loading, setLoading] = useState(true);
 
-  const [filterState, setFilterState] = useState([true, true, true]);
+  const [filterState, setFilterState] = useState([true, false, true]);
+  const [housingRows, setHousingRows] = useState<
+    Array<ApartmentRowType>
+  >([]);
+  // TODO: universities not yet available
+  /*
+  const [univRows, setUnivRows] = useState<Array<UniversityRowType>>(
+    [],
+  );
+  */
+  const [amenityRows, setAmenityRows] = useState<
+    Array<EntertainmentRowType>
+  >([]);
 
   useEffect(() => {
     const fetchDataAsync = async () => {
@@ -48,7 +65,25 @@ const Search: React.FunctionComponent<SearchProps> = ({
           model: 'search',
           params: params,
         });
-        console.log(data);
+        const amenitiesData = data[0];
+        const amenDataRows = amenitiesData.amenities.map((amen) => {
+          return {
+            id: amen.amen_id,
+            ...amen,
+          };
+        });
+
+        const housingData = data[1];
+        const housingDataRows = housingData.properties.map((apt) => {
+          return {
+            id: apt.property_id,
+            ...apt,
+          };
+        });
+
+        setAmenityRows(amenDataRows);
+        setHousingRows(housingDataRows);
+        setLoading(false);
       } catch (err) {
         console.error(err);
       }
@@ -56,6 +91,8 @@ const Search: React.FunctionComponent<SearchProps> = ({
 
     fetchDataAsync();
   }, [filterState]);
+  console.log(amenityRows);
+  console.log(housingRows);
 
   const toggleItem = (i: number) => {
     let count = 0;
@@ -70,10 +107,17 @@ const Search: React.FunctionComponent<SearchProps> = ({
   };
 
   const buildStyle = (i: number) => {
+    let color = 'red';
+    if (i == 1) color = 'green';
+    if (i == 2) color = 'blue';
     return {
-      border: filterState[i] ? '2px solid cyan' : '1px solid #aaa',
+      border: filterState[i]
+        ? '2px solid ' + color
+        : '1px solid #aaa',
     };
   };
+
+  if (loading) return <p>Loading, please wait.</p>;
 
   return (
     <div className={styles.Search}>
