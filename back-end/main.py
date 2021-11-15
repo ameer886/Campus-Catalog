@@ -240,7 +240,19 @@ def search():
                         "max_page": amenities_paginated_response.pages,
                         "total_items": amenities_paginated_response.total}
 
-    return jsonify({**amenities_pagination_header, **amenities}, {**housing_pagination_header, **housing})
+    universities_page = request.args.get('universities_page', default=1, type=int)
+    universities_per_page = request.args.get('universities_per_page', default = 10, type = int)
+    universities = {}
+    univ_paginated_response = {}
+    if 'University' in models:
+        univ_paginated_response = search_universities(query_terms).paginate(universities_page, max_per_page=universities_per_page)
+        universities = {"universities": all_univ_schema.dump(univ_paginated_response.items)}
+        univ_pagination_header = {"universities_page": universities_page,
+                        "per_page": universities_per_page,
+                        "max_page": univ_paginated_response.pages,
+                        "total_items": univ_paginated_response.total}
+
+    return jsonify({**amenities_pagination_header, **amenities}, {**housing_pagination_header, **housing}, {**univ_pagination_header, **universities})
 
 def search_housing(query_terms):
     sql = Housing.query
@@ -604,6 +616,21 @@ def get_univ_by_id(id):
         err.status_code = 404
         return err
     return jsonify(single_univ_schema.dump(univ))
+
+def search_universities(query):
+    sql = University.query
+    for term in query:
+        sql = sql.filter(
+            University.univ_name.ilike(f'%{term}%') |
+            University.ownership_id.ilike(term) |
+            University.city.ilike(term) | University.state.ilike(term) |
+            cast(University.acceptance_rate, VARCHAR).ilike(f'{term}') |
+            cast(University.graduation_rate, VARCHAR).ilike(f'{term}') |
+            cast(University.tuition_in_st, VARCHAR).ilike(term) |
+            cast(University.tuition_out_st, VARCHAR).ilike(term) |
+            cast(University.avg_cost_attendance, VARCHAR).ilike(term)
+            )
+    return sql.filter(University.rank != None)
 
 def search_amenities(query):
     sql_query = Amenities.query
