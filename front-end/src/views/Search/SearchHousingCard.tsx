@@ -1,48 +1,64 @@
-import React from "react";
-import styles from "./Search.module.css";
-import { Card } from "react-bootstrap";
+import React from 'react';
+import { Card } from 'react-bootstrap';
 
-/* displays card for a city result
-in the search page */
-function SearchHousingCard(props:any) {
+import type { ApartmentRowType } from '../Apartments/ApartmentsPage';
 
-    /* attributes of a city */
-    const housing_attributes = [
-        {
-            name: "Name:",
-            attribute: "property_name",
-        },
-        {
-            name: "Address:",
-            attribute: "address",
-        },
-    ]
+import { getHighlightHTML } from './Search';
 
+import styles from './Search.module.css';
+
+/* attributes of a city */
+const housing_attributes = [
+  {
+    name: 'Name:',
+    attribute: 'property_name',
+  },
+  {
+    name: 'City:',
+    attribute: 'city',
+  },
+  {
+    name: 'State:',
+    attribute: 'state',
+  },
+];
+
+type HousingCardProps = {
+  row: ApartmentRowType;
+  query: string;
+};
+
+const SearchHousingCard: React.FunctionComponent<HousingCardProps> =
+  ({ row, query }: HousingCardProps) => {
     /* map the attribute data to text in the card */
-    const displayCardText = () => {
-        return (
-        housing_attributes.map((housing, index) => (
-            <Card.Text className="card-text-style" 
-                        key={index}>
-                <b>{housing.name} {" "}</b>
-            </Card.Text>
-        ))
-        );
-    }
+    const displayCardText = (row: ApartmentRowType) => {
+      return housing_attributes.map((property, index) => (
+        <Card.Text className="card-text-style" key={index}>
+          <b>{property.name} </b>
+          {getHighlightHTML(
+            row[property.attribute].toString(),
+            query,
+          )}
+        </Card.Text>
+      ));
+    };
 
-    return(
-        <Card>
-            <Card.Body>
-                <a href={"/housing/id=" + props.hit.property_id}>
-                    <u>
-                        <Card.Title className="card-title-style">
-                            {props.hit.property_name}
-                        </Card.Title>
-                    </u>
-                </a>
-                {displayCardText()}
-            </Card.Body>
-        </Card> 
+    return (
+      <Card
+        className={styles.SearchCard}
+        style={{ borderColor: 'red' }}
+      >
+        <Card.Body>
+          <a href={'/housing/' + row.property_id}>
+            <u>
+              <Card.Title className={styles['card-title-style']}>
+                {row.property_name}
+              </Card.Title>
+            </u>
+          </a>
+          {displayCardText(row)}
+        </Card.Body>
+      </Card>
     );
-}
+  };
 export default SearchHousingCard;

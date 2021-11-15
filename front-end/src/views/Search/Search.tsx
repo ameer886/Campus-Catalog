@@ -7,6 +7,7 @@ import type { ApartmentRowType } from '../Apartments/ApartmentsPage';
 import type { EntertainmentRowType } from '../Entertainments/EntertainmentsPage';
 
 import SearchAmenitiesColumn from './SearchAmenitiesColumn';
+import SearchHousingColumn from './SearchHousingColumn';
 
 import { getAPI } from '../../APIClient';
 
@@ -170,20 +171,18 @@ const Search: React.FunctionComponent<SearchProps> = ({
 
       <div className={styles.Centering}>
         {filterState[0] && (
-          <div className={styles.Column}>
-            {loading ? (
-              'Loading housing results, please wait'
-            ) : (
-              <p>Test 1</p>
-            )}
-          </div>
+          <SearchHousingColumn
+            loading={loading}
+            query={q}
+            rows={housingRows}
+          />
         )}
         {filterState[1] && (
           <div className={styles.Column}>
             {loading ? (
               'Loading university results, please wait'
             ) : (
-              <p>Test 2</p>
+              <p>Universities are not implemented</p>
             )}
           </div>
         )}
