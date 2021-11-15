@@ -11,21 +11,19 @@ function SearchHousingCard(props:any) {
         {
             name: "Name:",
             attribute: "property_name",
-            attribute_id: 0
         },
         {
             name: "Address:",
             attribute: "address",
-            attribute_id: 1
         },
     ]
 
     /* map the attribute data to text in the card */
     const displayCardText = () => {
         return (
-        housing_attributes.map((housing) => (
+        housing_attributes.map((housing, index) => (
             <Card.Text className="card-text-style" 
-                        key={housing.attribute_id}>
+                        key={index}>
                 <b>{housing.name} {" "}</b>
             </Card.Text>
         ))

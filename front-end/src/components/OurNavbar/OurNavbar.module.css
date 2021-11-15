@@ -7,34 +7,16 @@
   font-family: 'Oswald', sans-serif;
   float: right;
 }
+
 .searchButton {
-   backgroundColor: blue;
-   borderColor: blue;
-   color: black;
-   fontSize: 2.0vw ;
-   float: right;
+  backgroundcolor: blue;
+  bordercolor: blue;
+  color: black;
+  fontsize: 2vw;
+  float: right;
 }
 
-<<<<<<< HEAD
 .brand {
   padding: 0px 10px;
   float: right;
 }
-=======
-.tabs {
-  color: white;
-  fontFamily: 'Oswald';
-  fontSize: 1.1vw;
-  display: flex;
-  padding: 1.1vw;
-  font-weight: bold;
-  float: right;
-} 
-
-.bar {
-   background-color: blue;
-   border-color: blue;
-}
-
-
->>>>>>> moved search to views

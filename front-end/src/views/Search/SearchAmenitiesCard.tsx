@@ -11,31 +11,27 @@ function SearchAmenitiesCard(props:any) {
         {
             name: "Name:",
             attribute: "amen_name",
-            attribute_id: 0
         },
         {
             name: "City:",
             attribute: "city",
-            attribute_id: 2
         },
         {
             name: "Zip Code:",
             attribute: "zip_code",
-            attribute_id: 3
         },
         {
             name: "State:",
             attribute: "state",
-            attribute_id: 5
         },
     ]
 
     /* map the attribute data to text in the card */
     const displayCardText = () => {
         return (
-        amenities_attributes.map((amenity) => (
+        amenities_attributes.map((amenity, index) => (
             <Card.Text className="card-text-style" 
-                        key={amenity.attribute_id}>
+                        key={index}>
                 <b>{amenity.name} {" "}</b>
             </Card.Text>
         ))
