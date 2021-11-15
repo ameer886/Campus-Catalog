@@ -217,7 +217,7 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
         <GenericTable
           columnDefinitions={entertainmentTableHeaders}
           data={rows}
-          parentSort={(e) => {
+          parentSort={(e: string) => {
             setLoading(testRows == null);
             setPage(1);
             setSortStr(e);

@@ -318,7 +318,7 @@ const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
         <GenericTable
           columnDefinitions={apartmentTableHeaders}
           data={rows}
-          parentSort={(e) => {
+          parentSort={(e: string) => {
             setLoading(testRows == null);
             setPage(1);
             setSortStr(e);
