@@ -41,7 +41,9 @@ export type FilterPopoverOption =
 
 export type FilterPopoverProps = {
   options: Array<FilterPopoverOption>;
-  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  setFilter:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((value: string) => void);
 };
 
 function isCheckboxOption(x: FilterPopoverOption): boolean {

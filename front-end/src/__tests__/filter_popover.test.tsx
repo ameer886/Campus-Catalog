@@ -13,6 +13,14 @@ import { popoverOptions as univOptions } from '../views/Universities/Universitie
 
 configure({ adapter: new Adapter() });
 
+const openPopover = async () => {
+  const popoverBtn = screen.getByRole('button');
+  expect(popoverBtn).not.toBeNull();
+  await act(async () => {
+    fireEvent.click(popoverBtn);
+  });
+};
+
 describe('Filter Popover Test Suite', () => {
   it('snapshot test: housing options', () => {
     const snap = shallow(
@@ -50,40 +58,52 @@ describe('Filter Popover Test Suite', () => {
     expect(snap).toMatchSnapshot();
   });
 
-  /*
-  it('input test: basic string', () => {
-    let s = '';
-    const setS = (value: React.SetStateAction<string>) => {
-      s = value.toString();
-    };
+  it('button opens popover', async () => {
     render(
       <FilterPopover
-        setFilter={setS}
-        options={[
+        options={[]}
+        setFilter={() => {
+          return;
+        }}
+      />,
+    );
+    await openPopover();
+    expect(screen.getByText('Filter Options')).toBeInTheDocument();
+  });
+
+  it('input test: basic string', async () => {
+    const options = [
+      {
+        header: 'Basic String',
+        key: 'key',
+        inputValues: [
           {
-            header: 'Basic String',
-            key: 'key',
-            inputValues: [
-              {
-                displayStr: 'Placeholder Text',
-              },
-            ],
+            displayStr: 'Placeholder Text',
           },
-        ]}
+        ],
+      },
+    ];
+
+    let s = '';
+    render(
+      <FilterPopover
+        setFilter={(value: string) => {
+          s = value;
+        }}
+        options={options}
       />,
     );
 
-    openPopover();
+    await openPopover();
     const textInput = screen.getByRole('textbox') as HTMLInputElement;
     expect(textInput).not.toBeNull();
 
     const applyButton = screen.getByRole('button', { name: 'Close' });
     expect(applyButton).not.toBeNull();
 
-    textInput.value = 'value';
+    fireEvent.change(textInput, { target: { value: 'value' } });
     fireEvent.click(applyButton);
 
-    expect(s).toEqual('test input');
+    expect(s).toEqual('&key=value');
   });
-  */
 });
