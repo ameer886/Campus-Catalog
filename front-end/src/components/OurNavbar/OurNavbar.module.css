@@ -3,20 +3,28 @@
   font-weight: 400;
   padding: 0.75em 0;
   letter-spacing: 1px;
-  color: yellowgreen;
   font-family: 'Oswald', sans-serif;
-  float: right;
+  float: 'right';
 }
-
 .searchButton {
-  backgroundcolor: blue;
-  bordercolor: blue;
+  background-color: blue;
+  border-color: blue;
   color: black;
-  fontsize: 2vw;
+  font-size: 2vw;
   float: right;
 }
 
-.brand {
-  padding: 0px 10px;
+.tabs {
+  color: white;
+  font-family: 'Oswald';
+  font-size: 1.1vw;
+  display: flex;
+  padding: 1.1vw;
+  font-weight: bold;
   float: right;
+}
+
+.bar {
+  background-color: blue;
+  border-color: blue;
 }

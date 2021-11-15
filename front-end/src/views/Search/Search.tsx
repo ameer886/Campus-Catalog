@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
-import styles from './Search.module.css';
 import WebFont from 'webfontloader';
+
+import { getAPI } from '../../APIClient';
+
+import styles from './Search.module.css';
 
 const OPTIONS = ['Housing', 'Universities', 'Amenities'];
 
@@ -36,6 +39,22 @@ const Search: React.FunctionComponent<SearchProps> = ({
 
   const [filterState, setFilterState] = useState([true, true, true]);
   console.log(getQueryFromFilter(filterState));
+
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      try {
+        const data = await getAPI({
+          model: 'search',
+          params: `q=${q}`,
+        });
+        console.log(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchDataAsync();
+  }, []);
 
   const toggleItem = (i: number) => {
     let count = 0;

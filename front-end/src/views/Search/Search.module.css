@@ -1,4 +1,4 @@
-.ais-Hits-item {
+.ais_Hits_item {
   display: flex;
   text-align: left;
 }
@@ -7,31 +7,25 @@
   text-align: center;
   padding-right: 2vw;
   padding-left: 2vw;
-  background: linear-gradient(
-    180deg,
-    #0c173c 0%,
-    #1b90c7 45.83%,
-    #96c5d3 95.83%
-  );
+  background: white;
   font-family: 'Oswald';
-  color: white;
   background-size: cover;
   width: 100%;
   height: 100vh;
   overflow-x: hidden;
-  align-items: center;
+  align-items: left;
 }
 
-.result-style {
+.result_style {
   font-family: 'Oswald';
   color: white;
 }
 
-.list-item {
+.list_item {
   padding-left: 2vw;
 }
 
-.search-side-by-side {
+.search_side_by_side {
   display: flex;
   flex-direction: row;
   color: white;
@@ -40,36 +34,37 @@
   text-align: left;
 }
 
-.search-heading {
+.search_heading {
   margin-top: 100px;
   font-size: 80px;
 }
 
-.search-columns {
+.search_columns {
+  color: black;
   width: 33.333%;
   margin-bottom: 100px;
 }
 
 .card {
-  display: inline-block;
+  display: inline_block;
 }
 
-.card-title-style {
+.card_title_style {
   text-align: center;
   font-size: 40px;
 }
 
-.card-text-style {
+.card_text_style {
   text-align: left;
   color: black;
 }
 
-.section-title {
+.section_title {
   text-align: left;
   font-size: 70px;
 }
 
-.section-subtitle {
+.section_subtitle {
   text-align: left;
   font-size: 20px;
 }
