@@ -38,14 +38,15 @@ const Search: React.FunctionComponent<SearchProps> = ({
   });
 
   const [filterState, setFilterState] = useState([true, true, true]);
-  console.log(getQueryFromFilter(filterState));
 
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
+        const params = `q=${q}&${getQueryFromFilter(filterState)}`;
+
         const data = await getAPI({
           model: 'search',
-          params: `q=${q}`,
+          params: params,
         });
         console.log(data);
       } catch (err) {
@@ -54,7 +55,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
     };
 
     fetchDataAsync();
-  }, []);
+  }, [filterState]);
 
   const toggleItem = (i: number) => {
     let count = 0;
