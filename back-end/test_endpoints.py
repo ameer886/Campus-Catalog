@@ -81,6 +81,7 @@ def test_single_instance_endpoint_with_error(client, endpoint):
     rv = client.get(f"{endpoint}/52543")
     assert rv.status_code == 404
 
+
 ### Housing Model Tests ###
 
 @pytest.mark.parametrize("prop_type",['apartment','condo','house','townhome'])
@@ -141,3 +142,43 @@ def test_housing_filter_walkscore(client, transitscore):
 
 
 ### University Model Tests ###
+
+@pytest.mark.parametrize("city", ["Austin", "Seattle", "Los Angeles", "Cambridge"])
+def test_university_filter_city(client, city):
+    rv = client.get(f"/universities?city={city}")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    content = result[1]
+    items = list(content.items())[0][1]
+    for _i in items:
+        assert _i["city"] == city
+
+@pytest.mark.parametrize("ownership", [1, 2, 3])
+def test_university_filter_ownership(client, ownership):
+    rv = client.get(f"/universities?ownership_id={ownership}")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    content = result[1]
+    items = list(content.items())[0][1]
+    for _i in items:
+        if ownership == 1:
+            assert _i["ownership_id"] == "Public"
+        if ownership == 2:
+            assert _i["ownership_id"] == "Private Non-Profit"
+        if ownership == 3:
+            assert _i["ownership_id"] == "Private For-Profit"
+
+@pytest.mark.parametrize("accept", [i for i in range(0, 100, 10)])
+def test_university_filter_acceptance(client, accept):
+    rv = client.get(f"/universities?accept={accept}")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    content = result[1]
+    items = list(content.items())[0][1]
+    for _i in items:
+        assert _i["acceptance_rate"] >= accept
+
+
+### Amenity Model Tests ###
+
+
