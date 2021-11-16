@@ -157,20 +157,31 @@ class TestBackEnd(unittest.TestCase):
         num_row = self.mock_db.session.query(amen).count()
         self.assertEqual(num_row, original_row_count)
 
-    # def test_endpoint1(self):
-    #     url = "https://api.campuscatalog.me/housing"
-    #     r = urllib.request.urlopen(url)
-    #     data = json.loads(r.read())
-    #     self.assertEqual(data["properties"][0]["city"], "Auburn")
-    #     self.assertEqual(data["properties"][0]["max_rent"], 800)
-    #     self.assertEqual(data["properties"][0]["max_sqft"], 1000.0)
-    #     self.assertEqual(data["properties"][0]["property_id"], "35erbsf")
-    #     self.assertEqual(data["properties"][0]["property_name"], "343 S Gay St")
-    #     self.assertEqual(data["properties"][0]["property_type"], "condo")
-    #     self.assertEqual(data["properties"][0]["rating"], 0.0)
-    #     self.assertEqual(data["properties"][0]["state"], "AL")
-    #     self.assertEqual(data["properties"][0]["transit_score"], 0)
-    #     self.assertEqual(data["properties"][0]["walk_score"], 62)
+    def test_housing_endpoint(self):
+        url = "https://api.campuscatalog.me/housing"
+        r = urllib.request.urlopen(url)
+        data = json.loads(r.read())
+        self.assertEqual(len(data), 2)
+        header = data[0]
+        self.assertIsInstance(header, dict)
+        self.assertEqual(len(header), 4)
+        self.assertEqual(header["page"], 1)
+        self.assertEqual(header["per_page"], 10)
+        self.assertIn("max_page", header)
+        self.assertIn("total_items", header)
+        content = data[1]
+        self.assertIsInstance(content, dict)
+        self.assertEqual(len(content["properties"]), header["per_page"])
+
+        # self.assertEqual(data["properties"][0]["max_rent"], 800)
+        # self.assertEqual(data["properties"][0]["max_sqft"], 1000.0)
+        # self.assertEqual(data["properties"][0]["property_id"], "35erbsf")
+        # self.assertEqual(data["properties"][0]["property_name"], "343 S Gay St")
+        # self.assertEqual(data["properties"][0]["property_type"], "condo")
+        # self.assertEqual(data["properties"][0]["rating"], 0.0)
+        # self.assertEqual(data["properties"][0]["state"], "AL")
+        # self.assertEqual(data["properties"][0]["transit_score"], 0)
+        # self.assertEqual(data["properties"][0]["walk_score"], 62)
 
     # def test_endpoint2(self):
     #     url = "https://api.campuscatalog.me/amenities"
