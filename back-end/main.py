@@ -127,7 +127,7 @@ class HousingSchema(ma.Schema):
     state = fields.Str(required=True)
     lat = fields.Decimal(required=True)
     lon = fields.Decimal(required=True)
-    rating = fields.Float(missing=0.0)
+    rating = fields.Float(load_default=0.0)
     walk_score = fields.Int()
     transit_score = fields.Int()
     min_rent = fields.Int(required=True)
@@ -408,18 +408,18 @@ class UniversitySchema(ma.Schema):
     zip_code = fields.Str()
     school_url = fields.Str()
     locale = fields.Method("map_locale")
-    longitude = fields.Float(missing=0.0)
-    latitude = fields.Float(missing=0.0)
+    longitude = fields.Float(load_default=0.0)
+    latitude = fields.Float(load_default=0.0)
     carnegie_undergrad = fields.Method("map_carnegie")
     num_undergrad = fields.Int()
     num_graduate = fields.Int()
     ownership_id = fields.Method("map_ownership")
-    acceptance_rate = fields.Float(missing=0.0)
-    graduation_rate = fields.Float(missing=0.0)
+    acceptance_rate = fields.Float(load_default=0.0)
+    graduation_rate = fields.Float(load_default=0.0)
     tuition_in_st = fields.Int()
     tuition_out_st = fields.Int()
-    avg_sat = fields.Float(missing=0.0)
-    avg_cost_attendance = fields.Float(missing=0.0)
+    avg_sat = fields.Float(load_default=0.0)
+    avg_cost_attendance = fields.Float(load_default=0.0)
     amenities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     housing_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     image = fields.Url()
@@ -610,7 +610,7 @@ def search_amenities(query):
     searches = []
     for term in query:
         # Check if query is float or int
-        if re.match('^\d+(\.\d+)?$', term):
+        if re.match(r'^\d+(\.\d+)?$', term):
             if term.isdigit():
                 searches.append(Amenities.num_review == int(term))    
             searches.append(sqlalchemy.func.abs(Amenities.rating - float(term)) <= 1e-6) 
