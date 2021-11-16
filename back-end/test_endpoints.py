@@ -76,7 +76,7 @@ def test_default_sorting_param_desc(client, endpoint):
     # all endpoints are default sorted by state
     assert all(items[i]['state'] >= items[i + 1]['state'] for i in range(len(items) - 1))
 
-# @pytest.mark.parametrize("endpoint",['/housing', '/amenities', '/universities'])
-# def test_single_instance_endpoint_with_error(client, endpoint):
-#     rv = client.get(f"{endpoint}/52543")
-#     assert rv.status_code == 404
+@pytest.mark.parametrize("endpoint",['/housing', '/amenities', '/universities'])
+def test_single_instance_endpoint_with_error(client, endpoint):
+    rv = client.get(f"{endpoint}/52543")
+    assert rv.status_code == 404
