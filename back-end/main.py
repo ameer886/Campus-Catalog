@@ -209,7 +209,6 @@ all_housing_schema = HousingSchema(only=table_columns, many=True)
 
 @app.route('/search', methods=['GET'])
 def search():
-    # TODO: extend to other models
     models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
     models = [model.capitalize() for model in models]
     query_terms = request.args.get('q', default=[], type=lambda v: v.split(' '))
@@ -220,7 +219,7 @@ def search():
     housing = {}
     housing_pagination_header = {}
     if 'Housing' in models:
-        paginated_response = search_housing(query_terms).paginate(housing_page, max_per_page=housing_per_page)
+        paginated_response = search_housing(query_terms).paginate(housing_page, error_out=False, max_per_page=housing_per_page)
         housing = {"properties": all_housing_schema.dump(paginated_response.items)}
         housing_pagination_header = {"housing_page": housing_page, 
                         "per_page": housing_per_page,
@@ -230,10 +229,10 @@ def search():
     amenities_page = request.args.get('amenities_page', default=1, type=int)
     amenities_per_page = request.args.get('amenities_per_page', default=10, type=int)
     amenities = {}
-    amenities_paginated_response = {}
+    amenities_pagination_header = {}
     if 'Amenities' in models:
         amenities_query = search_amenities(query_terms)
-        amenities_paginated_response = amenities_query.paginate(amenities_page, max_per_page=amenities_per_page)
+        amenities_paginated_response = amenities_query.paginate(amenities_page, error_out=False, max_per_page=amenities_per_page)
         amenities = {"amenities": all_amenities_schema.dump(amenities_paginated_response.items)}
         amenities_pagination_header = {"amenities_page": amenities_page, 
                         "per_page": amenities_per_page,
@@ -243,9 +242,9 @@ def search():
     universities_page = request.args.get('universities_page', default=1, type=int)
     universities_per_page = request.args.get('universities_per_page', default = 10, type = int)
     universities = {}
-    univ_paginated_response = {}
+    univ_pagination_header = {}
     if 'University' in models:
-        univ_paginated_response = search_universities(query_terms).paginate(universities_page, max_per_page=universities_per_page)
+        univ_paginated_response = search_universities(query_terms).paginate(universities_page, error_out=False, max_per_page=universities_per_page)
         universities = {"universities": all_univ_schema.dump(univ_paginated_response.items)}
         univ_pagination_header = {"universities_page": universities_page,
                         "per_page": universities_per_page,
