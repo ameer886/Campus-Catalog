@@ -44,7 +44,7 @@ python_unit_tests:
     - pip install -r back-end/requirements.txt
   script:
     - cd back-end
-    - python3 -m unit_test
+    - pytest
 
 
 deploy_develop:
