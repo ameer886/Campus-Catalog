@@ -3,7 +3,7 @@ import { useState } from 'react';
 import WebFont from 'webfontloader';
 
 import type { ApartmentRowType } from '../Apartments/ApartmentsPage';
-// import type { UniversityRowType } from '../Universities/UniversitiesPage';
+import type { UniversityRowType } from '../Universities/UniversitiesPage';
 import type { EntertainmentRowType } from '../Entertainments/EntertainmentsPage';
 
 import SearchAmenitiesColumn from './SearchAmenitiesColumn';
@@ -12,6 +12,7 @@ import SearchHousingColumn from './SearchHousingColumn';
 import { getAPI } from '../../APIClient';
 
 import styles from './Search.module.css';
+import SearchUniversitiesColumn from './SearchUniversitiesColumn';
 
 const OPTIONS = ['Housing', 'Universities', 'Amenities'];
 
@@ -79,16 +80,13 @@ const Search: React.FunctionComponent<SearchProps> = ({
   });
   const [loading, setLoading] = useState(true);
 
-  const [filterState, setFilterState] = useState([true, false, true]);
+  const [filterState, setFilterState] = useState([true, true, true]);
   const [housingRows, setHousingRows] = useState<
     Array<ApartmentRowType>
   >([]);
-  // TODO: universities not yet available
-  /*
   const [univRows, setUnivRows] = useState<Array<UniversityRowType>>(
     [],
   );
-  */
   const [amenityRows, setAmenityRows] = useState<
     Array<EntertainmentRowType>
   >([]);
@@ -102,24 +100,41 @@ const Search: React.FunctionComponent<SearchProps> = ({
           model: 'search',
           params: params,
         });
-        const amenitiesData = data[0];
-        const amenDataRows = amenitiesData.amenities.map((amen) => {
-          return {
-            id: amen.amen_id,
-            ...amen,
-          };
-        });
 
-        const housingData = data[1];
-        const housingDataRows = housingData.properties.map((apt) => {
-          return {
-            id: apt.property_id,
-            ...apt,
-          };
-        });
-
-        setAmenityRows(amenDataRows);
-        setHousingRows(housingDataRows);
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].amenities) {
+            const amenitiesData = data[i];
+            const amenDataRows = amenitiesData.amenities.map(
+              (amen) => {
+                return {
+                  id: amen.amen_id,
+                  ...amen,
+                };
+              },
+            );
+            setAmenityRows(amenDataRows);
+          } else if (data[i].universities) {
+            const univData = data[i];
+            const univDataRows = univData.universities.map((univ) => {
+              return {
+                id: univ.univ_id,
+                ...univ,
+              };
+            });
+            setUnivRows(univDataRows);
+          } else if (data[i].properties) {
+            const housingData = data[1];
+            const housingDataRows = housingData.properties.map(
+              (apt) => {
+                return {
+                  id: apt.property_id,
+                  ...apt,
+                };
+              },
+            );
+            setHousingRows(housingDataRows);
+          }
+        }
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -183,13 +198,11 @@ const Search: React.FunctionComponent<SearchProps> = ({
           />
         )}
         {filterState[1] && (
-          <div className={styles.Column}>
-            {loading ? (
-              'Loading university results, please wait'
-            ) : (
-              <p>Universities are not implemented</p>
-            )}
-          </div>
+          <SearchUniversitiesColumn
+            loading={loading}
+            query={q}
+            rows={univRows}
+          />
         )}
         {filterState[2] && (
           <SearchAmenitiesColumn

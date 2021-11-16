@@ -16,7 +16,7 @@ const SearchAmenitiesColumn: React.FunctionComponent<AmenColProps> =
     return (
       <div className={styles.Column}>
         {loading
-          ? 'Loading university results, please wait'
+          ? 'Loading amenity results, please wait'
           : rows.map((row, index) => (
               <SearchAmenitiesCard
                 key={index}

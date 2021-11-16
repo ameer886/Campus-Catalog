@@ -1,75 +1,71 @@
 import React from 'react';
-import './Search.css';
 import { Card } from 'react-bootstrap';
-import { Highlight } from 'react-instantsearch-dom';
+
+import type { UniversityRowType } from '../Universities/UniversitiesPage';
+
+import { getHighlightHTML } from './Search';
+
+import styles from './Search.module.css';
+
+/* attributes of a city */
+const univ_attributes = [
+  {
+    name: 'Name:',
+    attribute: 'univ_name',
+  },
+  {
+    name: 'City:',
+    attribute: 'city',
+  },
+  {
+    name: 'State:',
+    attribute: 'state',
+  },
+  {
+    name: 'Ranking:',
+    attribute: 'rank',
+  },
+];
+
+type UnivCardProps = {
+  row: UniversityRowType;
+  query: string;
+};
 
 /* displays card for a city result
 in the search page */
-function SearchUniversitiesCard(props: any) {
-  /* attributes of a city */
-  const university_attributes = [
-    {
-      name: 'Name:',
-      attribute: 'univ_name',
-      attribute_id: 0,
-    },
-    {
-      name: 'Number of Undergrad Students:',
-      attribute: 'num_undergrad',
-      attribute_id: 1,
-    },
-    {
-      name: 'School URL:',
-      attribute: 'school_url',
-      attribute_id: 2,
-    },
-    {
-      name: 'Locale:',
-      attribute: 'locale',
-      attribute_id: 3,
-    },
-    {
-      name: 'Acceptance Rate:',
-      attribute: 'acceptance_rate',
-      attribute_id: 4,
-    },
-    {
-      name: 'Average SAT:',
-      attribute: 'avg_sat',
-      attribute_id: 5,
-    },
-  ];
+const SearchUniversitiesCard: React.FunctionComponent<UnivCardProps> =
+  ({ row, query }: UnivCardProps) => {
+    /* map the attribute data to text in the card */
+    const displayCardText = (row: UniversityRowType) => {
+      return univ_attributes.map((univ, index) => (
+        <Card.Text className="card-text-style" key={index}>
+          <b>{univ.name} </b>
+          {row[univ.attribute] ? (
+            getHighlightHTML(row[univ.attribute].toString(), query)
+          ) : (
+            <span>N/A</span>
+          )}
+        </Card.Text>
+      ));
+    };
 
-  /* map the attribute data to text in the card */
-  const displayCardText = () => {
-    return university_attributes.map((university) => (
-      <Card.Text
-        className="card-text-style"
-        key={university.attribute_id}
+    return (
+      <Card
+        className={styles.SearchCard}
+        style={{ borderColor: 'green' }}
       >
-        <b>{university.name} </b>
-        <Highlight
-          attribute={university.attribute}
-          tagName="mark"
-          hit={props.hit}
-        />
-      </Card.Text>
-    ));
+        <Card.Body>
+          <a href={'/universities/' + row.univ_id}>
+            <u>
+              <Card.Title className={styles['card-title-style']}>
+                {row.univ_name}
+              </Card.Title>
+            </u>
+          </a>
+          {displayCardText(row)}
+        </Card.Body>
+      </Card>
+    );
   };
-
-  return (
-    <Card>
-      <Card.Body>
-        <a href={'/universities/id=' + props.hit.univ_id}>
-          <u>
-            <Card.Title className="card-title-style">
-              {props.hit.univ_name}
-            </Card.Title>
-          </u>
-        </a>
-        {displayCardText()}
-      </Card.Body>
-    </Card>
-  );
-}
 export default SearchUniversitiesCard;

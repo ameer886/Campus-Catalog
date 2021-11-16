@@ -16,7 +16,7 @@ const SearchHousingColumn: React.FunctionComponent<HousingColProps> =
     return (
       <div className={styles.Column}>
         {loading
-          ? 'Loading university results, please wait'
+          ? 'Loading housing results, please wait'
           : rows.map((row, index) => (
               <SearchHousingCard
                 key={index}
