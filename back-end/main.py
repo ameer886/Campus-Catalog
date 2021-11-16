@@ -644,7 +644,7 @@ def search_universities(query):
             cast(University.tuition_out_st, VARCHAR).ilike(term) |
             cast(University.avg_cost_attendance, VARCHAR).ilike(term)
             )
-    return sql.filter(University.rank != None)
+    return sql
 
 def search_amenities(query):
     sql_query = Amenities.query
