@@ -13,10 +13,17 @@ type UnivColProps = {
 
 const SearchUniversitiesColumn: React.FunctionComponent<UnivColProps> =
   ({ loading, query, rows }: UnivColProps) => {
+    if (loading)
+      return (
+        <div className={styles.Column}>
+          Loading university results, please wait
+        </div>
+      );
+
     return (
       <div className={styles.Column}>
-        {loading
-          ? 'Loading university results, please wait'
+        {rows.length === 0
+          ? 'No universities could be found.'
           : rows.map((row, index) => (
               <SearchUniversitiesCard
                 key={index}

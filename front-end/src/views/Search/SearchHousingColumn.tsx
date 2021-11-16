@@ -13,10 +13,17 @@ type HousingColProps = {
 
 const SearchHousingColumn: React.FunctionComponent<HousingColProps> =
   ({ loading, query, rows }: HousingColProps) => {
+    if (loading)
+      return (
+        <div className={styles.Column}>
+          Loading housing results, please wait
+        </div>
+      );
+
     return (
       <div className={styles.Column}>
-        {loading
-          ? 'Loading housing results, please wait'
+        {rows.length === 0
+          ? 'No housing results could be found.'
           : rows.map((row, index) => (
               <SearchHousingCard
                 key={index}

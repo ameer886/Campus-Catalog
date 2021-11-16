@@ -66,4 +66,5 @@ const SearchAmenitiesCard: React.FunctionComponent<AmenCardProps> = ({
     </Card>
   );
 };
+
 export default SearchAmenitiesCard;

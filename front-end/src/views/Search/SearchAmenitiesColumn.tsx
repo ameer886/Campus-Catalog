@@ -13,10 +13,17 @@ type AmenColProps = {
 
 const SearchAmenitiesColumn: React.FunctionComponent<AmenColProps> =
   ({ loading, query, rows }: AmenColProps) => {
+    if (loading)
+      return (
+        <div className={styles.Column}>
+          Loading amenity results, please wait
+        </div>
+      );
+
     return (
       <div className={styles.Column}>
-        {loading
-          ? 'Loading amenity results, please wait'
+        {rows.length === 0
+          ? 'No amenities could be found.'
           : rows.map((row, index) => (
               <SearchAmenitiesCard
                 key={index}

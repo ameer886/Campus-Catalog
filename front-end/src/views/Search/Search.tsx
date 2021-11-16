@@ -8,13 +8,15 @@ import type { EntertainmentRowType } from '../Entertainments/EntertainmentsPage'
 
 import SearchAmenitiesColumn from './SearchAmenitiesColumn';
 import SearchHousingColumn from './SearchHousingColumn';
+import SearchUniversitiesColumn from './SearchUniversitiesColumn';
+import PaginationRelay from '../../components/Pagination/PaginationRelay';
 
 import { getAPI } from '../../APIClient';
 
 import styles from './Search.module.css';
-import SearchUniversitiesColumn from './SearchUniversitiesColumn';
 
 const OPTIONS = ['Housing', 'Universities', 'Amenities'];
+const PAGE_SIZE = 8;
 
 type SearchProps = {
   q: string;
@@ -49,20 +51,19 @@ export function getHighlightHTML(s: string, q: string): JSX.Element {
 
   const output = (
     <>
-      {textArr.map((elt, index) => (
-        <>
-          {!(
-            elt.toLowerCase() === q.toLowerCase() ||
-            qWords.includes(elt.toLowerCase())
-          ) && <span key={index}>{elt}</span>}
-          {(elt.toLowerCase() === q.toLowerCase() ||
-            qWords.includes(elt.toLowerCase())) && (
-            <mark style={{ padding: 0, backgroundColor: 'yellow' }}>
-              {elt}
-            </mark>
-          )}
-        </>
-      ))}
+      {textArr.map((elt, index) => {
+        const shouldMark =
+          elt.toLowerCase() === q.toLowerCase() ||
+          qWords.includes(elt.toLowerCase());
+        const interior = shouldMark ? (
+          <mark style={{ padding: 0, backgroundColor: 'yellow' }}>
+            {elt}
+          </mark>
+        ) : (
+          elt
+        );
+        return <span key={index}>{interior}</span>;
+      })}
     </>
   );
   return output;
@@ -79,6 +80,8 @@ const Search: React.FunctionComponent<SearchProps> = ({
     },
   });
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [maxResult, setMaxResult] = useState(0);
 
   const [filterState, setFilterState] = useState([true, true, true]);
   const [housingRows, setHousingRows] = useState<
@@ -94,14 +97,22 @@ const Search: React.FunctionComponent<SearchProps> = ({
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
-        const params = `q=${q}&${getQueryFromFilter(filterState)}`;
+        let params = `q=${q}&${getQueryFromFilter(filterState)}`;
+        if (filterState[0])
+          params += `&housing_page=${page}&housing_per_page=${PAGE_SIZE}`;
+        if (filterState[1])
+          params += `&universities_page=${page}&universities_per_page=${PAGE_SIZE}`;
+        if (filterState[2])
+          params += `&amenities_page=${page}&amenities_per_page=${PAGE_SIZE}`;
 
         const data = await getAPI({
           model: 'search',
           params: params,
         });
 
+        let maxElts = 0;
         for (let i = 0; i < data.length; i++) {
+          maxElts = Math.max(maxElts, data[i].total_items);
           if (data[i].amenities) {
             const amenitiesData = data[i];
             const amenDataRows = amenitiesData.amenities.map(
@@ -135,6 +146,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
             setHousingRows(housingDataRows);
           }
         }
+        setMaxResult(maxElts);
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -142,7 +154,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
     };
 
     fetchDataAsync();
-  }, [filterState]);
+  }, [filterState, page]);
 
   const toggleItem = (i: number) => {
     let count = 0;
@@ -154,6 +166,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
     const copy = JSON.parse(JSON.stringify(filterState));
     copy[i] = !copy[i];
     setFilterState(copy);
+    setPage(1);
   };
 
   const buildStyle = (i: number) => {
@@ -212,6 +225,16 @@ const Search: React.FunctionComponent<SearchProps> = ({
           />
         )}
       </div>
+
+      <PaginationRelay
+        curPage={page}
+        setPage={(e) => {
+          setPage(e);
+          setLoading(true);
+        }}
+        pageSize={PAGE_SIZE}
+        totalElements={maxResult}
+      />
     </div>
   );
 };

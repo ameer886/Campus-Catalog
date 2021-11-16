@@ -97,8 +97,7 @@
 }
 
 .Column {
-  flex-grow: 1;
-  flex-shrink: 1;
+  flex: 1 1 0;
 }
 
 .SearchCard {
