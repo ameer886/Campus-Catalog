@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Search from "./views/Search/Search";
 
 import Navbar from './components/OurNavbar/OurNavbar';
 import CampCatSplashPage from './views/SplashPage/CampCatSplashPage';
@@ -87,6 +88,12 @@ ReactDOM.render(
             <University id={props.match.params.id} />
           )}
         />
+        <Route
+        path="/search/q=:q"
+        render={(props) => <Search q={props.match.params.q} />}
+      />
+
+
 
         {/* Invalid Page for missing links */}
         <Route path="/404" component={InvalidPage} />

@@ -1,0 +1,30 @@
+.OurNavbar {
+  font-size: 90%;
+  font-weight: 400;
+  padding: 0.75em 0;
+  letter-spacing: 1px;
+  font-family: 'Oswald', sans-serif;
+  float: 'right';
+}
+.searchButton {
+  background-color: blue;
+  border-color: blue;
+  color: black;
+  font-size: 2vw;
+  float: right;
+}
+
+.tabs {
+  color: white;
+  font-family: 'Oswald';
+  font-size: 1.1vw;
+  display: flex;
+  padding: 1.1vw;
+  font-weight: bold;
+  float: right;
+}
+
+.bar {
+  background-color: blue;
+  border-color: blue;
+}
