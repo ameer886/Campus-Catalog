@@ -34,9 +34,14 @@ function getQueryFromFilter(filter: Array<boolean>): string {
 }
 
 export function getHighlightHTML(s: string, q: string): JSX.Element {
+  const qWords = q.toLowerCase().split(' ');
+  let regexString = `(?=${q})|(?<=${q})`;
+  if (qWords.length > 1)
+    qWords.forEach((s) => (regexString += `|(?=${s})|(?<=${s})`));
+
   let textArr: string[];
   try {
-    textArr = s.split(new RegExp(`(?=${q})|(?<=${q})`, 'ig'));
+    textArr = s.split(new RegExp(regexString, 'ig'));
   } catch {
     textArr = [s];
   }
@@ -45,10 +50,12 @@ export function getHighlightHTML(s: string, q: string): JSX.Element {
     <>
       {textArr.map((elt, index) => (
         <>
-          {!(elt.toLowerCase() === q.toLowerCase()) && (
-            <span key={index}>{elt}</span>
-          )}
-          {elt.toLowerCase() === q.toLowerCase() && (
+          {!(
+            elt.toLowerCase() === q.toLowerCase() ||
+            qWords.includes(elt.toLowerCase())
+          ) && <span key={index}>{elt}</span>}
+          {(elt.toLowerCase() === q.toLowerCase() ||
+            qWords.includes(elt.toLowerCase())) && (
             <mark style={{ padding: 0, backgroundColor: 'yellow' }}>
               {elt}
             </mark>
@@ -121,8 +128,6 @@ const Search: React.FunctionComponent<SearchProps> = ({
 
     fetchDataAsync();
   }, [filterState]);
-  console.log(amenityRows);
-  console.log(housingRows);
 
   const toggleItem = (i: number) => {
     let count = 0;
