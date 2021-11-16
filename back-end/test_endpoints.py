@@ -36,7 +36,7 @@ def test_pagination_when_page_not_found(client, endpoint):
 
 @pytest.mark.parametrize("endpoint",['/housing', '/amenities', '/universities'])
 def test_pagination_param_per_page(client, endpoint):
-    per_page = randint(0, 100)
+    per_page = randint(1, 100)
     rv = client.get(f"{endpoint}?per_page={per_page}")
     assert rv.status_code == 200
 
