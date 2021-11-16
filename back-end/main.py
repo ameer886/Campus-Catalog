@@ -599,6 +599,12 @@ def get_all_universities():
 def get_univ_by_id(id):
     sql = queries.query_univ_images(id)
     result = db.session.execute(sql)
+    if result.rowcount == 0:
+        err = flask.Response(
+            json.dumps({"error": id + " not found"}), mimetype="application/json"
+        )
+        err.status_code = 404
+        return err
     univ = University.build_univ_from_args(*result)
     amen_sql = queries.query_univ_amen(id)
     amen_nearby = db.session.execute(amen_sql)
@@ -608,12 +614,6 @@ def get_univ_by_id(id):
     housing = tuple(hous_nearby)
     univ.set_amen_nearby(amenities)
     univ.set_housing_nearby(housing)
-    if univ is None:
-        err = flask.Response(
-            json.dump({"error": id + " not found"}), mimetype="application/json"
-        )
-        err.status_code = 404
-        return err
     return jsonify(single_univ_schema.dump(univ))
 
 def reverse_own_map(term):
