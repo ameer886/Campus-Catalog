@@ -617,13 +617,27 @@ def get_univ_by_id(id):
         return err
     return jsonify(single_univ_schema.dump(univ))
 
+def reverse_own_map(term):
+    if term in "Public":
+        return 1
+    elif term in "Private Non-Profit":
+        return 2
+    elif term in "Private For-Profit":
+        return 3
+    else:
+        return term
+
+#text(f'University.ownership_id == {search_ownership(int(University.ownership_id))}')
 def search_universities(query):
     sql = University.query
     for term in query:
+        numb = reverse_own_map(term)
+        check_owned = type(numb) == int
         sql = sql.filter(
             University.univ_name.ilike(f'%{term}%') |
-            University.ownership_id.ilike(term) |
+            (check_owned and University.ownership_id == numb) |
             University.city.ilike(term) | University.state.ilike(term) |
+            cast(University.rank, VARCHAR).ilike(term) |
             cast(University.acceptance_rate, VARCHAR).ilike(f'{term}') |
             cast(University.graduation_rate, VARCHAR).ilike(f'{term}') |
             cast(University.tuition_in_st, VARCHAR).ilike(term) |
