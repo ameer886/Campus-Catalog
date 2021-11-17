@@ -222,3 +222,33 @@ def test_amenity_filter_rate(client, rate):
         assert _i["rating"] >= rate
 
 ### Search Tests ###
+
+def test_search_pagination(client):
+    rv = client.get(f"/search?q=austin")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    assert type(result) == list
+    assert len(result) == 3
+    for _i in result:
+        assert type(_i) == dict
+        assert len(_i) == 5
+        assert _i["per_page"] == 10
+        items = list(_i.keys())
+        it = _i[items[-1]]
+        assert type(it) == list
+        assert len(it) == _i["per_page"]
+    
+def test_search_multi_term(client):
+    rv = client.get(f"/search?q=austin+tx")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    assert type(result) == list
+    assert len(result) == 3
+    for _i in result:
+        assert type(_i) == dict
+        assert len(_i) == 5
+        assert _i["per_page"] == 10
+        items = list(_i.keys())
+        it = _i[items[-1]]
+        assert type(it) == list
+        assert len(it) == _i["per_page"]
