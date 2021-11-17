@@ -425,7 +425,7 @@ class UniversitySchema(ma.Schema):
     num_undergrad = fields.Int()
     num_graduate = fields.Int()
     ownership_id = fields.Method("map_ownership")
-    mascot = fields.Str()
+    mascot_name = fields.Str()
     acceptance_rate = fields.Float(load_default=0.0)
     graduation_rate = fields.Float(load_default=0.0)
     tuition_in_st = fields.Int()
