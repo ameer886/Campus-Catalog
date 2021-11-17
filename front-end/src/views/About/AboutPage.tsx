@@ -92,7 +92,7 @@ const AboutPage: React.FunctionComponent = () => {
       issues: 0,
       unitTests: 29,
       color: '#31052f',
-      role: 'Frontend Lead Developr',
+      role: 'Front-End Lead Developr',
       img: RyanGahaganImg,
       bio: "Ryan is a senior at UT Austin. He's from Dripping Springs, TX. \
             He takes math courses on the side, and plays video games as though \
@@ -131,7 +131,7 @@ const AboutPage: React.FunctionComponent = () => {
       username: 'richagadre',
       commits: 0,
       issues: 0,
-      unitTests: 6,
+      unitTests: 0,
       role: 'Frontend Developer',
       color: '#ff7f7f',
       img: RichaGadreImg,
@@ -145,7 +145,7 @@ const AboutPage: React.FunctionComponent = () => {
       username: 'ameer886',
       commits: 0,
       issues: 0,
-      unitTests: 3,
+      unitTests: 27,
       color: '#7df9ff',
       role: 'Backend Lead Developer',
       img: DavidHeImg,
