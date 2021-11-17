@@ -1,5 +1,5 @@
 import pytest
-from random import randint
+from random import randint, choice, random
 
 def test_empty_endpoint(client):
     rv = client.get('/')
@@ -77,7 +77,7 @@ def test_default_sorting_param_desc(client, endpoint):
     assert all(items[i]['state'] >= items[i + 1]['state'] for i in range(len(items) - 1))
 
 @pytest.mark.parametrize("endpoint",['/housing', '/amenities', '/universities'])
-def test_single_instance_endpoint_with_error(client, endpoint):
+def test_single_instance_endpoint_handle_error(client, endpoint):
     rv = client.get(f"{endpoint}/52543")
     assert rv.status_code == 404
 
@@ -181,4 +181,44 @@ def test_university_filter_acceptance(client, accept):
 
 ### Amenity Model Tests ###
 
+@pytest.mark.parametrize("price",["$", "$$", "$$$", "$$$$"])
+def test_amenity_filter_single_price(client, price):
+    rv = client.get(f"/amenities?per_page=1000&price={price}")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    content = result[1]
+    items = list(content.items())[0][1]
+    for _i in items:
+        assert _i["pricing"] == price
 
+def test_amenity_filter_multiple_price(client):
+    price = ','.join(choice(["$", "$$", "$$$", "$$$$"]) for i in range(3))
+    rv = client.get(f"/amenities?per_page=1000&price={price}")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    content = result[1]
+    items = list(content.items())[0][1]
+    for _i in items:
+        assert _i["pricing"] in price
+
+@pytest.mark.parametrize("review", [randint(0, 50) for i in range(20)])
+def test_amenity_filter_reviews(client, review):
+    rv = client.get(f"/amenities?per_page=1000&review={review}")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    content = result[1]
+    items = list(content.items())[0][1]
+    for _i in items:
+        assert _i["num_review"] >= review
+
+@pytest.mark.parametrize("rate", [random()*10 for i in range(20)])
+def test_amenity_filter_rate(client, rate):
+    rv = client.get(f"/amenities?per_page=1000&rate={rate}")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    content = result[1]
+    items = list(content.items())[0][1]
+    for _i in items:
+        assert _i["rating"] >= rate
+
+### Search Tests ###
