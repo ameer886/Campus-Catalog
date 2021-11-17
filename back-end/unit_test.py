@@ -1,11 +1,6 @@
-from logging import raiseExceptions
 import unittest
-import sys
 from flask import Flask
 from sqlalchemy import MetaData
-import json
-import urllib
-import requests
 
 from db import db_init
 from models import University, Housing, Amenities
@@ -156,112 +151,6 @@ class TestBackEnd(unittest.TestCase):
         self.mock_db.session.commit()
         num_row = self.mock_db.session.query(amen).count()
         self.assertEqual(num_row, original_row_count)
-
-    # def test_endpoint1(self):
-    #     url = "https://api.campuscatalog.me/housing"
-    #     r = urllib.request.urlopen(url)
-    #     data = json.loads(r.read())
-    #     self.assertEqual(data["properties"][0]["city"], "Auburn")
-    #     self.assertEqual(data["properties"][0]["max_rent"], 800)
-    #     self.assertEqual(data["properties"][0]["max_sqft"], 1000.0)
-    #     self.assertEqual(data["properties"][0]["property_id"], "35erbsf")
-    #     self.assertEqual(data["properties"][0]["property_name"], "343 S Gay St")
-    #     self.assertEqual(data["properties"][0]["property_type"], "condo")
-    #     self.assertEqual(data["properties"][0]["rating"], 0.0)
-    #     self.assertEqual(data["properties"][0]["state"], "AL")
-    #     self.assertEqual(data["properties"][0]["transit_score"], 0)
-    #     self.assertEqual(data["properties"][0]["walk_score"], 62)
-
-    # def test_endpoint2(self):
-    #     url = "https://api.campuscatalog.me/amenities"
-    #     r = urllib.request.urlopen(url)
-    #     data = json.loads(r.read())
-    #     self.assertEqual(data["amenities"][0]["amen_id"], 462165312)
-    #     self.assertEqual(data["amenities"][0]["amen_name"], "Elephant Room")
-    #     self.assertEqual(data["amenities"][0]["city"], "Austin")
-    #     self.assertEqual(data["amenities"][0]["deliver"], False)
-    #     self.assertEqual(data["amenities"][0]["num_review"], 431)
-    #     self.assertEqual(data["amenities"][0]["pricing"], "$$")
-    #     self.assertEqual(data["amenities"][0]["state"], "TX")
-    #     self.assertEqual(data["amenities"][0]["takeout"], False)
-
-    # def test_endpoint3(self):
-    #     url = "https://api.campuscatalog.me/universities"
-    #     r = urllib.request.urlopen(url)
-    #     data = json.loads(r.read())
-    #     self.assertEqual(data["universities"][0]["city"], "Haverhill")
-    #     self.assertEqual(data["universities"][0]["ownership_id"], "Public")
-    #     self.assertEqual(data["universities"][0]["state"], "MA")
-    #     self.assertEqual(data["universities"][0]["tuition_in_st"], 5280)
-    #     self.assertEqual(data["universities"][0]["tuition_out_st"], 11064)
-    #     self.assertEqual(data["universities"][0]["univ_id"], "167376")
-    #     self.assertEqual(
-    #         data["universities"][0]["univ_name"], "Northern Essex Community College"
-    #     )
-
-    # def test_endpoint4(self):
-    #     url = "https://api.campuscatalog.me/universities/100663"
-    #     r = urllib.request.urlopen(url)
-    #     data = json.loads(r.read())
-    #     self.assertEqual(data["acceptance_rate"], 0.7366)
-    #     self.assertEqual(data["avg_cost_attendance"], 24495.0)
-    #     self.assertEqual(data["amenities_nearby"][0]["amenity_id"], "48971135")
-    #     self.assertEqual(data["avg_sat"], 1234.0)
-    #     self.assertEqual(
-    #         data["carnegie_undergrad"],
-    #         "Four-year, medium full-time, selective, higher transfer-in",
-    #     )
-    #     self.assertEqual(data["graduation_rate"], 0.634)
-    #     self.assertEqual(data["housing_nearby"][0]["property_id"], "jch15k4")
-    #     self.assertEqual(data["longitude"], -86.79935)
-    #     self.assertEqual(data["num_graduate"], 10897)
-
-    def test_endpoint5(self):
-        url = "https://api.campuscatalog.me/amenities/485770102"
-        r = urllib.request.urlopen(url)
-        data = json.loads(r.read())
-        self.assertEqual(data["address"], "2015 E M Franklin Ave Austin, TX 78723")
-        self.assertEqual(
-            data["amen_alias"], "blue-starlite-mini-urban-drive-in-austin-3"
-        )
-        self.assertEqual(data["amen_id"], 485770102)
-        self.assertEqual(data["amen_name"], "Blue Starlite Mini Urban Drive-In")
-        self.assertEqual(data["categories"][0], "Drive-In Theater")
-        self.assertEqual(data["city"], "Austin")
-        self.assertEqual(data["deliver"], False)
-        self.assertEqual(
-            data["hours"],
-            "Monday: 7:45 \u2013 11:30 PM\nTuesday: 7:45 \u2013 10:00 PM\nWednesday: 7:45 \u2013 10:00 PM\nThursday: 7:45 PM \u2013 12:00 AM\nFriday: 7:45 PM \u2013 12:00 AM\nSaturday: 7:45 PM \u2013 12:00 AM\nSunday: 7:30 \u2013 11:30 PM",
-        )
-        self.assertEqual(data["housing_nearby"][0]["property_id"], "85j4gs0")
-
-    def test_endpoint6(self):
-        url = "https://api.campuscatalog.me/housing/sqj5kb7"
-        r = urllib.request.urlopen(url)
-        data = json.loads(r.read())
-        self.assertEqual(data["amenities_nearby"][0]["amenity_id"], "89470460")
-        self.assertEqual(data["bath"]["max"], 0.5)
-        self.assertEqual(data["bed"]["max"], 0.0)
-        self.assertEqual(data["building_amenities"][0], "Washer/Dryer - In Unit")
-        self.assertEqual(data["cat_allow"], False)
-        self.assertEqual(data["dog_allow"], False)
-        self.assertEqual(
-            data["images"][0],
-            "https://images1.apartments.com/i2/2FXViLtJdfie7JYpAkCeEKNNsU0AtIH_pf2zE7CaSno/111/161-s-prospect-st-burlington-vt-primary-photo.jpg?p=1",
-        )
-        self.assertEqual(data["location"]["city"], "Burlington")
-        self.assertEqual(data["max_num_cat"], 0)
-        self.assertEqual(data["max_num_dog"], 0)
-        self.assertEqual(data["max_rent"], 1100)
-        self.assertEqual(data["min_rent"], 1100)
-        self.assertEqual(data["property_id"], "sqj5kb7")
-        self.assertEqual(data["property_type"], "condo")
-        self.assertEqual(data["sqft"]["max"], 220.0)
-        self.assertEqual(data["transit_score"], 47)
-        self.assertEqual(data["universities_nearby"][0]["university_id"], "231174")
-        self.assertEqual(data["util_included"][0], "Water")
-        self.assertEqual(data["walk_score"], 77)
-
 
 if __name__ == "__main__":
     unittest.main()
