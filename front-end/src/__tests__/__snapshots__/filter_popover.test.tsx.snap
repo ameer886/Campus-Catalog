@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Filter Popover Test Suite snapshot test: amenity options 1`] = `ShallowWrapper {}`;
+
+exports[`Filter Popover Test Suite snapshot test: housing options 1`] = `ShallowWrapper {}`;
+
+exports[`Filter Popover Test Suite snapshot test: university options 1`] = `ShallowWrapper {}`;

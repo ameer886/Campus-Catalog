@@ -54,7 +54,9 @@ export type GenericTableProps<
 > = {
   columnDefinitions: Array<ColumnDefinitionType<T, K>>;
   data: Array<T>;
-  parentSort?: React.Dispatch<React.SetStateAction<string>>;
+  parentSort?:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((e: string) => void);
   parentStr?: string;
 };
 

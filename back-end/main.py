@@ -5,12 +5,14 @@ from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from sqlalchemy.sql.sqltypes import VARCHAR
 from db import db_init
-from sqlalchemy import text, desc, cast
+from sqlalchemy import text, desc, cast, or_
 from sqlalchemy.sql.schema import MetaData, Column
 from models import University, Housing, Amenities
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, validate
 import queries
+import re
+import sqlalchemy
 
 app = Flask(__name__)
 CORS(app)
@@ -125,7 +127,7 @@ class HousingSchema(ma.Schema):
     state = fields.Str(required=True)
     lat = fields.Decimal(required=True)
     lon = fields.Decimal(required=True)
-    rating = fields.Float(missing=0.0)
+    rating = fields.Float(load_default=0.0)
     walk_score = fields.Int()
     transit_score = fields.Int()
     min_rent = fields.Int(required=True)
@@ -207,19 +209,49 @@ all_housing_schema = HousingSchema(only=table_columns, many=True)
 
 @app.route('/search', methods=['GET'])
 def search():
-    # TODO: extend to other models
-    # models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
+    models = request.args.get('models', default=['Housing', 'Amenities', 'University'], type=lambda v: v.split(','))
+    models = [model.capitalize() for model in models]
     query_terms = request.args.get('q', default=[], type=lambda v: v.split(' '))
     # pagination params
+    
     housing_page = request.args.get('housing_page', default=1, type=int)
     housing_per_page = request.args.get('housing_per_page', default=10, type=int)
+    housing = {}
+    housing_pagination_header = {}
+    if 'Housing' in models:
+        paginated_response = search_housing(query_terms).paginate(housing_page, error_out=False, max_per_page=housing_per_page)
+        housing = {"properties": all_housing_schema.dump(paginated_response.items)}
+        housing_pagination_header = {"housing_page": housing_page, 
+                        "per_page": housing_per_page,
+                        "max_page": paginated_response.pages,
+                        "total_items": paginated_response.total}
+    
+    amenities_page = request.args.get('amenities_page', default=1, type=int)
+    amenities_per_page = request.args.get('amenities_per_page', default=10, type=int)
+    amenities = {}
+    amenities_pagination_header = {}
+    if 'Amenities' in models:
+        amenities_query = search_amenities(query_terms)
+        amenities_paginated_response = amenities_query.paginate(amenities_page, error_out=False, max_per_page=amenities_per_page)
+        amenities = {"amenities": all_amenities_schema.dump(amenities_paginated_response.items)}
+        amenities_pagination_header = {"amenities_page": amenities_page, 
+                        "per_page": amenities_per_page,
+                        "max_page": amenities_paginated_response.pages,
+                        "total_items": amenities_paginated_response.total}
 
-    paginated_response = search_housing(query_terms).paginate(housing_page, max_per_page=housing_per_page)
-    pagination_header = {"housing_page": housing_page, 
-                    "per_page": paginated_response.per_page,
-                    "max_page": paginated_response.pages,
-                    "total_items": paginated_response.total}
-    return jsonify(pagination_header, {"properties": all_housing_schema.dump(paginated_response.items)})
+    universities_page = request.args.get('universities_page', default=1, type=int)
+    universities_per_page = request.args.get('universities_per_page', default = 10, type = int)
+    universities = {}
+    univ_pagination_header = {}
+    if 'University' in models:
+        univ_paginated_response = search_universities(query_terms).paginate(universities_page, error_out=False, max_per_page=universities_per_page)
+        universities = {"universities": all_univ_schema.dump(univ_paginated_response.items)}
+        univ_pagination_header = {"universities_page": universities_page,
+                        "per_page": universities_per_page,
+                        "max_page": univ_paginated_response.pages,
+                        "total_items": univ_paginated_response.total}
+
+    return jsonify({**amenities_pagination_header, **amenities}, {**housing_pagination_header, **housing}, {**univ_pagination_header, **universities})
 
 def search_housing(query_terms):
     sql = Housing.query
@@ -387,18 +419,19 @@ class UniversitySchema(ma.Schema):
     zip_code = fields.Str()
     school_url = fields.Str()
     locale = fields.Method("map_locale")
-    longitude = fields.Float(missing=0.0)
-    latitude = fields.Float(missing=0.0)
+    longitude = fields.Float(load_default=0.0)
+    latitude = fields.Float(load_default=0.0)
     carnegie_undergrad = fields.Method("map_carnegie")
     num_undergrad = fields.Int()
     num_graduate = fields.Int()
     ownership_id = fields.Method("map_ownership")
-    acceptance_rate = fields.Float(missing=0.0)
-    graduation_rate = fields.Float(missing=0.0)
+    mascot_name = fields.Str()
+    acceptance_rate = fields.Float(load_default=0.0)
+    graduation_rate = fields.Float(load_default=0.0)
     tuition_in_st = fields.Int()
     tuition_out_st = fields.Int()
-    avg_sat = fields.Float(missing=0.0)
-    avg_cost_attendance = fields.Float(missing=0.0)
+    avg_sat = fields.Float(load_default=0.0)
+    avg_cost_attendance = fields.Float(load_default=0.0)
     amenities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     housing_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     image = fields.Url()
@@ -572,6 +605,7 @@ def get_univ_by_id(id):
     amen_nearby = db.session.execute(amen_sql)
     hous_sql = queries.query_univ_housing(id)
     hous_nearby = db.session.execute(hous_sql)
+    result.close()
     amenities = tuple(amen_nearby)
     housing = tuple(hous_nearby)
     univ.set_amen_nearby(amenities)
@@ -584,6 +618,48 @@ def get_univ_by_id(id):
         return err
     return jsonify(single_univ_schema.dump(univ))
 
+def reverse_own_map(term):
+    if term in "Public":
+        return 1
+    elif term in "Private Non-Profit":
+        return 2
+    elif term in "Private For-Profit":
+        return 3
+    else:
+        return term
+
+def search_universities(query):
+    sql = University.query
+    for term in query:
+        numb = reverse_own_map(term)
+        check_owned = type(numb) == int
+        sql = sql.filter(
+            University.univ_name.ilike(f'%{term}%') |
+            (check_owned and University.ownership_id == numb) |
+            University.city.ilike(term) | University.state.ilike(term) |
+            cast(University.rank, VARCHAR).ilike(term) |
+            cast(University.acceptance_rate, VARCHAR).ilike(f'{term}') |
+            cast(University.graduation_rate, VARCHAR).ilike(f'{term}') |
+            cast(University.tuition_in_st, VARCHAR).ilike(term) |
+            cast(University.tuition_out_st, VARCHAR).ilike(term) |
+            cast(University.avg_cost_attendance, VARCHAR).ilike(term)
+            )
+    return sql
+
+def search_amenities(query):
+    sql_query = Amenities.query
+    searches = []
+    for term in query:
+        # Check if query is float or int
+        if re.match(r'^\d+(\.\d+)?$', term):
+            if term.isdigit():
+                searches.append(Amenities.num_review == int(term))    
+            searches.append(sqlalchemy.func.abs(Amenities.rating - float(term)) <= 1e-6) 
+        searches.append(Amenities.amen_name.ilike(f'%{term}%'))
+        searches.append(Amenities.pricing.ilike(f'%{term}%')) 
+        searches.append(Amenities.state.ilike(f'%{term}%')) 
+        searches.append(Amenities.city.ilike(f'%{term}%')) 
+    return sql_query.filter(or_(*tuple(searches)))
 
 @app.route("/amenities", methods=["GET"])
 def get_all_amenities():
@@ -612,7 +688,6 @@ def get_all_amenities():
     if sort_column not in amenities_table_columns:
         abort(400, f"invalid parameter: column {sort_column.capitalize()} not in {amenities_table_columns}")
 
-    
     # query and paginate
     try:
         sql_query = Amenities.query
@@ -624,7 +699,7 @@ def get_all_amenities():
             sql_query = sql_query.filter(Amenities.num_review >= reviews)
         if rating != None:
             sql_query = sql_query.filter(Amenities.rating >= rating)
-
+            
         order = desc(text(sort_column)) if sort_desc == True else text(sort_column)
         paginated_response = sql_query.order_by(order).paginate(page, max_per_page=per_page)
         all_amenities = paginated_response.items
@@ -671,7 +746,6 @@ def get_amenities_by_id(amen_id):
     amenity["images"] = images
     amenity["categories"] = categories
     return jsonify(amenity)
-
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
