@@ -152,5 +152,6 @@ class TestBackEnd(unittest.TestCase):
         num_row = self.mock_db.session.query(amen).count()
         self.assertEqual(num_row, original_row_count)
 
+
 if __name__ == "__main__":
     unittest.main()
