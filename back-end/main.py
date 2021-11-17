@@ -425,6 +425,7 @@ class UniversitySchema(ma.Schema):
     num_undergrad = fields.Int()
     num_graduate = fields.Int()
     ownership_id = fields.Method("map_ownership")
+    mascot = fields.Str()
     acceptance_rate = fields.Float(load_default=0.0)
     graduation_rate = fields.Float(load_default=0.0)
     tuition_in_st = fields.Int()
@@ -604,6 +605,7 @@ def get_univ_by_id(id):
     amen_nearby = db.session.execute(amen_sql)
     hous_sql = queries.query_univ_housing(id)
     hous_nearby = db.session.execute(hous_sql)
+    result.close()
     amenities = tuple(amen_nearby)
     housing = tuple(hous_nearby)
     univ.set_amen_nearby(amenities)
@@ -626,7 +628,6 @@ def reverse_own_map(term):
     else:
         return term
 
-#text(f'University.ownership_id == {search_ownership(int(University.ownership_id))}')
 def search_universities(query):
     sql = University.query
     for term in query:
