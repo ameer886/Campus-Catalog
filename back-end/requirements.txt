@@ -18,3 +18,4 @@ googlemaps
 us
 apify-client
 psycopg2-binary
+pytest

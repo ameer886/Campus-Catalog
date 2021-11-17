@@ -25,7 +25,7 @@ class University(db.Model):
     num_undergrad = db.Column(db.Integer, nullable=True)
     num_graduate = db.Column(db.Integer, nullable=True)
     ownership_id = db.Column(db.String(128), nullable=False)
-    mascot_name = db.Column(db.String(0), nullable = True)
+    mascot_name = db.Column(db.String(0), nullable=True)
     acceptance_rate = db.Column(db.Float, nullable=True)
     graduation_rate = db.Column(db.Float, nullable=True)
     tuition_in_st = db.Column(db.Integer, nullable=True)
@@ -53,7 +53,7 @@ class University(db.Model):
         num_undergrad=0,
         num_graduate=0,
         ownership_id="NaN",
-        mascot_name = None,
+        mascot_name=None,
         acceptance_rate=0,
         graduation_rate=0,
         tuition_in_st=0,
