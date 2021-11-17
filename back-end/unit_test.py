@@ -58,7 +58,7 @@ class TestBackEnd(unittest.TestCase):
         dummy["num_graduate"] = 0
         dummy["avg_cost_attendance"] = 0
         dummy["ownership_id"] = 1
-        dummy["mascot"] = None
+        dummy["mascot_name"] = None
         dummy["acceptance_rate"] = 0.0
         dummy["graduation_rate"] = 100.0
         dummy["tuition_in_st"] = 0
