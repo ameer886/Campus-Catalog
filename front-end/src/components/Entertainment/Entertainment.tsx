@@ -36,6 +36,7 @@ const Entertainment: React.FunctionComponent<EntertainmentProps> = ({
         setQuery({ ...data });
       } catch (err) {
         console.error(err);
+        window.location.assign('/error');
       }
     };
     fetchDataAsync();

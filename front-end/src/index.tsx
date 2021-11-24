@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Search from "./views/Search/Search";
+import Search from './views/Search/Search';
 
 import Navbar from './components/OurNavbar/OurNavbar';
 import CampCatSplashPage from './views/SplashPage/CampCatSplashPage';
@@ -19,6 +19,7 @@ import EntertainmentsPage from './views/Entertainments/EntertainmentsPage';
 import Entertainment from './components/Entertainment/Entertainment';
 import UniversitiesPage from './views/Universities/UniversitiesPage';
 import University from './components/University/University';
+import ErrorPage from './views/Invalid/ErrorPage';
 import InvalidPage from './views/Invalid/InvalidPage';
 
 import reportWebVitals from './reportWebVitals';
@@ -89,11 +90,12 @@ ReactDOM.render(
           )}
         />
         <Route
-        path="/search/q=:q"
-        render={(props) => <Search q={props.match.params.q} />}
-      />
+          path="/search/q=:q"
+          render={(props) => <Search q={props.match.params.q} />}
+        />
 
-
+        {/* Error page */}
+        <Route path="/error" exact component={ErrorPage} />
 
         {/* Invalid Page for missing links */}
         <Route path="/404" component={InvalidPage} />

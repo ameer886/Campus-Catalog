@@ -190,6 +190,7 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
           setLoading(false);
         } catch (err) {
           console.error(err);
+          window.location.assign('/error');
         }
       };
       fetchDataAsync();

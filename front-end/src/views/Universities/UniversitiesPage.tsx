@@ -248,6 +248,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
         setLoading(false);
       } catch (err) {
         console.error(err);
+        window.location.assign('/error');
       }
     };
     fetchDataAsync();
