@@ -52,7 +52,7 @@ const OurNavbar: React.FunctionComponent = () => {
   return (
     <div className="OurNavbar">
       <Navbar sticky="top" bg="dark" variant="dark">
-        <Navbar.Brand className={styles.tabs}>
+        <Navbar.Brand className={styles.tabs} href="/">
           CAMPUS CATALOG
         </Navbar.Brand>
 
