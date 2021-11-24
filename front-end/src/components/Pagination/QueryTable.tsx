@@ -38,11 +38,15 @@ const QueryTable = <T extends RowWithIndex, K extends keyof T>({
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
+        setLoading(true);
+        let adjust = params;
+        if (params.slice(0, 1) === '&') adjust = params.slice(1);
         const data = await getAPI({
           model: model,
-          params: params,
+          params: adjust,
         });
         const responseRows = processResponse(data);
+        // await new Promise((resolve) => setTimeout(resolve, 100000));
         setRows(responseRows);
         setLoading(false);
       } catch (err) {
@@ -52,9 +56,21 @@ const QueryTable = <T extends RowWithIndex, K extends keyof T>({
     };
 
     fetchDataAsync();
-  }, []);
+  }, [params]);
 
-  if (loading) return <p>Loading, please be patient.</p>;
+  if (loading)
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          width: '100%',
+          marginBottom: '8px',
+        }}
+      >
+        Loading, please be patient.
+      </div>
+    );
 
   return (
     <div style={{ alignItems: 'center' }}>

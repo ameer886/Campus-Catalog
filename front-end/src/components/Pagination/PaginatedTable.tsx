@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styles from './PaginatedTable.module.css';
 
@@ -41,33 +41,45 @@ type PaginationTableProps<
 const PaginatedTable = <T extends RowWithIndex, K extends keyof T>({
   params,
   processResponse,
+  parentSort,
   ...rest
 }: PaginationTableProps<T, K>): JSX.Element => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
+  console.log(page);
+
+  useEffect(() => {
+    // Need to reset page on update sort or update filter
+    setPage(1);
+    setTotalItems(0);
+  }, [params]);
 
   const processPage = (data: IntentionallyAny) => {
     const responseMeta: PaginationMeta = { ...data[0] };
     setTotalItems(responseMeta.total_items);
-    return processResponse(data[1]);
+    return processResponse(data);
   };
 
-  const pageParams = `page=${page}&per_page=${PAGE_SIZE}` + params;
+  let pageParams = `page=${page}&per_page=${PAGE_SIZE}`;
+  if (params) pageParams += params;
   return (
-    <div className={styles.PaginatedContainer}>
+    <>
       <QueryTable
         params={pageParams}
         processResponse={processPage}
+        parentSort={parentSort}
         {...rest}
       />
 
-      <PaginationRelay
-        curPage={page}
-        setPage={setPage}
-        pageSize={PAGE_SIZE}
-        totalElements={totalItems}
-      />
-    </div>
+      <div className={styles.PaginatedContainer}>
+        <PaginationRelay
+          curPage={page}
+          setPage={setPage}
+          pageSize={PAGE_SIZE}
+          totalElements={totalItems}
+        />
+      </div>
+    </>
   );
 };
 
