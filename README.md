@@ -8,10 +8,13 @@
 - David He (UTEID: hh26758)
 
 ## General Info
-Git SHA: 5ec689f5ed95cd4609390452070f08cd1adc0eef
+Git SHA: 2a49b56dc518acf01174963bcd989bd47a834147
 
 Phase I Leader: Ryan Gahagan
+
 Phase II Leader: David He
+
+Phase III Leader: Brandon Hinh
 
 Website: https://campuscatalog.me
 
@@ -45,3 +48,16 @@ Time of completion:
 
 Comments: Thank you Jefferson and Caitlin for making the tutorials on Flask, AWS Set up, and debugging.
 However, this phase is too short for a lot of implementations. Please consider making phase 2 longer.
+
+## Phase 3
+Time of completion:
+
+| Member | Estimated | Actual |
+| ------ | ------ | ------ |
+| Ryan Gahagan | 32 | 50 |
+| Andrew Luo | 35 | 35 |
+| Brandon Hinh | 30 | 35 |
+| Richa Gadre | 30 | 35 |
+| David He | 30 | 45 |
+
+Comments: As always, thanks to Jefferson and Caitlin for all the help. Filtering was a bear and the specifications were not super clear on searching.
