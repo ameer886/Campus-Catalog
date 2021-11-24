@@ -50,8 +50,8 @@ const QueryTable = <T extends RowWithIndex, K extends keyof T>({
         setRows(responseRows);
         setLoading(false);
       } catch (err) {
-        history.push('/error');
         console.error(err);
+        history.push('/error');
       }
     };
 

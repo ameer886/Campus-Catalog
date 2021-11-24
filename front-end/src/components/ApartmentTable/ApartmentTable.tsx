@@ -1,22 +1,19 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import type { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
 import type { ApartmentRowType } from '../../views/Apartments/ApartmentsPage';
 import type { IntentionallyAny } from '../../utilities';
-import type { PaginationMeta } from '../../components/Pagination/PaginatedTable';
 import type { FilterPopoverOption } from '../../components/FilterPopover/FilterPopover';
 
 import PaginationRelay from '../Pagination/PaginationRelay';
 import GenericTable from '../../components/GenericTable/GenericTable';
+import PaginatedTable from '../../components/Pagination/PaginatedTable';
 import FilterPopover from '../../components/FilterPopover/FilterPopover';
 
-import { getAPI } from '../../APIClient';
 import { formatNumberToMoney } from '../../utilities';
 
 import styles from './ApartmentTable.module.css';
-
-const PAGE_SIZE = 10;
 
 const apartmentTableHeaders: ColumnDefinitionType<
   ApartmentRowType,
@@ -213,128 +210,66 @@ type ApartmentTableTestProps = {
 
 const ApartmentTable: React.FunctionComponent<ApartmentTableTestProps> =
   ({ testRows }: ApartmentTableTestProps) => {
-    // A TON of useStates for managing this component, let's break them down
-    // loading: if true, display a loading text instead of the table
-    const [loading, setLoading] = useState(testRows == null);
+    if (testRows) {
+      // Hack around queries to get a "table" that tests the basic fns
+      // We need to avoid any kind of query while keeping tests functional
+      // If testRows is not undefined, then this will most certainly
+      // crash the front-end
+      const ps = 10;
+      const [sortStr, setSortStr] = useState('NONE');
+      const [filter, setFilter] = useState('');
+      const [page, setPage] = useState(1);
 
-    // rows: the actual data in the tables. Initially empty, set on query.
-    const [rows, setRows] = useState<Array<ApartmentRowType>>([]);
+      return (
+        <div className={styles.ApartmentTable}>
+          <div>
+            <div className={styles.FilterButton}>
+              <FilterPopover
+                options={popoverOptions}
+                setFilter={(e: string) => {
+                  if (filter === e) return;
+                  setFilter(e);
+                }}
+              />
+            </div>
+          </div>
 
-    // meta: the meta information for the query i.e. page, total items, etc
-    const [meta, setMeta] = useState<PaginationMeta | null>(
-      testRows == null
-        ? null
-        : {
-            page: 1,
-            max_page: testRows.length / PAGE_SIZE,
-            total_items: testRows.length,
-            per_page: PAGE_SIZE,
-          },
-    );
+          <GenericTable
+            columnDefinitions={apartmentTableHeaders}
+            data={testRows.slice((page - 1) * ps, page * ps)}
+            parentSort={setSortStr}
+            parentStr={sortStr}
+          />
 
-    // page: the current query page
-    const [page, setPage] = useState(1); // Pages are 1-indexed
+          <PaginationRelay
+            curPage={page}
+            setPage={setPage}
+            pageSize={ps}
+            totalElements={testRows.length}
+          />
+        </div>
+      );
+    }
 
-    // filter: a string for the current filter e.g. "&state=TX&city=Austin"
-    // const [filter, setFilter] = useState('&rating=any');
-    const [filter, setFilter] = useState('');
-
-    // sortStr: String for current sorting
-    // of the form key_asc or key_dsc
-    const [sortStr, setSortStr] = useState('NONE');
-
-    /*
-     * TODO: There's a big opportunity for refactor here!!!
-     * Specifically, both model tables look nearly identical
-     * with only two major differences: the column definitions
-     * and the method fetchDataAsync. If sorting and filtering
-     * don't change this flow too much, you can rework PaginatedTable
-     * (which is no longer being used at all) to take in a property
-     * for the column defs and a property for "getData" that
-     * does all the processing except the state dispatches in
-     * fetchDataAsync. This will allow the tables to specify
-     * what the query and response look like while also removing
-     * all the duplicated code.
-     */
-    useEffect(() => {
-      if (testRows) {
-        setRows(
-          testRows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
-        );
-        return;
-      }
-
-      const fetchDataAsync = async () => {
-        try {
-          let params = `page=${page}&per_page=${PAGE_SIZE}`;
-          if (sortStr !== 'NONE') {
-            params += `&sort=${sortStr.slice(0, -4)}`;
-            if (sortStr.includes('dsc')) params += '&desc=True';
-          }
-          if (filter) params += filter;
-
-          const data = await getAPI({
-            model: 'housing',
-            params: params,
-          });
-          const responseMeta: PaginationMeta = { ...data[0] };
-          const responseRows = data[1].properties.map(
-            (apt: IntentionallyAny) => {
-              return {
-                id: apt.property_id,
-                ...apt,
-              };
-            },
-          );
-          setRows(responseRows);
-          setMeta(responseMeta);
-          setLoading(false);
-        } catch (err) {
-          console.error(err);
-          window.location.assign('/error');
-        }
-      };
-      fetchDataAsync();
-    }, [page, filter, sortStr]);
-
-    if (loading || meta == null)
-      return <p>Loading, please be patient.</p>;
+    const processResponse = (data: IntentionallyAny) => {
+      const responseRows = data[1].properties.map(
+        (apt: IntentionallyAny) => {
+          return {
+            id: apt.property_id,
+            ...apt,
+          };
+        },
+      );
+      return responseRows;
+    };
 
     return (
       <div className={styles.ApartmentTable}>
-        <div>
-          <div className={styles.FilterButton}>
-            <FilterPopover
-              options={popoverOptions}
-              setFilter={(e: string) => {
-                if (filter === e) return;
-                setLoading(testRows == null);
-                setPage(1);
-                setFilter(e);
-              }}
-            />
-          </div>
-        </div>
-
-        <GenericTable
+        <PaginatedTable
+          options={popoverOptions}
+          processResponse={processResponse}
+          model="housing"
           columnDefinitions={apartmentTableHeaders}
-          data={rows}
-          parentSort={(e: string) => {
-            setLoading(testRows == null);
-            setPage(1);
-            setSortStr(e);
-          }}
-          parentStr={sortStr}
-        />
-
-        <PaginationRelay
-          curPage={page}
-          setPage={(e) => {
-            setLoading(testRows == null);
-            setPage(e);
-          }}
-          pageSize={PAGE_SIZE}
-          totalElements={meta.total_items}
         />
       </div>
     );

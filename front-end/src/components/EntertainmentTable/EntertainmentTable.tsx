@@ -135,15 +135,14 @@ type EntertainmentTableTestProps = {
 
 const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
   ({ testRows }: EntertainmentTableTestProps) => {
-    const [filter, setFilter] = useState('');
-    const [sortStr, setSortStr] = useState('NONE');
-
     if (testRows) {
       // Hack around queries to get a "table" that tests the basic fns
       // We need to avoid any kind of query while keeping tests functional
       // If testRows is not undefined, then this will most certainly
       // crash the front-end
       const ps = 10;
+      const [filter, setFilter] = useState('');
+      const [sortStr, setSortStr] = useState('NONE');
       const [page, setPage] = useState(1);
 
       return (
@@ -177,12 +176,6 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
       );
     }
 
-    let params = filter;
-    if (sortStr !== 'NONE') {
-      params += `&sort=${sortStr.slice(0, -4)}`;
-      if (sortStr.includes('dsc')) params += '&desc=True';
-    }
-
     const processResponse = (data: IntentionallyAny) => {
       const responseRows = data[1].amenities.map(
         (amen: IntentionallyAny) => {
@@ -197,23 +190,11 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
 
     return (
       <div className={styles.EntertainmentTable}>
-        <div className={styles.FilterButton}>
-          <FilterPopover
-            options={popoverOptions}
-            setFilter={(e: string) => {
-              if (filter === e) return;
-              setFilter(e);
-            }}
-          />
-        </div>
-
         <PaginatedTable
-          params={params}
+          options={popoverOptions}
           processResponse={processResponse}
           model="amenities"
           columnDefinitions={entertainmentTableHeaders}
-          parentSort={setSortStr}
-          parentStr={sortStr}
         />
       </div>
     );
