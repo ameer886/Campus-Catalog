@@ -97,13 +97,11 @@ const Search: React.FunctionComponent<SearchProps> = ({
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
-        let params = `q=${q}&${getQueryFromFilter(filterState)}`;
-        if (filterState[0])
-          params += `&housing_page=${page}&housing_per_page=${PAGE_SIZE}`;
-        if (filterState[1])
-          params += `&universities_page=${page}&universities_per_page=${PAGE_SIZE}`;
-        if (filterState[2])
-          params += `&amenities_page=${page}&amenities_per_page=${PAGE_SIZE}`;
+        const params =
+          `q=${q}&${getQueryFromFilter(filterState)}` +
+          `&housing_page=${page}&housing_per_page=${PAGE_SIZE}` +
+          `&universities_page=${page}&universities_per_page=${PAGE_SIZE}` +
+          `&amenities_page=${page}&amenities_per_page=${PAGE_SIZE}`;
 
         const data = await getAPI({
           model: 'search',
@@ -157,7 +155,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
     };
 
     fetchDataAsync();
-  }, [filterState, page]);
+  }, [page]);
 
   const toggleItem = (i: number) => {
     let count = 0;
