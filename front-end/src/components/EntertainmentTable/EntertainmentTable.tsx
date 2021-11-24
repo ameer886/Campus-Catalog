@@ -1,10 +1,9 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import type { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
 import type { EntertainmentRowType } from '../../views/Entertainments/EntertainmentsPage';
 import type { IntentionallyAny } from '../../utilities';
-import type { PaginationMeta } from '../../components/Pagination/PaginatedTable';
 import type { FilterPopoverOption } from '../../components/FilterPopover/FilterPopover';
 
 import GenericTable from '../GenericTable/GenericTable';
@@ -12,11 +11,7 @@ import PaginationRelay from '../Pagination/PaginationRelay';
 import PaginatedTable from '../../components/Pagination/PaginatedTable';
 import FilterPopover from '../../components/FilterPopover/FilterPopover';
 
-import { getAPI } from '../../APIClient';
-
 import styles from './EntertainmentTable.module.css';
-
-const PAGE_SIZE = 10;
 
 const entertainmentTableHeaders: ColumnDefinitionType<
   EntertainmentRowType,
@@ -143,6 +138,45 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
     const [filter, setFilter] = useState('');
     const [sortStr, setSortStr] = useState('NONE');
 
+    if (testRows) {
+      // Hack around queries to get a "table" that tests the basic fns
+      // We need to avoid any kind of query while keeping tests functional
+      // If testRows is not undefined, then this will most certainly
+      // crash the front-end
+      const ps = 10;
+      const [page, setPage] = useState(1);
+
+      return (
+        <div className={styles.EntertainmentTable}>
+          <div>
+            <div className={styles.FilterButton}>
+              <FilterPopover
+                options={popoverOptions}
+                setFilter={(e: string) => {
+                  if (filter === e) return;
+                  setFilter(e);
+                }}
+              />
+            </div>
+          </div>
+
+          <GenericTable
+            columnDefinitions={entertainmentTableHeaders}
+            data={testRows.slice((page - 1) * ps, page * ps)}
+            parentSort={setSortStr}
+            parentStr={sortStr}
+          />
+
+          <PaginationRelay
+            curPage={page}
+            setPage={setPage}
+            pageSize={ps}
+            totalElements={testRows.length}
+          />
+        </div>
+      );
+    }
+
     let params = filter;
     if (sortStr !== 'NONE') {
       params += `&sort=${sortStr.slice(0, -4)}`;
@@ -183,40 +217,6 @@ const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
         />
       </div>
     );
-
-    /*
-    if (testRows) {
-      return (
-        <div className={styles.EntertainmentTable}>
-          <div>
-            <div className={styles.FilterButton}>
-              <FilterPopover
-                options={popoverOptions}
-                setFilter={(e: string) => {
-                  if (filter === e) return;
-                  setFilter(e);
-                }}
-              />
-            </div>
-          </div>
-
-          <GenericTable
-            columnDefinitions={entertainmentTableHeaders}
-            data={rows}
-            parentSort={setSortStr}
-            parentStr={sortStr}
-          />
-
-          <PaginationRelay
-            curPage={page}
-            setPage={setPage}
-            pageSize={PAGE_SIZE}
-            totalElements={meta.total_items}
-          />
-        </div>
-      );
-    }
-    */
   };
 
 export default EntertainmentTable;

@@ -91,7 +91,7 @@ describe('Amenity Table Test Suite', () => {
   });
 
   it('pagination works', () => {
-    const rows = [];
+    const rows: EntertainmentRowType[] = [];
     for (let i = 0; i < 25; i++) {
       rows.push(EXAMPLE_ROWS[0]);
     }
