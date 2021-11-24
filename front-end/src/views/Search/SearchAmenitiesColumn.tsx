@@ -1,10 +1,34 @@
 import React from 'react';
 
+import type { GenericDatumField } from './GenericCard';
 import type { EntertainmentRowType } from '../Entertainments/EntertainmentsPage';
 
-import styles from './Search.module.css';
-import SearchAmenitiesCard from './SearchAmenitiesCard';
+import GenericColumn from './GenericColumn';
 
+/* attributes of an amenity */
+const amenityAttrs: GenericDatumField<
+  EntertainmentRowType,
+  keyof EntertainmentRowType
+>[] = [
+  {
+    name: 'Name:',
+    attribute: 'amen_name',
+  },
+  {
+    name: 'City:',
+    attribute: 'city',
+  },
+  {
+    name: 'State:',
+    attribute: 'state',
+  },
+  {
+    name: 'Rating:',
+    attribute: 'rating',
+  },
+];
+
+// props to coerce T into EntertainmentRowType
 type AmenColProps = {
   loading: boolean;
   query: string;
@@ -12,27 +36,19 @@ type AmenColProps = {
 };
 
 const SearchAmenitiesColumn: React.FunctionComponent<AmenColProps> =
-  ({ loading, query, rows }: AmenColProps) => {
-    if (loading)
-      return (
-        <div className={styles.Column}>
-          Loading amenity results, please wait
-        </div>
-      );
+  ({ ...rest }: AmenColProps) => {
+    // Build extra props specific to amenity
+    const amenityColProps = {
+      name: 'amenity',
+      color: 'blue',
+      attributes: amenityAttrs,
+      getName: (row: EntertainmentRowType) => row.amen_name,
+      getHREF: (row: EntertainmentRowType) => {
+        return `/amenities/${row.amen_id}`;
+      },
+    };
 
-    return (
-      <div className={styles.Column}>
-        {rows.length === 0
-          ? 'No amenities could be found.'
-          : rows.map((row, index) => (
-              <SearchAmenitiesCard
-                key={index}
-                row={row}
-                query={query}
-              />
-            ))}
-      </div>
-    );
+    return <GenericColumn {...amenityColProps} {...rest} />;
   };
 
 export default SearchAmenitiesColumn;

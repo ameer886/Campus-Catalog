@@ -111,7 +111,6 @@ const Search: React.FunctionComponent<SearchProps> = ({
         });
 
         const maxElts = [0, 0, 0];
-        console.log(data);
         for (let i = 0; i < data.length; i++) {
           if (data[i].amenities) {
             maxElts[2] = data[i].total_items;
