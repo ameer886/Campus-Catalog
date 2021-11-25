@@ -1,21 +1,17 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import type { ColumnDefinitionType } from '../../components/GenericTable/GenericTable';
 import type { EntertainmentRowType } from '../../views/Entertainments/EntertainmentsPage';
 import type { IntentionallyAny } from '../../utilities';
-import type { PaginationMeta } from '../../components/Pagination/PaginatedTable';
 import type { FilterPopoverOption } from '../../components/FilterPopover/FilterPopover';
 
 import GenericTable from '../GenericTable/GenericTable';
 import PaginationRelay from '../Pagination/PaginationRelay';
+import PaginatedTable from '../../components/Pagination/PaginatedTable';
 import FilterPopover from '../../components/FilterPopover/FilterPopover';
 
-import { getAPI } from '../../APIClient';
-
 import styles from './EntertainmentTable.module.css';
-
-const PAGE_SIZE = 10;
 
 const entertainmentTableHeaders: ColumnDefinitionType<
   EntertainmentRowType,
@@ -139,101 +135,66 @@ type EntertainmentTableTestProps = {
 
 const EntertainmentTable: React.FunctionComponent<EntertainmentTableTestProps> =
   ({ testRows }: EntertainmentTableTestProps) => {
-    const [loading, setLoading] = useState(testRows == null);
-    const [rows, setRows] = useState<Array<EntertainmentRowType>>([]);
-    const [meta, setMeta] = useState<PaginationMeta | null>(
-      testRows == null
-        ? null
-        : {
-            page: 1,
-            max_page: testRows.length / PAGE_SIZE,
-            total_items: testRows.length,
-            per_page: PAGE_SIZE,
-          },
-    );
-    const [page, setPage] = useState(1); // Pages are 1-indexed
-    const [filter, setFilter] = useState('');
-    const [sortStr, setSortStr] = useState('NONE');
+    if (testRows) {
+      // Hack around queries to get a "table" that tests the basic fns
+      // We need to avoid any kind of query while keeping tests functional
+      // If testRows is not undefined, then this will most certainly
+      // crash the front-end
+      const ps = 10;
+      const [filter, setFilter] = useState('');
+      const [sortStr, setSortStr] = useState('NONE');
+      const [page, setPage] = useState(1);
 
-    useEffect(() => {
-      if (testRows) {
-        setRows(
-          testRows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
-        );
-        return;
-      }
+      return (
+        <div className={styles.EntertainmentTable}>
+          <div>
+            <div className={styles.FilterButton}>
+              <FilterPopover
+                options={popoverOptions}
+                setFilter={(e: string) => {
+                  if (filter === e) return;
+                  setFilter(e);
+                }}
+              />
+            </div>
+          </div>
 
-      const fetchDataAsync = async () => {
-        try {
-          let params = `page=${page}&per_page=${PAGE_SIZE}`;
-          if (sortStr !== 'NONE') {
-            params += `&sort=${sortStr.slice(0, -4)}`;
-            if (sortStr.includes('dsc')) params += '&desc=True';
-          }
-          if (filter) params += filter;
+          <GenericTable
+            columnDefinitions={entertainmentTableHeaders}
+            data={testRows.slice((page - 1) * ps, page * ps)}
+            parentSort={setSortStr}
+            parentStr={sortStr}
+          />
 
-          const data = await getAPI({
-            model: 'amenities',
-            params: params,
-          });
-          const responseMeta: PaginationMeta = { ...data[0] };
-          const responseRows = data[1].amenities.map(
-            (apt: IntentionallyAny) => {
-              return {
-                id: apt.amen_id,
-                ...apt,
-              };
-            },
-          );
-          setRows(responseRows);
-          setMeta(responseMeta);
-          setLoading(false);
-        } catch (err) {
-          console.error(err);
-          window.location.assign('/error');
-        }
-      };
-      fetchDataAsync();
-    }, [page, filter, sortStr]);
+          <PaginationRelay
+            curPage={page}
+            setPage={setPage}
+            pageSize={ps}
+            totalElements={testRows.length}
+          />
+        </div>
+      );
+    }
 
-    if (loading || meta == null)
-      return <p>Loading, please be patient.</p>;
+    const processResponse = (data: IntentionallyAny) => {
+      const responseRows = data[1].amenities.map(
+        (amen: IntentionallyAny) => {
+          return {
+            id: amen.amen_id,
+            ...amen,
+          };
+        },
+      );
+      return responseRows;
+    };
 
     return (
       <div className={styles.EntertainmentTable}>
-        <div>
-          <div className={styles.FilterButton}>
-            <FilterPopover
-              options={popoverOptions}
-              setFilter={(e: string) => {
-                if (filter === e) return;
-                setLoading(testRows == null);
-                setPage(1);
-                setFilter(e);
-              }}
-            />
-          </div>
-        </div>
-
-        <GenericTable
+        <PaginatedTable
+          options={popoverOptions}
+          processResponse={processResponse}
+          model="amenities"
           columnDefinitions={entertainmentTableHeaders}
-          data={rows}
-          parentSort={(e: string) => {
-            setLoading(testRows == null);
-            setPage(1);
-            setSortStr(e);
-          }}
-          parentStr={sortStr}
-        />
-
-        <PaginationRelay
-          curPage={page}
-          setPage={(e) => {
-            setLoading(testRows == null);
-            setPage(e);
-          }}
-          pageSize={PAGE_SIZE}
-          totalElements={meta.total_items}
         />
       </div>
     );

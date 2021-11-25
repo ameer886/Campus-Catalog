@@ -46,7 +46,7 @@ const PaginationRelay: React.FunctionComponent<PaginationRelayProps> =
 
     return (
       <div>
-        <div>
+        <div className={styles.TextContainer}>
           Showing items {curPages} of {totalElements}.
         </div>
         <div className={styles.ButtonContainer}>
