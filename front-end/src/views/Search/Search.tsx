@@ -81,9 +81,9 @@ const Search: React.FunctionComponent<SearchProps> = ({
   });
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [maxResult, setMaxResult] = useState(0);
 
   const [filterState, setFilterState] = useState([true, true, true]);
+  const [maxResults, setMaxResults] = useState([0, 0, 0]);
   const [housingRows, setHousingRows] = useState<
     Array<ApartmentRowType>
   >([]);
@@ -97,23 +97,21 @@ const Search: React.FunctionComponent<SearchProps> = ({
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
-        let params = `q=${q}&${getQueryFromFilter(filterState)}`;
-        if (filterState[0])
-          params += `&housing_page=${page}&housing_per_page=${PAGE_SIZE}`;
-        if (filterState[1])
-          params += `&universities_page=${page}&universities_per_page=${PAGE_SIZE}`;
-        if (filterState[2])
-          params += `&amenities_page=${page}&amenities_per_page=${PAGE_SIZE}`;
+        const params =
+          `q=${q}&${getQueryFromFilter(filterState)}` +
+          `&housing_page=${page}&housing_per_page=${PAGE_SIZE}` +
+          `&universities_page=${page}&universities_per_page=${PAGE_SIZE}` +
+          `&amenities_page=${page}&amenities_per_page=${PAGE_SIZE}`;
 
         const data = await getAPI({
           model: 'search',
           params: params,
         });
 
-        let maxElts = 0;
+        const maxElts = [0, 0, 0];
         for (let i = 0; i < data.length; i++) {
-          maxElts = Math.max(maxElts, data[i].total_items);
           if (data[i].amenities) {
+            maxElts[2] = data[i].total_items;
             const amenitiesData = data[i];
             const amenDataRows = amenitiesData.amenities.map(
               (amen) => {
@@ -125,6 +123,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
             );
             setAmenityRows(amenDataRows);
           } else if (data[i].universities) {
+            maxElts[1] = data[i].total_items;
             const univData = data[i];
             const univDataRows = univData.universities.map((univ) => {
               return {
@@ -134,6 +133,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
             });
             setUnivRows(univDataRows);
           } else if (data[i].properties) {
+            maxElts[0] = data[i].total_items;
             const housingData = data[1];
             const housingDataRows = housingData.properties.map(
               (apt) => {
@@ -146,15 +146,16 @@ const Search: React.FunctionComponent<SearchProps> = ({
             setHousingRows(housingDataRows);
           }
         }
-        setMaxResult(maxElts);
+        setMaxResults(maxElts);
         setLoading(false);
       } catch (err) {
         console.error(err);
+        window.location.assign('/error');
       }
     };
 
     fetchDataAsync();
-  }, [filterState, page]);
+  }, [page]);
 
   const toggleItem = (i: number) => {
     let count = 0;
@@ -179,6 +180,12 @@ const Search: React.FunctionComponent<SearchProps> = ({
         : '1px solid #aaa',
     };
   };
+
+  let totalVisibleItems = 0;
+  for (let i = 0; i < maxResults.length; i++) {
+    if (filterState[i])
+      totalVisibleItems = Math.max(totalVisibleItems, maxResults[i]);
+  }
 
   return (
     <div className={styles.Search}>
@@ -233,7 +240,7 @@ const Search: React.FunctionComponent<SearchProps> = ({
           setLoading(true);
         }}
         pageSize={PAGE_SIZE}
-        totalElements={maxResult}
+        totalElements={totalVisibleItems}
       />
     </div>
   );

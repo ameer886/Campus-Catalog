@@ -1,10 +1,34 @@
 import React from 'react';
 
+import type { GenericDatumField } from './GenericCard';
 import type { UniversityRowType } from '../Universities/UniversitiesPage';
 
-import styles from './Search.module.css';
-import SearchUniversitiesCard from './SearchUniversitiesCard';
+import GenericColumn from './GenericColumn';
 
+/* attributes of a university */
+const univAttrs: GenericDatumField<
+  UniversityRowType,
+  keyof UniversityRowType
+>[] = [
+  {
+    name: 'Name:',
+    attribute: 'univ_name',
+  },
+  {
+    name: 'City:',
+    attribute: 'city',
+  },
+  {
+    name: 'State:',
+    attribute: 'state',
+  },
+  {
+    name: 'Ranking:',
+    attribute: 'rank',
+  },
+];
+
+// props to coerce T into UniversityRowType
 type UnivColProps = {
   loading: boolean;
   query: string;
@@ -12,27 +36,19 @@ type UnivColProps = {
 };
 
 const SearchUniversitiesColumn: React.FunctionComponent<UnivColProps> =
-  ({ loading, query, rows }: UnivColProps) => {
-    if (loading)
-      return (
-        <div className={styles.Column}>
-          Loading university results, please wait
-        </div>
-      );
+  ({ ...rest }: UnivColProps) => {
+    // Build extra props specific to univ
+    const univColProps = {
+      name: 'university',
+      color: 'green',
+      attributes: univAttrs,
+      getName: (row: UniversityRowType) => row.univ_name,
+      getHREF: (row: UniversityRowType) => {
+        return `/universities/${row.univ_id}`;
+      },
+    };
 
-    return (
-      <div className={styles.Column}>
-        {rows.length === 0
-          ? 'No universities could be found.'
-          : rows.map((row, index) => (
-              <SearchUniversitiesCard
-                key={index}
-                row={row}
-                query={query}
-              />
-            ))}
-      </div>
-    );
+    return <GenericColumn {...univColProps} {...rest} />;
   };
 
 export default SearchUniversitiesColumn;

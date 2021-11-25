@@ -92,7 +92,7 @@ const AboutPage: React.FunctionComponent = () => {
       issues: 0,
       unitTests: 29,
       color: '#31052f',
-      role: 'Front-End Lead Developr',
+      role: 'Front-End Lead Developer',
       img: RyanGahaganImg,
       bio: "Ryan is a senior at UT Austin. He's from Dripping Springs, TX. \
             He takes math courses on the side, and plays video games as though \
@@ -107,7 +107,7 @@ const AboutPage: React.FunctionComponent = () => {
       issues: 0,
       unitTests: 8,
       color: '#ebda8a',
-      role: 'Backend Devops',
+      role: 'Back-end Devops',
       img: AndrewLuoImg,
       bio: 'Andrew is a junior from Plano, Texas. Has no idea how he managed to get \
             to this point. Enjoys cooking, playing tennis, and watching anime.',
@@ -119,7 +119,7 @@ const AboutPage: React.FunctionComponent = () => {
       issues: 0,
       unitTests: 10,
       color: '#90ee90',
-      role: 'Backend Developer',
+      role: 'Back-end Developer',
       img: BrandonHinhImg,
       bio: 'Brandon is currently a junior CS and Actuarial Science major. He is \
             from Houston, TX. He is interested in full-stack web development and \
@@ -132,7 +132,7 @@ const AboutPage: React.FunctionComponent = () => {
       commits: 0,
       issues: 0,
       unitTests: 0,
-      role: 'Frontend Developer',
+      role: 'Front-end Developer',
       color: '#ff7f7f',
       img: RichaGadreImg,
       bio: 'Richa is currently studying Computer Science and minoring in Business \
@@ -147,7 +147,7 @@ const AboutPage: React.FunctionComponent = () => {
       issues: 0,
       unitTests: 27,
       color: '#7df9ff',
-      role: 'Backend Lead Developer',
+      role: 'Back-end Lead Developer',
       img: DavidHeImg,
       bio: 'David is a senior CS major at UT. He is from Shanghai, China. He is working \
             on backend development and database management for the site. He is also \

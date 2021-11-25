@@ -109,7 +109,7 @@ export const aboutTools: ToolOrAPI[] = [
   },
   {
     name: 'Selenium',
-    description: 'Acceptance testsk',
+    description: 'Acceptance tests',
     link: 'https://www.selenium.dev/',
     img: SeleniumLogoImg,
   },
