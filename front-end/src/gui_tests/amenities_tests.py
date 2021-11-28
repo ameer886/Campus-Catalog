@@ -1,6 +1,7 @@
 import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
 import sys
 
 URL = "https://www.campuscatalog.me/amenities/"
@@ -24,9 +25,9 @@ class Test(unittest.TestCase):
     def testAmenitiesInstance(self):
         self.driver.get("https://www.campuscatalog.me/amenities/706993/")
         self.driver.implicitly_wait(20)
-        name = self.driver.find_element_by_class_name("Entertainment_Name__3dIms").text
+        name = self.driver.find_element(By.CLASS_NAME, "Entertainment_Name__3dIms").text
         assert name == "Rice & Spice"
-        address = self.driver.find_element_by_class_name(
+        address = self.driver.find_element(By.CLASS_NAME,
             "Entertainment_Location__pOj9B"
         ).text
         assert address == "1520 Jackson Ave W Oxford, MS 38655"
