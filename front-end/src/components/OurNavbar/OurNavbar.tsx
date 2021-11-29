@@ -34,6 +34,10 @@ const OurNavbar: React.FunctionComponent = () => {
       href: '/universities',
       name: 'UNIVERSITIES',
     },
+    {
+      href: '/visualizations',
+      name: 'VISUALIZATIONS',
+    },
   ];
 
   return (
