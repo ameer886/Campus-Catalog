@@ -25,46 +25,50 @@ const ProviderSunburst: React.FunctionComponent = () => {
       // For each course
       courseData.forEach((course) => {
         if (course.desc !== 'NaN') {
-          // For each professor that teaches it
-          course.professors.forEach((prof) => {
-            if (
-              prof !== 'NaN' &&
-              !course['dept general'].includes('No Department for')
-            ) {
-              // If the professor has no datum yet, make the datum
-              const profKey = course['dept specific'] + prof;
-              if (!profToCourses.has(profKey)) {
-                profToCourses.set(profKey, {
-                  name: prof,
-                  children: [],
-                });
-              }
-
-              // Add the course to the professor
-              const profObj = profToCourses.get(profKey);
-              profObj.children.push({
-                // note: we're skipping sections here because there's way too much
-                name: course['num name'],
-                children: [],
-                value: course.section.length,
-              });
-
-              // Finally, if the department of this course/prof doesn't exist, add one
-              if (!deptToProfs.has(course['dept general'])) {
-                deptToProfs.set(course['dept general'], {
-                  name: course['dept general'],
-                  children: [],
-                });
-              }
-              const deptObj = deptToProfs.get(course['dept general']);
-              // Add professor to department if we haven't already done so
-              let includesProf = false;
-              for (let i = 0; i < deptObj.children.length; i++)
-                if (deptObj.children[i].name === profObj.name)
-                  includesProf = true;
-              if (!includesProf) deptObj.children.push(profObj);
+          // Concatenate all the professors that teach it
+          if (
+            course.professors.length > 0 &&
+            course.professors[0] !== 'NaN' &&
+            !course['dept general'].includes('No Department for')
+          ) {
+            let profConcat = course.professors[0];
+            for (let i = 1; i < course.professors.length; i++) {
+              profConcat += ', ' + course.professors[i];
             }
-          });
+
+            // If the professor has no datum yet, make the datum
+            const profKey = course['dept specific'] + profConcat;
+            if (!profToCourses.has(profKey)) {
+              profToCourses.set(profKey, {
+                name: profConcat,
+                children: [],
+              });
+            }
+
+            // Add the course to the professor
+            const profObj = profToCourses.get(profKey);
+            profObj.children.push({
+              // note: we're skipping sections here because there's way too much
+              name: course['num name'],
+              children: [],
+              value: course.section.length,
+            });
+
+            // Finally, if the department of this course/prof doesn't exist, add one
+            if (!deptToProfs.has(course['dept general'])) {
+              deptToProfs.set(course['dept general'], {
+                name: course['dept general'],
+                children: [],
+              });
+            }
+            const deptObj = deptToProfs.get(course['dept general']);
+            // Add professor to department if we haven't already done so
+            let includesProf = false;
+            for (let i = 0; i < deptObj.children.length; i++)
+              if (deptObj.children[i].name === profObj.name)
+                includesProf = true;
+            if (!includesProf) deptObj.children.push(profObj);
+          }
         }
       });
 
