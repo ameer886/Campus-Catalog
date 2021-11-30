@@ -92,23 +92,6 @@ describe('Filter Popover Test Suite', () => {
     expect(screen.getByText('Filter Options')).toBeInTheDocument();
   });
 
-  it('popover closes on apply', async () => {
-    render(
-      <FilterPopover
-        options={[]}
-        setFilter={() => {
-          return;
-        }}
-      />,
-    );
-    await openPopover();
-    await clickApply();
-
-    expect(
-      screen.queryByText('Filter Options'),
-    ).not.toBeInTheDocument();
-  });
-
   it('input test: basic string', async () => {
     const options: FilterPopoverOption[] = [
       {
