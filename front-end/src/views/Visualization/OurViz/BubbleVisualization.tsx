@@ -6,11 +6,11 @@ import { Typography } from "antd"
 
 const { Title } = Typography
 
-const UnivCostChart = () => {
-   const [data, setData] = useState([])
-   const [loading, setLoading] = useState(false)
-   const history = useHistory()
-   const [univ_id] = useState(new Map())
+const UnivCostChart: React.FunctionComponent = () => {
+   const [data, setData] = useState([]);
+   const [loading, setLoading] = useState(false);
+   const history = useHistory();
+   const [univ_id] = useState(new Map());
 
    useEffect(() => {
       const parseData = (data) => {
@@ -31,8 +31,10 @@ const UnivCostChart = () => {
                model: 'universities',
                params: params
             });
+            data[1]['universities'].forEach((univ) => {
+               univ_id.set(univ.univ_name, univ.univ_id)
+            })
             const parsedData = parseData(data[1]['universities'])
-            console.log(parsedData)
             setData(parsedData)
             setLoading(false)
          } catch (err) {
@@ -56,20 +58,20 @@ const UnivCostChart = () => {
          Loading, please be patient.
       </div>
       );
-   
+   console.log(univ_id)
    return (
       <>
-         <Title level={1}>Average Cost of Attendance</Title>
+         <Title level={2}>Average Cost of Attendance</Title>
          <div>
             <BubbleChart
                graph={{
-                  zoom: 0.7,
+                  zoom: 0.9,
                   offsetX: 0.0,
                   offsetY: 0.0,
                }}
                showLegend={false}
                width={1000}
-               height={800}
+               height={1000}
 					valueFont={{
 						family: "Arial",
 						size: 12,
@@ -78,7 +80,7 @@ const UnivCostChart = () => {
 					}}
 					labelFont={{
 						family: "Arial",
-						size: 16,
+						size: 8,
 						color: "#fff",
 						weight: "bold",
 					}}
@@ -89,8 +91,8 @@ const UnivCostChart = () => {
 				/>
 			</div>
       </>
-   )
+   );
 
 }
 
-export { UnivCostChart }
+export default UnivCostChart;
