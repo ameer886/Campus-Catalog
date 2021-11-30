@@ -26,17 +26,21 @@ const ProviderSunburst: React.FunctionComponent = () => {
       courseData.forEach((course) => {
         // For each professor that teaches it
         course.professors.forEach((prof) => {
-          if (prof !== 'NaN') {
+          if (
+            prof !== 'NaN' &&
+            !course['dept general'].includes('No Department for')
+          ) {
             // If the professor has no datum yet, make the datum
-            if (!profToCourses.has(prof)) {
-              profToCourses.set(prof, {
+            const profKey = course['dept specific'] + prof;
+            if (!profToCourses.has(profKey)) {
+              profToCourses.set(profKey, {
                 name: prof,
                 children: [],
               });
             }
 
             // Add the course to the professor
-            const profObj = profToCourses.get(prof);
+            const profObj = profToCourses.get(profKey);
             profObj.children.push({
               // note: we're skipping sections here because there's way too much
               name: course['num name'],
@@ -63,7 +67,7 @@ const ProviderSunburst: React.FunctionComponent = () => {
       });
 
       const sunburstData = {
-        name: 'Bevos',
+        name: 'UT',
         children: Array.from(deptToProfs.values()),
       };
       setData(sunburstData);
@@ -89,8 +93,8 @@ const ProviderSunburst: React.FunctionComponent = () => {
         tooltipPosition="right"
         keyId="Sunburst"
         value="value"
-        width={window.innerWidth * 0.8}
-        height={window.innerHeight * 0.8}
+        width={window.innerWidth * 1.0}
+        height={window.innerHeight * 1.0}
       />
     </div>
   );
