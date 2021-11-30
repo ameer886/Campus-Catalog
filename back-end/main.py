@@ -8,7 +8,7 @@ from sqlalchemy.sql.sqltypes import VARCHAR
 from sqlalchemy import text, desc, cast, or_
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.sql.schema import MetaData
-from werkzeug.exceptions import HTTPException, NotFound
+from werkzeug.exceptions import HTTPException
 from models import University, Housing, Amenities
 import sqlalchemy
 
@@ -281,7 +281,7 @@ def get_housing_by_id(id):
         sql = queries.query_images(id)
         result = db.session.execute(sql)
         if result.rowcount == 0:
-            raise NotFound()
+            raise HousingNotFound(description=f"property with id:{id} does not exist")
         housing = Housing.build_obj_from_args(*result)
         amen_sql = queries.query_amen(id)
         amen_nearby = db.session.execute(amen_sql)
@@ -342,11 +342,7 @@ def get_univ_by_id(id):
         sql = queries.query_univ_images(id)
         result = db.session.execute(sql)
         if result.rowcount == 0:
-            err = flask.Response(
-                json.dumps({"error": id + " not found"}), mimetype="application/json"
-            )
-            err.status_code = 404
-            return err
+            raise UniversityNotFound(description=f"university with id:{id} does not exist")
         univ = University.build_univ_from_args(*result)
         amen_sql = queries.query_univ_amen(id)
         amen_nearby = db.session.execute(amen_sql)
@@ -459,12 +455,7 @@ def get_amenities_by_id(amen_id):
     try:
         amenity = Amenities.query.get(amen_id)
         if amenity is None:
-            response = flask.Response(
-                json.dumps({"error": "id " + str(amen_id) + " not found"}),
-                mimetype="application/json",
-            )
-            response.status_code = 404
-            return response
+            raise AmenityNotFound(description=f"amenity with id:{amen_id} does not exist")
         housing_sql = queries.query_housing_from_amen(amen_id)
         housing_nearby = db.session.execute(housing_sql)
         univ_sql = queries.query_univ_from_amen(amen_id)
