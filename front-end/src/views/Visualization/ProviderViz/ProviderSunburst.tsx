@@ -49,6 +49,7 @@ const ProviderSunburst: React.FunctionComponent = () => {
               profToCourses.set(profKey, {
                 name: profConcat,
                 children: [],
+                innerVal: 0,
               });
             }
 
@@ -60,12 +61,14 @@ const ProviderSunburst: React.FunctionComponent = () => {
               children: [],
               value: course.num_section,
             });
+            profObj.innerVal += course.num_section;
 
             // Finally, if the department of this course/prof doesn't exist, add one
             if (!deptToProfs.has(course.course_dept_general_name)) {
               deptToProfs.set(course.course_dept_general_name, {
                 name: course.course_dept_general_name,
                 children: [],
+                innerVal: 0,
               });
             }
             const deptObj = deptToProfs.get(
@@ -76,14 +79,22 @@ const ProviderSunburst: React.FunctionComponent = () => {
             for (let i = 0; i < deptObj.children.length; i++)
               if (deptObj.children[i].name === profObj.name)
                 includesProf = true;
-            if (!includesProf) deptObj.children.push(profObj);
+            if (!includesProf) {
+              deptObj.children.push(profObj);
+              deptObj.innerVal += profObj.innerVal;
+            }
           }
         }
       });
 
+      // Filter out excess values from our data
+      const sunburstObj = Array.from(deptToProfs.values()).filter(
+        (dept) => dept.innerVal >= 100,
+      );
+
       const sunburstData = {
         name: 'UT',
-        children: Array.from(deptToProfs.values()),
+        children: sunburstObj,
       };
       setData(sunburstData);
       setLoading(false);
@@ -94,23 +105,31 @@ const ProviderSunburst: React.FunctionComponent = () => {
   if (loading || data == null) return <p>Loading</p>;
 
   return (
-    <div
-      style={{
-        justifyContent: 'center',
-        display: 'flex',
-      }}
-    >
-      <Sunburst
-        data={data}
-        scale="exponential"
-        tooltipContent={<div className="sunburstTooltip" />}
-        tooltip
-        tooltipPosition="right"
-        keyId="Sunburst"
-        value="value"
-        width={window.innerWidth * 1.0}
-        height={window.innerHeight * 1.0}
-      />
+    <div>
+      <h3>Department Sizes</h3>
+      <p>
+        This graph shows all of the departments with at least 100
+        sections, the professors in that department, and the courses
+        they teach in a sunburst hierarchy.
+      </p>
+      <div
+        style={{
+          justifyContent: 'center',
+          display: 'flex',
+        }}
+      >
+        <Sunburst
+          data={data}
+          scale="exponential"
+          tooltipContent={<div className="sunburstTooltip" />}
+          tooltip
+          tooltipPosition="right"
+          keyId="Sunburst"
+          value="value"
+          width={window.innerWidth * 1.0}
+          height={window.innerHeight * 1.0}
+        />
+      </div>
     </div>
   );
 };
