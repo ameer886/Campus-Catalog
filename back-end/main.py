@@ -156,7 +156,7 @@ def json_field_handler(request, columns):
     if fields is None:
         return fields
     difference = set(fields) - set(columns)
-    if difference is not None:
+    if len(difference) > 0:
         raise InvalidParamterException(description=f"Invalid Fields: {difference}\n Please select from {set(columns)}")
     return fields
 
