@@ -149,19 +149,26 @@ def merge_ranges(scores):
     return result
 
 
-def normalize_query(params):
+def normalize_query(params, columns):
     unflat_params = params.to_dict()
-    return {k: v for k, v in unflat_params.items() if k in ("city", "state")}
+    return {k: v for k, v in unflat_params.items() if k in columns}
 
+def paginated_JSON_builder(data, schema, keyword):
+    header = {"page": data.page,
+            "per_page": data.per_page,
+            "max_page": data.pages,
+            "total_items": data.total}
+    content = schema.dump(data.items)
+    return jsonify(header, {keyword: content})
 
-def normalize_amenities_query(params):
-    unflat_params = params.to_dict()
-    return {k: v for k, v in unflat_params.items() if k in amenities_table_columns}
-
-
-def normalize_university_query(params):
-    unflat_params = params.to_dict()
-    return {k: v for k, v in unflat_params.items() if k in univ_columns}
+def paginated_query_result_builder(request, query, table):
+    page, per_page = get_pagination_params(request)
+    column, descending = get_sort_params(request, table)
+    order = desc(text(column)) if descending == True else text(column)
+    paginated_result = query.order_by(order).paginate(
+        page, max_per_page=per_page
+    )
+    return paginated_result
 
 def get_pagination_params(request):
     page = request.args.get("page", default=1, type=int)
@@ -170,7 +177,7 @@ def get_pagination_params(request):
     per_page = request.args.get("per_page", default=10, type=int)
     if per_page < 1:
         raise InvalidParamterException(description="per_page must be greater than 0")
-    return {"page": page, "per_page": per_page}
+    return page, per_page
 
 def get_sort_params(request, table):
     sort_column = request.args.get("sort", default="state", type=str).lower()
@@ -189,16 +196,11 @@ def get_sort_params(request, table):
             sort_column = "min_rent"
     if sort_column not in table.c:
         raise InvalidParamterException(description=f"{sort_column} is not sortable")
-    return {"column": sort_column, "desc": sort_desc}
+    return sort_column, sort_desc
 
 @app.route("/housing", methods=["GET"])
 def get_all_housing():
     try:
-        # pagination params
-        paginate_params = get_pagination_params(request)
-        # sort params
-        sort_params = get_sort_params(request, housing)
-
         # retrieve params for filtering
         type_filter = request.args.get(
             "type",
@@ -220,7 +222,7 @@ def get_all_housing():
         transitscore_bounds = merge_ranges(transitscore)
 
         # positional filters
-        filter_params = normalize_query(request.args)
+        filter_params = normalize_query(request.args, ("city", "state"))
         filter_on = bool(filter_params)
         walkscore_spec = []
         transit_spec = []
@@ -251,21 +253,8 @@ def get_all_housing():
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
 
-        order = desc(text(sort_params["column"])) if sort_params["desc"] == True else text(sort_params["column"])
-        paginated_response = sql_query.order_by(order).paginate(
-            paginate_params["page"], max_per_page=paginate_params["per_page"]
-        )
-        all_housing = paginated_response.items
-        
-        page_headers = {
-            "page": paginated_response.page,
-            "per_page": paginated_response.per_page,
-            "max_page": paginated_response.pages,
-            "total_items": paginated_response.total,
-        }
-
-        result = all_housing_schema.dump(all_housing)
-        return jsonify(page_headers, {"properties": result})
+        paginated_result = paginated_query_result_builder(request, sql_query, housing)
+        return paginated_JSON_builder(paginated_result, all_housing_schema, "properties")
     except InvalidParamterException as e:
         abort(400, e)
     except HTTPException as e:
@@ -304,18 +293,13 @@ def get_housing_by_id(id):
 @app.route("/universities", methods=["GET"])
 def get_all_universities():
     try:
-        # pagination params
-        paginate_params = get_pagination_params(request)
-        # sort params
-        sort_params = get_sort_params(request, university)
-
         # retrieve params for filtering
         ownership = request.args.get("ownership_id")
         accept = request.args.get("accept", type=float)
         grad = request.args.get("grad", type=float)
 
         # positional filters
-        filter_params = normalize_university_query(request.args)
+        filter_params = normalize_query(request.args, univ_columns)
         filter_on = bool(filter_params)
 
         sql_query = University.query
@@ -328,20 +312,9 @@ def get_all_universities():
         if grad != None:
             sql_query = sql_query.filter(University.graduation_rate >= grad)
         sql_query = sql_query.filter(University.rank != None)
-        order = desc(text(sort_params["column"])) if sort_params["desc"] == True else text(sort_params["column"])
-        paginated_response = sql_query.order_by(order).paginate(
-            paginate_params["page"], max_per_page=paginate_params["per_page"]
-        )
-        all_univ = paginated_response.items
-        
-        page_headers = {
-            "page": paginated_response.page,
-            "per_page": paginated_response.per_page,
-            "max_page": paginated_response.pages,
-            "total_items": paginated_response.total,
-        }
-        result = all_univ_schema.dump(all_univ)
-        return jsonify(page_headers, {"universities": result})
+
+        paginated_result = paginated_query_result_builder(request, sql_query, university)
+        return paginated_JSON_builder(paginated_result, all_univ_schema, "universities")
     except InvalidParamterException as e:
         abort(400, e)
     except HTTPException as e:
@@ -430,11 +403,6 @@ def search_amenities(query):
 def get_all_amenities():
     # query and paginate
     try:
-        # pagination params
-        paginate_params = get_pagination_params(request)
-        # sort params
-        sort_params = get_sort_params(request, amenities)
-
         pricing_filter = request.args.get("price")
         pricing_list = (
             pricing_filter.split(",") if pricing_filter != None else pricing_filter
@@ -445,7 +413,7 @@ def get_all_amenities():
         rating = request.args.get("rate", type=float)
 
         # positional filters
-        filter_params = normalize_amenities_query(request.args)
+        filter_params = normalize_query(request.args, amenities_table_columns)
         filter_on = bool(filter_params)
         sql_query = Amenities.query
         if pricing_filter != None:
@@ -459,21 +427,8 @@ def get_all_amenities():
         if rating != None:
             sql_query = sql_query.filter(Amenities.rating >= rating)
 
-        order = desc(text(sort_params["column"])) if sort_params["desc"] == True else text(sort_params["column"])
-        paginated_response = sql_query.order_by(order).paginate(
-            paginate_params["page"], max_per_page=paginate_params["per_page"]
-        )
-        all_amenities = paginated_response.items
-        
-        page_headers = {
-            "page": paginated_response.page,
-            "per_page": paginated_response.per_page,
-            "max_page": paginated_response.pages,
-            "total_items": paginated_response.total,
-        }
-
-        result = all_amenities_schema.dump(all_amenities)
-        return jsonify(page_headers, {"amenities": result})
+        paginated_result = paginated_query_result_builder(request, sql_query, amenities)
+        return paginated_JSON_builder(paginated_result, all_amenities_schema, "amenities")
     except InvalidParamterException as e:
         abort(400, e)
     except HTTPException as e:
