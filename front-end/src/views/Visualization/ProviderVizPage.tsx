@@ -3,19 +3,19 @@ import Button from 'react-bootstrap/Button';
 
 import styles from './VisualizationsPage.module.css';
 
-import VizStack from './OurViz/VizStack';
+import ProviderVizStack from './ProviderViz/ProviderVizStack';
 
 const VisualizationsPage: React.FunctionComponent = () => {
   return (
     <div className={styles.VizContainer}>
-      <h1>Visualizations</h1>
-      <VizStack />
+      <h1>Provider Visualizations</h1>
+      <ProviderVizStack />
       <Button
         onClick={() => {
-          window.location.assign('/provider_visualizations');
+          window.location.assign('/visualizations');
         }}
       >
-        Click here to view provider visualizations!
+        Click here to view our visualizations!
       </Button>
     </div>
   );
