@@ -1,6 +1,4 @@
 import re
-import flask
-import json
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -12,7 +10,7 @@ from werkzeug.exceptions import HTTPException
 from models import University, Housing, Amenities
 import sqlalchemy
 
-from schemas import (all_amenities_schema, amenities_schema, all_housing_schema, single_housing_schema, single_univ_schema, all_univ_schema, amenities_table_columns, univ_columns)
+from schemas import (AmenitiesSchema, HousingSchema, UniversitySchema, table_columns, all_amenities_schema, amenities_schema, all_housing_schema, single_housing_schema, single_univ_schema, all_univ_schema, amenities_table_columns, univ_columns)
 from exceptions import InvalidParamterException, HousingNotFound, AmenityNotFound, UniversityNotFound
 import queries
 from db import db_init
@@ -153,6 +151,15 @@ def normalize_query(params, columns):
     unflat_params = params.to_dict()
     return {k: v for k, v in unflat_params.items() if k in columns}
 
+def json_field_handler(request, columns):
+    fields = request.args.get("fields", type=lambda v: v.split(','))
+    if fields is None:
+        return fields
+    difference = set(fields) - set(columns)
+    if len(difference) > 0:
+        raise InvalidParamterException(description=f"Invalid Fields: {difference}\n Please select from {set(columns)}")
+    return fields
+
 def paginated_JSON_builder(data, schema, keyword):
     header = {"page": data.page,
             "per_page": data.per_page,
@@ -201,6 +208,8 @@ def get_sort_params(request, table):
 @app.route("/housing", methods=["GET"])
 def get_all_housing():
     try:
+        fields = json_field_handler(request, table_columns)
+        schema = all_housing_schema if fields is None else HousingSchema(only=fields, many=True)
         # retrieve params for filtering
         type_filter = request.args.get(
             "type",
@@ -254,7 +263,8 @@ def get_all_housing():
             sql_query = sql_query.filter_by(**filter_params)
 
         paginated_result = paginated_query_result_builder(request, sql_query, housing)
-        return paginated_JSON_builder(paginated_result, all_housing_schema, "properties")
+        return paginated_JSON_builder(paginated_result, schema, "properties")
+
     except InvalidParamterException as e:
         abort(400, e)
     except HTTPException as e:
@@ -293,6 +303,8 @@ def get_housing_by_id(id):
 @app.route("/universities", methods=["GET"])
 def get_all_universities():
     try:
+        fields = json_field_handler(request, univ_columns)
+        schema = all_univ_schema if fields is None else UniversitySchema(only=fields, many=True)
         # retrieve params for filtering
         ownership = request.args.get("ownership_id")
         accept = request.args.get("accept", type=float)
@@ -314,7 +326,7 @@ def get_all_universities():
         sql_query = sql_query.filter(University.rank != None)
 
         paginated_result = paginated_query_result_builder(request, sql_query, university)
-        return paginated_JSON_builder(paginated_result, all_univ_schema, "universities")
+        return paginated_JSON_builder(paginated_result, schema, "universities")
     except InvalidParamterException as e:
         abort(400, e)
     except HTTPException as e:
@@ -403,6 +415,8 @@ def search_amenities(query):
 def get_all_amenities():
     # query and paginate
     try:
+        fields = json_field_handler(request, amenities_table_columns)
+        schema = all_amenities_schema if fields is None else AmenitiesSchema(only=fields, many=True)
         pricing_filter = request.args.get("price")
         pricing_list = (
             pricing_filter.split(",") if pricing_filter != None else pricing_filter
@@ -428,7 +442,7 @@ def get_all_amenities():
             sql_query = sql_query.filter(Amenities.rating >= rating)
 
         paginated_result = paginated_query_result_builder(request, sql_query, amenities)
-        return paginated_JSON_builder(paginated_result, all_amenities_schema, "amenities")
+        return paginated_JSON_builder(paginated_result, schema, "amenities")
     except InvalidParamterException as e:
         abort(400, e)
     except HTTPException as e:
