@@ -1,5 +1,6 @@
 import React from 'react';
-import UnivCostChart from './BubbleVisualization';
+import UnivCostChart from './UnivCostChart';
+
 const VizStack: React.FunctionComponent = () => {
   return (
     <>
