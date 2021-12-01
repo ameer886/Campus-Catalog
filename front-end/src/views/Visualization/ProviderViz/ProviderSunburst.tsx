@@ -13,9 +13,9 @@ const ProviderSunburst: React.FunctionComponent = () => {
     const fetchDataAsync = async () => {
       // Fetch course data
       const courseFetch = await fetch(
-        'https://api.bevoscourseguide.me/api/allcourses?per_page=10000',
+        'https://api.bevoscourseguide.me/api/coursereduced',
       );
-      const courseData = (await courseFetch.json()).courses;
+      const courseData = await courseFetch.json();
 
       // Maps prof names to prof objects to group courses
       const profToCourses = new Map<string, IntentionallyAny>();
@@ -24,20 +24,27 @@ const ProviderSunburst: React.FunctionComponent = () => {
 
       // For each course
       courseData.forEach((course) => {
-        if (course.desc !== 'NaN') {
+        if (course.course_desc !== 'NaN') {
           // Concatenate all the professors that teach it
           if (
-            course.professors.length > 0 &&
-            course.professors[0] !== 'NaN' &&
-            !course['dept general'].includes('No Department for')
+            course.course_professors.length > 0 &&
+            course.course_professors[0] !== 'NaN' &&
+            !course.course_dept_general_name.includes(
+              'No Department for',
+            )
           ) {
-            let profConcat = course.professors[0];
-            for (let i = 1; i < course.professors.length; i++) {
-              profConcat += ', ' + course.professors[i];
+            let profConcat = course.course_professors[0];
+            for (
+              let i = 1;
+              i < course.course_professors.length;
+              i++
+            ) {
+              profConcat += ', ' + course.course_professors[i];
             }
 
             // If the professor has no datum yet, make the datum
-            const profKey = course['dept specific'] + profConcat;
+            const profKey =
+              course.course_dept_specific_abbr + profConcat;
             if (!profToCourses.has(profKey)) {
               profToCourses.set(profKey, {
                 name: profConcat,
@@ -49,19 +56,21 @@ const ProviderSunburst: React.FunctionComponent = () => {
             const profObj = profToCourses.get(profKey);
             profObj.children.push({
               // note: we're skipping sections here because there's way too much
-              name: course['num name'],
+              name: course.course_num_name,
               children: [],
-              value: course.section.length,
+              value: course.num_section,
             });
 
             // Finally, if the department of this course/prof doesn't exist, add one
-            if (!deptToProfs.has(course['dept general'])) {
-              deptToProfs.set(course['dept general'], {
-                name: course['dept general'],
+            if (!deptToProfs.has(course.course_dept_general_name)) {
+              deptToProfs.set(course.course_dept_general_name, {
+                name: course.course_dept_general_name,
                 children: [],
               });
             }
-            const deptObj = deptToProfs.get(course['dept general']);
+            const deptObj = deptToProfs.get(
+              course.course_dept_general_name,
+            );
             // Add professor to department if we haven't already done so
             let includesProf = false;
             for (let i = 0; i < deptObj.children.length; i++)
