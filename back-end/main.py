@@ -149,19 +149,9 @@ def merge_ranges(scores):
     return result
 
 
-def normalize_query(params):
+def normalize_query(params, columns):
     unflat_params = params.to_dict()
-    return {k: v for k, v in unflat_params.items() if k in ("city", "state")}
-
-
-def normalize_amenities_query(params):
-    unflat_params = params.to_dict()
-    return {k: v for k, v in unflat_params.items() if k in amenities_table_columns}
-
-
-def normalize_university_query(params):
-    unflat_params = params.to_dict()
-    return {k: v for k, v in unflat_params.items() if k in univ_columns}
+    return {k: v for k, v in unflat_params.items() if k in columns}
 
 def paginated_JSON_builder(data, schema, keyword):
     header = {"page": data.page,
@@ -232,7 +222,7 @@ def get_all_housing():
         transitscore_bounds = merge_ranges(transitscore)
 
         # positional filters
-        filter_params = normalize_query(request.args)
+        filter_params = normalize_query(request.args, ("city", "state"))
         filter_on = bool(filter_params)
         walkscore_spec = []
         transit_spec = []
@@ -309,7 +299,7 @@ def get_all_universities():
         grad = request.args.get("grad", type=float)
 
         # positional filters
-        filter_params = normalize_university_query(request.args)
+        filter_params = normalize_query(request.args, univ_columns)
         filter_on = bool(filter_params)
 
         sql_query = University.query
@@ -423,7 +413,7 @@ def get_all_amenities():
         rating = request.args.get("rate", type=float)
 
         # positional filters
-        filter_params = normalize_amenities_query(request.args)
+        filter_params = normalize_query(request.args, amenities_table_columns)
         filter_on = bool(filter_params)
         sql_query = Amenities.query
         if pricing_filter != None:
