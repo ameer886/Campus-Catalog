@@ -3,7 +3,6 @@ from flask import jsonify, request, abort
 from sqlalchemy.sql.sqltypes import VARCHAR
 from sqlalchemy import text, desc, cast, or_, func
 from sqlalchemy.exc import SQLAlchemyError
-
 from werkzeug.exceptions import HTTPException
 
 from .models import University, Housing, Amenities
@@ -12,6 +11,7 @@ from .exceptions import *
 from campus_catalog import app, db, university, housing, amenities
 import campus_catalog.queries as queries
 
+# routing for Elastic Beanstalk health check
 @app.route("/")
 def home():
     return "<h1> goodbye world </h1>"
