@@ -1,29 +1,16 @@
 import re
-from flask import Flask, jsonify, request, abort
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+from flask import jsonify, request, abort
 from sqlalchemy.sql.sqltypes import VARCHAR
-from sqlalchemy import text, desc, cast, or_
+from sqlalchemy import text, desc, cast, or_, func
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.sql.schema import MetaData
+
 from werkzeug.exceptions import HTTPException
-from models import University, Housing, Amenities
-import sqlalchemy
 
-from schemas import (AmenitiesSchema, HousingSchema, UniversitySchema, table_columns, all_amenities_schema, amenities_schema, all_housing_schema, single_housing_schema, single_univ_schema, all_univ_schema, amenities_table_columns, univ_columns)
-from exceptions import InvalidParamterException, HousingNotFound, AmenityNotFound, UniversityNotFound
-import queries
-from db import db_init
-
-app = Flask(__name__)
-CORS(app)
-db = db_init(app)
-
-metadata = MetaData(db.engine)
-metadata.reflect()
-university = metadata.tables["university"]
-housing = metadata.tables["housing"]
-amenities = metadata.tables["amenities"]
+from .models import University, Housing, Amenities
+from .schemas import *
+from .exceptions import *
+from campus_catalog import app, db, university, housing, amenities
+import campus_catalog.queries as queries
 
 @app.route("/")
 def home():
@@ -403,7 +390,7 @@ def search_amenities(query):
         if re.match(r"^\d+(\.\d+)?$", term):
             if term.isdigit():
                 searches.append(Amenities.num_review == int(term))
-            searches.append(sqlalchemy.func.abs(Amenities.rating - float(term)) <= 1e-6)
+            searches.append(func.abs(Amenities.rating - float(term)) <= 1e-6)
         searches.append(Amenities.amen_name.ilike(f"%{term}%"))
         searches.append(Amenities.pricing.ilike(f"%{term}%"))
         searches.append(Amenities.state.ilike(f"%{term}%"))
@@ -484,7 +471,3 @@ def get_amenities_by_id(amen_id):
         db.session.rollback()
     except Exception as e:
         abort(503, e)
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,5 +1,4 @@
 from operator import and_
-from requests.models import Response
 from sqlalchemy.sql.schema import MetaData
 from main import db
 from models import Housing, HousingImages
