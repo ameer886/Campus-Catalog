@@ -22,6 +22,28 @@ class Test(unittest.TestCase):
     def tearDownClass(cls):
         cls.driver.quit()
 
+    def testSort(self):
+        self.driver.get(URL)
+        self.driver.implicitly_wait(10)
+        self.driver.find_element(By.XPATH, "/html/body/div/div[2]/div/table/thead/tr/th[1]").click()
+        self.driver.implicitly_wait(10)
+        amenity = self.driver.find_element(By.XPATH, "/html/body/div/div[2]/div/table/tbody/tr[1]/td[1]/a")
+
+        assert amenity.text == "10Q Chicken"
+
+    def testFilter(self):
+        self.driver.get(URL)
+        self.driver.implicitly_wait(10)
+        self.driver.find_element(By.XPATH, "/html/body/div[1]/div[2]/div/div[1]/div/div/button").click()
+        city_filter = self.driver.find_element(By.XPATH, "/html/body/div[2]/div[3]/div[1]/form/div/div/input")
+        city_filter.send_keys("Austin")
+        self.driver.find_element(By.XPATH, "/html/body/div[2]/div[2]/div/button").click()
+        self.driver.implicitly_wait(10)
+
+        amenity = self.driver.find_element(By.XPATH, "/html/body/div/div[2]/div/table/tbody/tr[1]/td[1]/a")
+
+        assert amenity.text == "Esther's Follies"
+
     def testAmenitiesInstance(self):
         self.driver.get("https://www.campuscatalog.me/amenities/706993/")
         self.driver.implicitly_wait(20)
