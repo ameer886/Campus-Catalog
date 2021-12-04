@@ -16,13 +16,16 @@ const StateChoropleth: React.FunctionComponent = () => {
       [1, numCells + 1],
       d3.schemeBlues[numCells],
     );
+    const format = (d) => `${d}%`;
 
     data.set('Texas', 10);
 
     const linear = d3
       .scaleLinear()
       .domain([0, 10])
-      .range([color(0), color(numCells)]);
+      // Start range at 2 because 0 and 1 look like white
+      // makes boundaries impossible to see
+      .range([color(2), color(numCells)]);
     //.range(['rgb(46, 73, 123)', 'rgb(71, 187, 94)']);
     //.tickFormat(d3.format('d'));
 
@@ -36,6 +39,7 @@ const StateChoropleth: React.FunctionComponent = () => {
       .attr('transform', 'translate(610,20)');
 
     const linearLegend = legendColor()
+      .title('Num Professors')
       .shapeWidth(30)
       .labelFormat(d3.format('d'))
       //.cells([1, 2, 3, 6, 8])
@@ -52,11 +56,13 @@ const StateChoropleth: React.FunctionComponent = () => {
       .join('path')
       .attr('fill', (d) => linear(data.get(d.properties.name)))
       .attr('d', d3.geoPath())
-      .append('title');
-    //      .text(
-    //        (d) => `${d.properties.name}
-    //    ${format(data.get(d.properties.name))}`,
-    //      );
+      .append('title')
+      .text(
+        (d) =>
+          `${d.properties.name}\n${format(
+            data.get(d.properties.name) ?? 0,
+          )}`,
+      );
 
     svg
       .append('path')
@@ -75,7 +81,6 @@ const StateChoropleth: React.FunctionComponent = () => {
 
   return (
     <div>
-      <p>Hello</p>
       <svg ref={d3Chart}></svg>
     </div>
   );
