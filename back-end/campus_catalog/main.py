@@ -201,7 +201,7 @@ def get_all_housing():
         type_filter = request.args.get(
             "type",
             default=["apartment", "condo", "house", "townhome"],
-            type=lambda v: v.split(","),
+            type=lambda v: v.split(",")
         )
         min_rent = request.args.get("min_rent", default=0, type=int)
         max_rent = request.args.get("max_rent", default=100000, type=int)
@@ -232,7 +232,7 @@ def get_all_housing():
                 f"""{getattr(Housing, 'transit_score')} >= {bound[0]} AND 
                     {getattr(Housing, 'transit_score')} <= {bound[1]}"""
             )
-        # query and paginate
+ 
         # get Query object
         sql_query = Housing.query
         # apply filters if detected
@@ -292,25 +292,23 @@ def get_all_universities():
     try:
         fields = json_field_handler(request, univ_columns)
         schema = all_univ_schema if fields is None else UniversitySchema(only=fields, many=True)
-        # retrieve params for filtering
-        ownership = request.args.get("ownership_id")
-        accept = request.args.get("accept", type=float)
-        grad = request.args.get("grad", type=float)
 
+        # retrieve params for filtering
+        accept = request.args.get("accept",default=0.0, type=float)
+        grad = request.args.get("grad",default=0.0, type=float)
+        unranked = request.args.get("unranked", default=False, type=lambda v: v.lower() == "true")
         # positional filters
         filter_params = normalize_query(request.args, univ_columns)
         filter_on = bool(filter_params)
 
         sql_query = University.query
-        if ownership != None:
-            sql_query = sql_query.filter(University.ownership_id == ownership)
+        sql_query = sql_query.filter(
+            University.acceptance_rate >= accept,
+            University.graduation_rate >= grad,
+            University.rank.is_(None) if unranked == True else University.rank.is_not(None)
+        )
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
-        if accept != None:
-            sql_query = sql_query.filter(University.acceptance_rate >= accept)
-        if grad != None:
-            sql_query = sql_query.filter(University.graduation_rate >= grad)
-        sql_query = sql_query.filter(University.rank != None)
 
         paginated_result = paginated_query_result_builder(request, sql_query, university)
         return paginated_JSON_builder(paginated_result, schema, "universities")
@@ -404,29 +402,22 @@ def get_all_amenities():
     try:
         fields = json_field_handler(request, amenities_table_columns)
         schema = all_amenities_schema if fields is None else AmenitiesSchema(only=fields, many=True)
-        pricing_filter = request.args.get("price")
-        pricing_list = (
-            pricing_filter.split(",") if pricing_filter != None else pricing_filter
-        )
 
-        reviews = request.args.get("reviews", type=int)
-
-        rating = request.args.get("rate", type=float)
+        pricing_filter = request.args.get("price", default=['$','$$','$$$','$$$$'], type=lambda v: v.split(','))
+        reviews = request.args.get("reviews", default=0, type=int)
+        rating = request.args.get("rate", default=0.0, type=float)
 
         # positional filters
         filter_params = normalize_query(request.args, amenities_table_columns)
         filter_on = bool(filter_params)
         sql_query = Amenities.query
-        if pricing_filter != None:
-            sql_query = sql_query.filter(
-                getattr(Amenities, "pricing").in_(pricing_list)
-            )
+        sql_query = sql_query.filter(
+            Amenities.pricing.in_(pricing_filter),
+            Amenities.num_review >= reviews,
+            Amenities.rating >= rating
+        )
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
-        if reviews != None:
-            sql_query = sql_query.filter(Amenities.num_review >= reviews)
-        if rating != None:
-            sql_query = sql_query.filter(Amenities.rating >= rating)
 
         paginated_result = paginated_query_result_builder(request, sql_query, amenities)
         return paginated_JSON_builder(paginated_result, schema, "amenities")
