@@ -1,22 +1,34 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 
 import styles from './VisualizationsPage.module.css';
 
-import VizStack from './OurViz/VizStack';
+import UnivCostChart from './OurViz/UnivCostChart';
+
+import ProviderSunburst from './ProviderViz/ProviderSunburst';
 
 const VisualizationsPage: React.FunctionComponent = () => {
   return (
     <div className={styles.VizContainer}>
       <h1>Visualizations</h1>
-      <VizStack />
-      <Button
-        onClick={() => {
-          window.location.assign('/provider_visualizations');
-        }}
+
+      <Tabs
+        defaultActiveKey="univCostChart"
+        className="mb-3"
+        style={{ justifyContent: 'center' }}
+        // This will make the sunburst not eat every graph
+        // however, it will make queries run every single time
+        // that tabs are switched
+        unmountOnExit
       >
-        Click here to view provider visualizations!
-      </Button>
+        <Tab eventKey="univCostChart" title="University Cost">
+          <UnivCostChart />
+        </Tab>
+        <Tab eventKey="providerSunburst" title="Course Sunburst">
+          <ProviderSunburst />
+        </Tab>
+      </Tabs>
     </div>
   );
 };
