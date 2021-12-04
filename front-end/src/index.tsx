@@ -20,7 +20,6 @@ import Entertainment from './components/Entertainment/Entertainment';
 import UniversitiesPage from './views/Universities/UniversitiesPage';
 import University from './components/University/University';
 import VisualizationsPage from './views/Visualization/VisualizationsPage';
-import ProviderVizPage from './views/Visualization/ProviderVizPage';
 import ErrorPage from './views/Invalid/ErrorPage';
 import InvalidPage from './views/Invalid/InvalidPage';
 
@@ -103,11 +102,6 @@ ReactDOM.render(
           path="/visualizations"
           exact
           component={VisualizationsPage}
-        />
-        <Route
-          path="/provider_visualizations"
-          exact
-          component={ProviderVizPage}
         />
 
         {/* Error page */}
