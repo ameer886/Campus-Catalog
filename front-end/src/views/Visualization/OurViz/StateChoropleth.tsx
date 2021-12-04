@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import Form from 'react-bootstrap/Form';
 
 // Provides topology processing for map and borders
 import * as topojson from 'topojson-client';
@@ -28,6 +29,7 @@ import states from './states-albers-10m';
 
 const StateChoropleth: React.FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
+  const [model, setModel] = useState('universities');
 
   // To use d3, we need to get an SVG and insert it directly
   // into the DOM. React really doesn't like you doing that
@@ -40,13 +42,20 @@ const StateChoropleth: React.FunctionComponent = () => {
   // It will run the query, process the data, then use d3
   // to edit the SVG directly.
   useEffect(() => {
+    console.log('effect');
     // Number of cells in the label
     const numCells = 8;
 
     // Function built from d3 to get a suitable color scheme
+    const scheme =
+      model === 'housing'
+        ? d3.schemeReds
+        : model === 'universities'
+        ? d3.schemeGreens
+        : d3.schemeBlues;
     const color = d3.scaleQuantize(
       [1, numCells + 1],
-      d3.schemeBlues[numCells],
+      scheme[numCells],
     );
 
     // Format function for the tooltips
@@ -67,12 +76,17 @@ const StateChoropleth: React.FunctionComponent = () => {
     //.range(['rgb(46, 73, 123)', 'rgb(71, 187, 94)']);
     //.tickFormat(d3.format('d'));
 
-    // Retrieve our chart via the ref and set the size
-    // If you need to reset the chart, you can run this line:
-    // svg.selectAll('*').remove();
-    const svg = d3
-      .select(d3Chart.current)
-      .attr('viewBox', [0, 0, 975, 610]);
+    // Retrieve our chart via the ref
+    const svg = d3.select(d3Chart.current);
+
+    // We change our chart every time the model changes
+    // This line deletes everything in the SVG; without it,
+    // we actually wind up stacking a bunch of SVGs on top of
+    // one another, which is really slow
+    svg.selectAll('*').remove();
+
+    // Set our size (must be done after clear)
+    svg.attr('viewBox', [0, 0, 975, 610]);
 
     // Append a group in the top right for the label
     // Theoretically should not be a hard-coded position,
@@ -86,7 +100,9 @@ const StateChoropleth: React.FunctionComponent = () => {
     // Use alternative legend-building lib to create legend
     // function (as opposed to import {legend} from '@d3/color-legend)
     const linearLegend = legendColor()
-      .title('Number of Universities') // Legend title
+      .title(
+        'Number of ' + model.charAt(0).toUpperCase() + model.slice(1),
+      ) // Legend title
       .shapeWidth(30) // Width of each cell
       .labelFormat(d3.format('d')) // Format of each cell text
       //.cells([1, 2, 3, 6, 8])     // explicit cell names
@@ -136,10 +152,23 @@ const StateChoropleth: React.FunctionComponent = () => {
     // At this point, we've retrieved our data and drawn
     // our SVG. We have no need for a loading string any more.
     setLoading(false);
-  }, []);
+  }, [model]);
 
   return (
     <div>
+      <Form>
+        <Form.Group>
+          <Form.Label htmlFor="modelSelect">
+            Select your model:
+          </Form.Label>
+          <br />
+          <select onChange={(e) => setModel(e.target.value)}>
+            <option value="universities">Universities</option>
+            <option value="housing">Housing</option>
+            <option value="amenities">Amenities</option>
+          </select>
+        </Form.Group>
+      </Form>
       {loading && <div>Loading, please be patient.</div>}
       <svg ref={d3Chart}></svg>
     </div>
