@@ -16,3 +16,4 @@ if __name__ == "__main__":
     os.system("python3 ./front-end/src/gui_tests/amenities_tests.py " + PATH)
     os.system("python3 ./front-end/src/gui_tests/housing_tests.py " + PATH)
     os.system("python3 ./front-end/src/gui_tests/universities_tests.py " + PATH)
+    os.system("python3 ./front-end/src/gui_tests/search_tests.py " + PATH)
