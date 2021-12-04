@@ -1,25 +1,63 @@
 import React from 'react';
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+
+// Provides topology processing for map and borders
 import * as topojson from 'topojson-client';
+
+// Provides legend (@d3/color-legend doesn't work on react)
 import { legendColor } from 'd3-svg-legend';
 
+// Provides actual SVG description for US states
+// Taken from https://github.com/topojson/us-atlas
 import states from './states-albers-10m';
 
+/*
+ * On the change that you find yourself using this component
+ * as a reference, then you should make sure you understand
+ * the basics of what an SVG is and how they work first.
+ *
+ * A good understanding of React hooks (particularly the
+ * useRef hook) will be very helpful as well.
+ *
+ * The whole component is, of course, ripped nearly directly
+ * from https://observablehq.com/@d3/state-choropleth
+ * except that I had to fix all the bugs that don't work because
+ * we're not in Observable
+ */
+
 const StateChoropleth: React.FunctionComponent = () => {
+  const [loading, setLoading] = useState(true);
+
+  // To use d3, we need to get an SVG and insert it directly
+  // into the DOM. React really doesn't like you doing that
+  // normally, so you need a ref. The ref must be null initially
+  // to satisfy type constraints, but will be set to the SVG for
+  // this component on mount.
   const d3Chart = useRef(null);
 
+  // After mount, this should automatically run.
+  // It will run the query, process the data, then use d3
+  // to edit the SVG directly.
   useEffect(() => {
+    // Number of cells in the label
     const numCells = 8;
-    const data = new Map();
+
+    // Function built from d3 to get a suitable color scheme
     const color = d3.scaleQuantize(
       [1, numCells + 1],
       d3.schemeBlues[numCells],
     );
+
+    // Format function for the tooltips
     const format = (d) => `${d}%`;
 
+    // Actual data processing
+    const data = new Map();
     data.set('Texas', 10);
 
+    // Build a function that does a linear interpolation of
+    // the data to get values and colors of states/cells
     const linear = d3
       .scaleLinear()
       .domain([0, 10])
@@ -29,26 +67,41 @@ const StateChoropleth: React.FunctionComponent = () => {
     //.range(['rgb(46, 73, 123)', 'rgb(71, 187, 94)']);
     //.tickFormat(d3.format('d'));
 
+    // Retrieve our chart via the ref and set the size
+    // If you need to reset the chart, you can run this line:
+    // svg.selectAll('*').remove();
     const svg = d3
       .select(d3Chart.current)
       .attr('viewBox', [0, 0, 975, 610]);
 
+    // Append a group in the top right for the label
+    // Theoretically should not be a hard-coded position,
+    // but I'm stupid and don't want to mess with dynamic
+    // width/height params
     svg
       .append('g')
       .attr('class', 'legend')
       .attr('transform', 'translate(610,20)');
 
+    // Use alternative legend-building lib to create legend
+    // function (as opposed to import {legend} from '@d3/color-legend)
     const linearLegend = legendColor()
-      .title('Num Professors')
-      .shapeWidth(30)
-      .labelFormat(d3.format('d'))
-      //.cells([1, 2, 3, 6, 8])
-      .cells(numCells)
-      .orient('horizontal')
-      .scale(linear);
+      .title('Number of Universities') // Legend title
+      .shapeWidth(30) // Width of each cell
+      .labelFormat(d3.format('d')) // Format of each cell text
+      //.cells([1, 2, 3, 6, 8])     // explicit cell names
+      .cells(numCells) // Number of cells to LIRP over
+      .orient('horizontal') // Make the legend sideways
+      .scale(linear); // And lirp
 
+    // Retrieve that group we made earlier by class name and
+    // run the function we just built, which appends a legend
     svg.select('.legend').call(linearLegend);
 
+    // This chain is absurd but basically colors in the states
+    // themselves based on whatever value they have in the map
+    // It also adds in a tooltip via the title attribute
+    // The tooltip shows the name of the state and its value
     svg
       .append('g')
       .selectAll('path')
@@ -64,6 +117,8 @@ const StateChoropleth: React.FunctionComponent = () => {
           )}`,
       );
 
+    // This function draws the bundaries between the states
+    // You can read more
     svg
       .append('path')
       .datum(
@@ -77,10 +132,15 @@ const StateChoropleth: React.FunctionComponent = () => {
       .attr('stroke', 'white')
       .attr('stroke-linejoin', 'round')
       .attr('d', d3.geoPath());
+
+    // At this point, we've retrieved our data and drawn
+    // our SVG. We have no need for a loading string any more.
+    setLoading(false);
   }, []);
 
   return (
     <div>
+      {loading && <div>Loading, please be patient.</div>}
       <svg ref={d3Chart}></svg>
     </div>
   );
