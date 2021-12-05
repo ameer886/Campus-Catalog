@@ -16,6 +16,36 @@ import states from './states-albers-10m';
 import { getAPI } from '../../../APIClient';
 import { IntentionallyAny, stateAbbToLong } from '../../../utilities';
 
+// Override for all d3 schemes because gitLab can't import them
+// this is why we can't have nice things
+const schemeBlues = [
+  '#eff3ff',
+  '#c6dbef',
+  '#9ecae1',
+  '#6baed6',
+  '#4292c6',
+  '#2171b5',
+  '#084594',
+];
+const schemeReds = [
+  '#fee5d9',
+  '#fcbba1',
+  '#fc9272',
+  '#fb6a4a',
+  '#ef3b2c',
+  '#cb181d',
+  '#99000d',
+];
+const schemeGreens = [
+  '#edf8e9',
+  '#c7e9c0',
+  '#a1d99b',
+  '#74c476',
+  '#41ab5d',
+  '#238b45',
+  '#005a32',
+];
+
 /*
  * On the change that you find yourself using this component
  * as a reference, then you should make sure you understand
@@ -86,16 +116,18 @@ const StateChoropleth: React.FunctionComponent = () => {
     const numCells = 7;
 
     // Function built from d3 to get a suitable color scheme
+    // Apparently, the d3.schemeBlues/Reds/Greens functions
+    // *can't* be imported by gitLab. Super cool.
+    // So I've hard-coded the 7-elt array versions of these
+    // for usage. If you really need to change the numCells,
+    // PLEASE change this too.
     const scheme =
       model === 'housing'
-        ? d3.schemeReds
+        ? schemeReds // d3.schemeReds[7]
         : model === 'universities'
-        ? d3.schemeGreens
-        : d3.schemeBlues;
-    const color = d3.scaleQuantize(
-      [1, numCells + 1],
-      scheme[numCells],
-    );
+        ? schemeGreens // d3.schemeGreens[7]
+        : schemeBlues; // d3.schemeBlues[7]
+    const color = d3.scaleQuantize([1, numCells + 1], scheme);
 
     let maxCount = 0;
     data.forEach((val) => {
