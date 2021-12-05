@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   font-family: 'Times New Roman', Times, serif;
+  background-image: url('../../views/SplashPage/harvard.png');
 }
 
 .Name {
@@ -29,4 +30,25 @@
 
 .SplitSide {
   width: 45%;
+}
+
+.middleText {
+  background-color: lightgoldenrodyellow;
+  border-style: solid;
+}
+
+.labels {
+  background-color: lightpink;
+  border-style: solid;
+}
+
+.ul {
+  columns: 100px 4;
+  border-style: solid;
+  background-color: lightgrey;
+  padding-bottom: 20px;
+}
+
+.map {
+  border: 5px solid #555;
 }

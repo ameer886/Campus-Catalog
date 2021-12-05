@@ -3,6 +3,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: 'Times New Roman', Times, serif;
+  background-image: url('../../views/SplashPage/harvard.png');
 }
 
 .Name {
@@ -27,4 +29,26 @@
 .InlineLink {
   display: inline;
   padding: 0;
+}
+.middleText {
+  background-color: lightgoldenrodyellow;
+  border-style: solid;
+}
+
+.imgCols {
+  float: left;
+  object-fit: cover;
+  padding: 5px;
+}
+
+.ul {
+  columns: 100px 4;
+  border-style: solid;
+  background-color: lightgrey;
+  padding-bottom: 20px;
+}
+
+.labels {
+  background-color: lightpink;
+  border-style: solid;
 }

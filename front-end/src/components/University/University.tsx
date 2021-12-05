@@ -58,117 +58,125 @@ const University: React.FunctionComponent<UniversityProps> = ({
         <p>We could not find a ranking for this university.</p>
       )}
 
-      <p>This university is a {uniQuery.ownership_id} university.</p>
-      <p>
-        You can find the university website{' '}
-        <Nav.Link
-          href={uniQuery.school_url}
-          style={{ display: 'inline', padding: '0' }}
-          rel="nofollower noopener"
-        >
-          here
-        </Nav.Link>
-        .
-      </p>
+      <div className={styles.middleText}>
+        <p>
+          This university is a {uniQuery.ownership_id} university.
+        </p>
+        <p>
+          You can find the university website{' '}
+          <Nav.Link
+            href={uniQuery.school_url}
+            style={{ display: 'inline', padding: '0' }}
+            rel="nofollower noopener"
+          >
+            here
+          </Nav.Link>
+          .
+        </p>
 
-      {uniQuery.avg_cost_attendance != null &&
-      uniQuery.avg_cost_attendance !== 0 ? (
-        <p>
-          The average cost of attendance for this university is{' '}
-          {formatNumberToMoney(uniQuery.avg_cost_attendance)}.
-        </p>
-      ) : (
-        <p>
-          We could not find the average cost of attendance for this
-          university.
-        </p>
-      )}
-      {uniQuery.tuition_in_st != null &&
-      uniQuery.tuition_in_st !== 0 ? (
-        <p>
-          The in-state tuition for this university is{' '}
-          {formatNumberToMoney(uniQuery.tuition_in_st)}.
-        </p>
-      ) : (
-        <p>
-          We could not find the in-state tuition for this university.
-        </p>
-      )}
-      {uniQuery.tuition_out_st != null &&
-      uniQuery.tuition_out_st !== 0 ? (
-        <p>
-          The out-of-state tuition for this university is{' '}
-          {formatNumberToMoney(uniQuery.tuition_out_st)}.
-        </p>
-      ) : (
-        <p>
-          We could not find the out-of-state tuition for this
-          university.
-        </p>
-      )}
+        {uniQuery.avg_cost_attendance != null &&
+        uniQuery.avg_cost_attendance !== 0 ? (
+          <p>
+            The average cost of attendance for this university is{' '}
+            {formatNumberToMoney(uniQuery.avg_cost_attendance)}.
+          </p>
+        ) : (
+          <p>
+            We could not find the average cost of attendance for this
+            university.
+          </p>
+        )}
+        {uniQuery.tuition_in_st != null &&
+        uniQuery.tuition_in_st !== 0 ? (
+          <p>
+            The in-state tuition for this university is{' '}
+            {formatNumberToMoney(uniQuery.tuition_in_st)}.
+          </p>
+        ) : (
+          <p>
+            We could not find the in-state tuition for this
+            university.
+          </p>
+        )}
+        {uniQuery.tuition_out_st != null &&
+        uniQuery.tuition_out_st !== 0 ? (
+          <p>
+            The out-of-state tuition for this university is{' '}
+            {formatNumberToMoney(uniQuery.tuition_out_st)}.
+          </p>
+        ) : (
+          <p>
+            We could not find the out-of-state tuition for this
+            university.
+          </p>
+        )}
 
-      <p>
-        {uniQuery.graduation_rate != null ? (
-          <span>
-            This university has a graudation rate of{' '}
-            {(100 * uniQuery.graduation_rate).toFixed(1)}%.{' '}
-          </span>
-        ) : (
-          <span>We could not find the graduation rate. </span>
-        )}
-        {uniQuery.num_undergrad != null ? (
-          <span>
-            There are {uniQuery.num_undergrad.toLocaleString('en-US')}{' '}
-            undergrad students.{' '}
-          </span>
-        ) : (
-          <span>
-            We could not find the number of undergrad students.{' '}
-          </span>
-        )}
-        {uniQuery.num_graduate != null ? (
-          <span>
-            There are {uniQuery.num_graduate.toLocaleString('en-US')}{' '}
-            graduate students.
-          </span>
-        ) : (
-          <span>
-            We could not find the number of graduate students.
-          </span>
-        )}
-      </p>
+        <p>
+          {uniQuery.graduation_rate != null ? (
+            <span>
+              This university has a graudation rate of{' '}
+              {(100 * uniQuery.graduation_rate).toFixed(1)}%.{' '}
+            </span>
+          ) : (
+            <span>We could not find the graduation rate. </span>
+          )}
+          {uniQuery.num_undergrad != null ? (
+            <span>
+              There are{' '}
+              {uniQuery.num_undergrad.toLocaleString('en-US')}{' '}
+              undergrad students.{' '}
+            </span>
+          ) : (
+            <span>
+              We could not find the number of undergrad students.{' '}
+            </span>
+          )}
+          {uniQuery.num_graduate != null ? (
+            <span>
+              There are{' '}
+              {uniQuery.num_graduate.toLocaleString('en-US')} graduate
+              students.
+            </span>
+          ) : (
+            <span>
+              We could not find the number of graduate students.
+            </span>
+          )}
+        </p>
 
-      <p>
-        {uniQuery.avg_sat ? (
-          <span>
-            The average SAT score for this university is{' '}
-            {uniQuery.avg_sat}.
-          </span>
-        ) : (
-          <span>We could not find the average SAT score. </span>
-        )}
-        {uniQuery.acceptance_rate ? (
-          <span>
-            The acceptance rate
-            {(100 * uniQuery.acceptance_rate).toFixed(1)}%.
-          </span>
-        ) : (
-          <span>We could not find the acceptance rate.</span>
-        )}
-      </p>
+        <p>
+          {uniQuery.avg_sat ? (
+            <span>
+              The average SAT score for this university is{' '}
+              {uniQuery.avg_sat}.
+            </span>
+          ) : (
+            <span>We could not find the average SAT score. </span>
+          )}
+          {uniQuery.acceptance_rate ? (
+            <span>
+              The acceptance rate
+              {(100 * uniQuery.acceptance_rate).toFixed(1)}%.
+            </span>
+          ) : (
+            <span>We could not find the acceptance rate.</span>
+          )}
+        </p>
 
-      <p>Carnegie undergrad: {uniQuery.carnegie_undergrad}</p>
-      <p>The locale is: {uniQuery.locale}</p>
-
+        <p>Carnegie undergrad: {uniQuery.carnegie_undergrad}</p>
+        <p>The locale is: {uniQuery.locale}</p>
+      </div>
       <div className={styles.Splitter}>
         <div className={styles.SplitSide}>
-          <p>
-            We found {uniQuery.amenities_nearby.length} nearby
-            entertainment amenit
-            {uniQuery.amenities_nearby.length === 1 ? 'y' : 'ies'}.
-          </p>
+          <div className={styles.labels}>
+            <p>
+              We found {uniQuery.amenities_nearby.length} nearby
+              entertainment amenit
+              {uniQuery.amenities_nearby.length === 1 ? 'y' : 'ies'}.
+            </p>
+          </div>
           {uniQuery.amenities_nearby.length > 0 && (
-            <div>
+            <div className={styles.ul}>
               <ul style={{ width: '100%', textAlign: 'center' }}>
                 {uniQuery.amenities_nearby.map((amenity, index) => (
                   <li key={index}>
@@ -185,13 +193,15 @@ const University: React.FunctionComponent<UniversityProps> = ({
         </div>
 
         <div className={styles.SplitSide}>
-          <p>
-            We found {uniQuery.housing_nearby.length} nearby housing
-            location
-            {uniQuery.housing_nearby.length === 1 ? '' : 's'}.
-          </p>
+          <div className={styles.labels}>
+            <p>
+              We found {uniQuery.housing_nearby.length} nearby housing
+              location
+              {uniQuery.housing_nearby.length === 1 ? '' : 's'}.
+            </p>
+          </div>
           {uniQuery.housing_nearby.length > 0 && (
-            <div>
+            <div className={styles.ul}>
               <ul style={{ width: '100%', textAlign: 'center' }}>
                 {uniQuery.housing_nearby.map((housing, index) => (
                   <li key={index}>
@@ -210,10 +220,14 @@ const University: React.FunctionComponent<UniversityProps> = ({
 
       <img src={uniQuery.image} />
 
-      <p>A map of the location:</p>
-      <Location
-        position={{ lat: uniQuery.latitude, lng: uniQuery.longitude }}
-      />
+      <div className={styles.map}>
+        <Location
+          position={{
+            lat: uniQuery.latitude,
+            lng: uniQuery.longitude,
+          }}
+        />
+      </div>
     </div>
   );
 };
