@@ -137,7 +137,14 @@ class HousingSchema(ma.Schema):
             "lon": property.lon,
         }
 
-
+class DataSummarySchema(ma.Schema):
+    class Meta:
+        ordered = True
+    
+    num_univ = fields.Int()
+    num_amen = fields.Int()
+    num_prop = fields.Int()
+    state = fields.String()
 
 class UniversitySchema(ma.Schema):
     class Meta:
@@ -317,3 +324,4 @@ univ_columns = (
 )
 all_univ_schema = UniversitySchema(only=univ_columns, many=True)
 
+data_summary_schema = DataSummarySchema(many=True)

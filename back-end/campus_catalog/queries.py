@@ -144,3 +144,19 @@ def query_univ_housing(id):
     FROM cte
     WHERE cte.univ_id = '{id}'
     """
+
+def data_summary_query():
+    return '''
+    SELECT u.num_univ, COALESCE(amen.num_amen, 0) AS num_amen, COALESCE(hous.num_prop,0) as num_prop, u.state
+    FROM (
+        SELECT COUNT(univ_id) as num_univ, state FROM university
+        GROUP BY state) as u
+    LEFT JOIN (
+        SELECT COUNT(amen_id) as num_amen, state
+        FROM amenities GROUP BY state) as amen
+    ON u.state = amen.state
+    LEFT JOIN (
+        SELECT COUNT(property_id) as num_prop, state
+        FROM housing GROUP BY state)as hous
+    ON u.state = hous.state
+    '''

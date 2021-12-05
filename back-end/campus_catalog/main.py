@@ -1,5 +1,7 @@
 import re
 from flask import jsonify, request, abort
+from sqlalchemy.sql.expression import select, true
+from sqlalchemy.sql.functions import count
 from sqlalchemy.sql.sqltypes import VARCHAR
 from sqlalchemy import text, desc, cast, or_, func
 from sqlalchemy.exc import SQLAlchemyError
@@ -456,6 +458,19 @@ def get_amenities_by_id(amen_id):
         amenity["images"] = images
         amenity["categories"] = categories
         return jsonify(amenity)
+    except HTTPException as e:
+        abort(e.code, e)
+    except SQLAlchemyError as e:
+        db.session.rollback()
+    except Exception as e:
+        abort(503, e)
+
+@app.route("/summary", methods=["GET"])
+def get_data_summary():
+    try:
+        stmt = text(queries.data_summary_query())
+        result = db.session.execute(stmt)
+        return jsonify(data_summary_schema.dump(result))
     except HTTPException as e:
         abort(e.code, e)
     except SQLAlchemyError as e:
