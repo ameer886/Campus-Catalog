@@ -61,7 +61,10 @@ const Scatterplot: React.FunctionComponent = () => {
    return (
      <>
        <Title level={2}>Walk Score vs. Average Rent Cost</Title>
-       <div>
+       <div style={{
+          justifyContent: 'center',
+          display: 'flex',
+        }}>
          <ScatterChart width={1750} height={750}
             margin={{ top: 20, right: 20, bottom: 10, left: 10 }}>
             <CartesianGrid strokeDasharray="3 3" />
