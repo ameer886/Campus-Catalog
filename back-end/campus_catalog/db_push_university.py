@@ -4,9 +4,6 @@ from main import db
 import urllib
 from dotenv import load_dotenv, find_dotenv
 import os
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine, Column, String, Integer, MetaData
 
 
 def map_ownership(num):

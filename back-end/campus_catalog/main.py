@@ -1,30 +1,19 @@
 import re
-from flask import Flask, jsonify, request, abort
-from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
+from flask import jsonify, request, abort
+from sqlalchemy.sql.expression import select, true
+from sqlalchemy.sql.functions import count
 from sqlalchemy.sql.sqltypes import VARCHAR
-from sqlalchemy import text, desc, cast, or_
+from sqlalchemy import text, desc, cast, or_, func
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.sql.schema import MetaData
 from werkzeug.exceptions import HTTPException
-from models import University, Housing, Amenities
-import sqlalchemy
 
-from schemas import (AmenitiesSchema, HousingSchema, UniversitySchema, table_columns, all_amenities_schema, amenities_schema, all_housing_schema, single_housing_schema, single_univ_schema, all_univ_schema, amenities_table_columns, univ_columns)
-from exceptions import InvalidParamterException, HousingNotFound, AmenityNotFound, UniversityNotFound
-import queries
-from db import db_init
+from .models import University, Housing, Amenities
+from .schemas import *
+from .exceptions import *
+from campus_catalog import app, db, university, housing, amenities
+import campus_catalog.queries as queries
 
-app = Flask(__name__)
-CORS(app)
-db = db_init(app)
-
-metadata = MetaData(db.engine)
-metadata.reflect()
-university = metadata.tables["university"]
-housing = metadata.tables["housing"]
-amenities = metadata.tables["amenities"]
-
+# routing for Elastic Beanstalk health check
 @app.route("/")
 def home():
     return "<h1> goodbye world </h1>"
@@ -214,7 +203,7 @@ def get_all_housing():
         type_filter = request.args.get(
             "type",
             default=["apartment", "condo", "house", "townhome"],
-            type=lambda v: v.split(","),
+            type=lambda v: v.split(",")
         )
         min_rent = request.args.get("min_rent", default=0, type=int)
         max_rent = request.args.get("max_rent", default=100000, type=int)
@@ -245,7 +234,7 @@ def get_all_housing():
                 f"""{getattr(Housing, 'transit_score')} >= {bound[0]} AND 
                     {getattr(Housing, 'transit_score')} <= {bound[1]}"""
             )
-        # query and paginate
+ 
         # get Query object
         sql_query = Housing.query
         # apply filters if detected
@@ -305,25 +294,23 @@ def get_all_universities():
     try:
         fields = json_field_handler(request, univ_columns)
         schema = all_univ_schema if fields is None else UniversitySchema(only=fields, many=True)
-        # retrieve params for filtering
-        ownership = request.args.get("ownership_id")
-        accept = request.args.get("accept", type=float)
-        grad = request.args.get("grad", type=float)
 
+        # retrieve params for filtering
+        accept = request.args.get("accept",default=0.0, type=float)
+        grad = request.args.get("grad",default=0.0, type=float)
+        unranked = request.args.get("unranked", default=False, type=lambda v: v.lower() == "true")
         # positional filters
         filter_params = normalize_query(request.args, univ_columns)
         filter_on = bool(filter_params)
 
         sql_query = University.query
-        if ownership != None:
-            sql_query = sql_query.filter(University.ownership_id == ownership)
+        sql_query = sql_query.filter(
+            University.acceptance_rate >= accept,
+            University.graduation_rate >= grad,
+            University.rank.is_(None) if unranked == True else University.rank.is_not(None)
+        )
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
-        if accept != None:
-            sql_query = sql_query.filter(University.acceptance_rate >= accept)
-        if grad != None:
-            sql_query = sql_query.filter(University.graduation_rate >= grad)
-        sql_query = sql_query.filter(University.rank != None)
 
         paginated_result = paginated_query_result_builder(request, sql_query, university)
         return paginated_JSON_builder(paginated_result, schema, "universities")
@@ -403,7 +390,7 @@ def search_amenities(query):
         if re.match(r"^\d+(\.\d+)?$", term):
             if term.isdigit():
                 searches.append(Amenities.num_review == int(term))
-            searches.append(sqlalchemy.func.abs(Amenities.rating - float(term)) <= 1e-6)
+            searches.append(func.abs(Amenities.rating - float(term)) <= 1e-6)
         searches.append(Amenities.amen_name.ilike(f"%{term}%"))
         searches.append(Amenities.pricing.ilike(f"%{term}%"))
         searches.append(Amenities.state.ilike(f"%{term}%"))
@@ -417,29 +404,22 @@ def get_all_amenities():
     try:
         fields = json_field_handler(request, amenities_table_columns)
         schema = all_amenities_schema if fields is None else AmenitiesSchema(only=fields, many=True)
-        pricing_filter = request.args.get("price")
-        pricing_list = (
-            pricing_filter.split(",") if pricing_filter != None else pricing_filter
-        )
 
-        reviews = request.args.get("reviews", type=int)
-
-        rating = request.args.get("rate", type=float)
+        pricing_filter = request.args.get("price", default=['$','$$','$$$','$$$$'], type=lambda v: v.split(','))
+        reviews = request.args.get("reviews", default=0, type=int)
+        rating = request.args.get("rate", default=0.0, type=float)
 
         # positional filters
         filter_params = normalize_query(request.args, amenities_table_columns)
         filter_on = bool(filter_params)
         sql_query = Amenities.query
-        if pricing_filter != None:
-            sql_query = sql_query.filter(
-                getattr(Amenities, "pricing").in_(pricing_list)
-            )
+        sql_query = sql_query.filter(
+            Amenities.pricing.in_(pricing_filter),
+            Amenities.num_review >= reviews,
+            Amenities.rating >= rating
+        )
         if filter_on:
             sql_query = sql_query.filter_by(**filter_params)
-        if reviews != None:
-            sql_query = sql_query.filter(Amenities.num_review >= reviews)
-        if rating != None:
-            sql_query = sql_query.filter(Amenities.rating >= rating)
 
         paginated_result = paginated_query_result_builder(request, sql_query, amenities)
         return paginated_JSON_builder(paginated_result, schema, "amenities")
@@ -485,6 +465,15 @@ def get_amenities_by_id(amen_id):
     except Exception as e:
         abort(503, e)
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+@app.route("/summary", methods=["GET"])
+def get_data_summary():
+    try:
+        stmt = text(queries.data_summary_query())
+        result = db.session.execute(stmt)
+        return jsonify(data_summary_schema.dump(result))
+    except HTTPException as e:
+        abort(e.code, e)
+    except SQLAlchemyError as e:
+        db.session.rollback()
+    except Exception as e:
+        abort(503, e)

@@ -1,8 +1,4 @@
-from enum import unique
-from flask import request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, Sequence
-from sqlalchemy.orm import relation
 from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint
 
 db = SQLAlchemy()
