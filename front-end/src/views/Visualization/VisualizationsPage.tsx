@@ -5,6 +5,7 @@ import Tab from 'react-bootstrap/Tab';
 import styles from './VisualizationsPage.module.css';
 
 import UnivCostChart from './OurViz/UnivCostChart';
+import StateChoropleth from './OurViz/StateChoropleth';
 
 import ProviderSunburst from './ProviderViz/ProviderSunburst';
 
@@ -24,6 +25,9 @@ const VisualizationsPage: React.FunctionComponent = () => {
       >
         <Tab eventKey="univCostChart" title="University Cost">
           <UnivCostChart />
+        </Tab>
+        <Tab eventKey="stateChoropleth" title="State Density">
+          <StateChoropleth />
         </Tab>
         <Tab eventKey="providerSunburst" title="Course Sunburst">
           <ProviderSunburst />
