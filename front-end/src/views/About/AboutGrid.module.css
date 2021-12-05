@@ -22,7 +22,7 @@
   border: 2px solid maroon;
   border-radius: 16px;
 
-  color: #222;
+  color: black;
 }
 
 .ToolName {
@@ -45,5 +45,5 @@
 
 .Description {
   font-size: 18px;
-  color: #444;
+  color: black;
 }

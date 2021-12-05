@@ -7,6 +7,7 @@
 .About {
   text-align: center;
   font-family: 'Times New Roman', Times, serif;
+  background-color: rgb(153, 152, 152);
 }
 
 .Title {
@@ -25,6 +26,7 @@
 .Info {
   font-size: 24px;
   font-family: 'Times New Roman', Times, serif;
+  color: black;
 }
 
 .BigLogoContainer {
