@@ -13,6 +13,9 @@ import { legendColor } from 'd3-svg-legend';
 // Taken from https://github.com/topojson/us-atlas
 import states from './states-albers-10m';
 
+import { getAPI } from '../../../APIClient';
+import { IntentionallyAny, stateAbbToLong } from '../../../utilities';
+
 /*
  * On the change that you find yourself using this component
  * as a reference, then you should make sure you understand
@@ -29,6 +32,10 @@ import states from './states-albers-10m';
 
 const StateChoropleth: React.FunctionComponent = () => {
   const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<Map<
+    IntentionallyAny,
+    IntentionallyAny
+  > | null>(null);
   const [model, setModel] = useState('universities');
 
   // To use d3, we need to get an SVG and insert it directly
@@ -38,13 +45,45 @@ const StateChoropleth: React.FunctionComponent = () => {
   // this component on mount.
   const d3Chart = useRef(null);
 
+  // This should run automatically after mount, but only once
+  // i.e. we should never need to fetch this data twice because
+  // it doesn't matter when we change which model to show
+  useEffect(() => {
+    const fetchDataAsync = async () => {
+      const response = await getAPI({ model: 'summary' });
+      const mapCount = new Map();
+
+      response.forEach((state) => {
+        mapCount.set(stateAbbToLong(state.state), state);
+      });
+
+      setData(mapCount);
+    };
+    fetchDataAsync();
+  }, []);
+
   // After mount, this should automatically run.
   // It will run the query, process the data, then use d3
   // to edit the SVG directly.
+  // This should also run every time data is updated i.e.
+  // only once after the query finishes. This means we query once
+  // and render many times. Unlike the query, the SVG must be
+  // built many times so we do need this.
+  // Using two useEffects is very risky businesses, so if you must
+  // change this, then please be aware of what you're doing.
   useEffect(() => {
-    console.log('effect');
+    if (data == null) return;
+
+    // Property we're reading in this chart
+    const valProp =
+      model === 'housing'
+        ? 'num_prop'
+        : model === 'universities'
+        ? 'num_univ'
+        : 'num_amen';
+
     // Number of cells in the label
-    const numCells = 8;
+    const numCells = 7;
 
     // Function built from d3 to get a suitable color scheme
     const scheme =
@@ -58,18 +97,16 @@ const StateChoropleth: React.FunctionComponent = () => {
       scheme[numCells],
     );
 
-    // Format function for the tooltips
-    const format = (d) => `${d}%`;
-
-    // Actual data processing
-    const data = new Map();
-    data.set('Texas', 10);
+    let maxCount = 0;
+    data.forEach((val) => {
+      maxCount = Math.max(maxCount, val[valProp]);
+    });
 
     // Build a function that does a linear interpolation of
     // the data to get values and colors of states/cells
     const linear = d3
       .scaleLinear()
-      .domain([0, 10])
+      .domain([0, maxCount])
       // Start range at 2 because 0 and 1 look like white
       // makes boundaries impossible to see
       .range([color(2), color(numCells)]);
@@ -95,7 +132,7 @@ const StateChoropleth: React.FunctionComponent = () => {
     svg
       .append('g')
       .attr('class', 'legend')
-      .attr('transform', 'translate(610,20)');
+      .attr('transform', 'translate(580,20)');
 
     // Use alternative legend-building lib to create legend
     // function (as opposed to import {legend} from '@d3/color-legend)
@@ -103,7 +140,7 @@ const StateChoropleth: React.FunctionComponent = () => {
       .title(
         'Number of ' + model.charAt(0).toUpperCase() + model.slice(1),
       ) // Legend title
-      .shapeWidth(30) // Width of each cell
+      .shapeWidth(40) // Width of each cell
       .labelFormat(d3.format('d')) // Format of each cell text
       //.cells([1, 2, 3, 6, 8])     // explicit cell names
       .cells(numCells) // Number of cells to LIRP over
@@ -123,14 +160,16 @@ const StateChoropleth: React.FunctionComponent = () => {
       .selectAll('path')
       .data(topojson.feature(states, states.objects.states).features)
       .join('path')
-      .attr('fill', (d) => linear(data.get(d.properties.name)))
+      .attr('fill', (d) =>
+        linear(data.get(d.properties.name)[valProp]),
+      )
       .attr('d', d3.geoPath())
       .append('title')
       .text(
         (d) =>
-          `${d.properties.name}\n${format(
-            data.get(d.properties.name) ?? 0,
-          )}`,
+          `${d.properties.name}\n${
+            data.get(d.properties.name)[valProp]
+          } ${model}`,
       );
 
     // This function draws the bundaries between the states
@@ -152,7 +191,7 @@ const StateChoropleth: React.FunctionComponent = () => {
     // At this point, we've retrieved our data and drawn
     // our SVG. We have no need for a loading string any more.
     setLoading(false);
-  }, [model]);
+  }, [data, model]);
 
   return (
     <div>
