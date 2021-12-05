@@ -106,7 +106,7 @@ const ProviderSunburst: React.FunctionComponent = () => {
 
   return (
     <div>
-      <h3>Department Sizes</h3>
+      <div className="Header">Department Sizes</div>
       <p>
         This graph shows all of the departments with at least 100
         sections, the professors in that department, and the courses

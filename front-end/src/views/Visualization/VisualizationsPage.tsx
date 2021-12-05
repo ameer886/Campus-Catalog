@@ -11,7 +11,7 @@ import ProviderSunburst from './ProviderViz/ProviderSunburst';
 const VisualizationsPage: React.FunctionComponent = () => {
   return (
     <div className={styles.VizContainer}>
-      <h1>Visualizations</h1>
+      <div className="Header">Visualizations</div>
 
       <Tabs
         defaultActiveKey="univCostChart"

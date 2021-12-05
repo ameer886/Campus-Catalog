@@ -58,7 +58,7 @@ export type EntertainmentRowType = {
 const EntertainmentsPage: React.FunctionComponent = () => {
   return (
     <div className="Entertainments">
-      <h1>Amenities</h1>
+      <div className="Header">Amenities</div>
       <EntertainmentTable />
     </div>
   );

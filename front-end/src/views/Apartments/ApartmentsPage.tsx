@@ -59,7 +59,7 @@ export type ApartmentRowType = {
 const ApartmentsPage: React.FunctionComponent = () => {
   return (
     <div className="Apartments">
-      <h1>Housing</h1>
+      <div className="Header">Housing</div>
       <ApartmentTable />
     </div>
   );

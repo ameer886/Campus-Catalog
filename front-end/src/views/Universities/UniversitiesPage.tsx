@@ -272,7 +272,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
 
   return (
     <div className={styles.Universities}>
-      <h1>Universities</h1>
+      <div className="Header">Universities</div>
       <div className={styles.UniversitySplitter}>
         {/* Build the grid on the left */}
         <div className={styles.SplitterGrid}>

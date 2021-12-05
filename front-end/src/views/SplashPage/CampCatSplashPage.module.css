@@ -1,30 +1,39 @@
 .Centering {
   text-align: center;
+  background-color: black;
 }
 
 .TextContainer {
+  font-weight: bold;
   display: flex;
   text-align: center;
   justify-content: center;
   width: 100%;
+  font-family: 'Times New Roman', Times, serif;
 }
-
+.AllText {
+  background-image: url('harvard.png');
+}
+.Grid {
+  background-image: black;
+}
 .Title {
   font-size: 72px;
   font-weight: bold;
-  margin-bottom: 108px;
+  margin-bottom: 36px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .Mission {
+  font-weight: bolder;
   font-size: 40px;
   max-width: 1080px;
-  color: #322477;
+  color: maroon;
 }
 
 .Help {
-  font-size: 60px;
-  font-weight: bold;
-  color: maroon;
-  text-decoration: underline;
-  margin-bottom: 72px;
+  font-size: 40px;
+  font-weight: bolder;
+  color: black;
+  margin-bottom: 340px;
 }

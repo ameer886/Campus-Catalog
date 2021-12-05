@@ -1,5 +1,8 @@
 .EntertainmentTable {
   align-items: center;
+  background-color: rgb(184, 181, 181);
+  margin-top: 100px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .FilterButton {

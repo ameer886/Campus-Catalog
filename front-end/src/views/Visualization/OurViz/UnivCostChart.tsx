@@ -2,9 +2,6 @@ import React, { useEffect, useState } from 'react';
 import BubbleChart from '@weknow/react-bubble-chart-d3';
 import { getAPI } from '../../../APIClient';
 import { useHistory } from 'react-router-dom';
-import { Typography } from 'antd';
-
-const { Title } = Typography;
 
 const UnivCostChart: React.FunctionComponent = () => {
   const [data, setData] = useState([]);
@@ -59,7 +56,7 @@ const UnivCostChart: React.FunctionComponent = () => {
     );
   return (
     <>
-      <Title level={2}>Average Cost of Attendance</Title>
+      <div className="Header">Universities</div>
       <div>
         <BubbleChart
           graph={{

@@ -6,21 +6,25 @@
 
 .About {
   text-align: center;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .Title {
   font-size: 48px;
   font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .Section {
   color: maroon;
   font-size: 36px;
   font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .Info {
   font-size: 24px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .BigLogoContainer {

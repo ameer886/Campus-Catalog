@@ -1,5 +1,6 @@
 .Universities {
   text-align: center;
+  background-image: url('../SplashPage/harvard.png');
 }
 
 .UniversitySplitter {
@@ -24,4 +25,9 @@
 
 .RadioButton {
   margin: 0 4px;
+}
+
+.Header {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 4vw;
 }

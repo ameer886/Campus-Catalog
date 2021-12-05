@@ -3,11 +3,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .Name {
   font-size: 48px;
   font-weight: bold;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .Location {

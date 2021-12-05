@@ -5,8 +5,8 @@
 
 .Search {
   text-align: center;
-  padding-right: 2vw;
-  padding-left: 2vw;
+  padding-right: 1.1vw;
+  padding-left: 1.1vw;
   background: white;
   font-family: 'Oswald';
   background-size: cover;
@@ -21,7 +21,7 @@
 }
 
 .list_item {
-  padding-left: 2vw;
+  padding-left: 1.1vw;
 }
 
 .search_side_by_side {

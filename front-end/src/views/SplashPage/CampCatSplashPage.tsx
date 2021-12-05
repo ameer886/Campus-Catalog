@@ -10,22 +10,25 @@ import SplashGrid from './SplashGrid';
 const CampCatSplashPage: React.FunctionComponent = () => {
   return (
     <div className={styles.Centering}>
-      <div className={styles.TextContainer}>
-        <h1 className={styles.Title}>Campus Catalog</h1>
-      </div>
+      <div className={styles.AllText}>
+        <div className={styles.TextContainer}>
+          <h1 className={styles.Title}>CAMPUS CATALOG</h1>
+        </div>
 
-      <div className={styles.TextContainer}>
-        <h2 className={styles.Mission}>
-          Struggling to find the right university?
-          <br />
-          Not sure where to live or where to spend your time?
-        </h2>
+        <div className={styles.TextContainer}>
+          <h2 className={styles.Mission}>
+            Struggling to find the right university?
+            <br />
+            Not sure where to live or where to spend your time?
+          </h2>
+        </div>
+        <div className={styles.TextContainer}>
+          <h3 className={styles.Help}>We&#39;re here to help.</h3>
+        </div>
       </div>
-      <div className={styles.TextContainer}>
-        <h3 className={styles.Help}>We&#39;re here to help.</h3>
+      <div className={styles.Grid}>
+        <SplashGrid />
       </div>
-
-      <SplashGrid />
     </div>
   );
 };

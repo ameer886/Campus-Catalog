@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgb(184, 181, 181);
 }
 
 .SplashGridContainer {
@@ -21,28 +22,32 @@
   align-items: center;
   justify-content: center;
   margin: 12px 48px;
+  background-color: rgb(184, 181, 181);
 }
 
 .SplashCard {
-  height: 260px;
-  width: 380px;
+  height: 150px;
+  width: 200px;
+  margin-top: 100px;
 
   border: 10px solid maroon;
 
-  background-color: #ddd;
+  background-color: rgb(184, 181, 181);
   color: #222;
 }
 
 .SplashImg {
-  height: 240px;
-  width: 360px;
+  height: 150px;
+  width: 200px;
 }
 
 .CardLabel {
   font-size: 48px;
-  font-weight: bold;
-  color: cornflowerblue;
+  font-weight: bolder;
+  color: maroon;
   position: absolute;
-  margin-top: -324px;
+  margin-top: -100px;
   text-decoration: underline;
+  font-family: 'Times New Roman', Times, serif;
+  margin-bottom: 100px;
 }
