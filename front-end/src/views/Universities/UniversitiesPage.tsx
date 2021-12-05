@@ -248,6 +248,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
         setLoading(false);
       } catch (err) {
         console.error(err);
+        window.location.assign('/error');
       }
     };
     fetchDataAsync();
@@ -258,7 +259,7 @@ const UniversitiesPage: React.FunctionComponent = () => {
     return (
       <div style={{ textAlign: 'center' }}>
         <h1>Universities</h1>
-        <p>Loading responses, please be patient.</p>
+        <p>Loading, please be patient.</p>
       </div>
     );
 
