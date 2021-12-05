@@ -191,7 +191,11 @@ const StateChoropleth: React.FunctionComponent = () => {
       .append('g')
       .selectAll('path')
       .data(topojson.feature(states, states.objects.states).features)
-      .join('path')
+      // This line really does not like me
+      // .join('path')
+      // Following replacement per https://stackoverflow.com/a/55708965
+      .enter()
+      .append('path')
       .attr('fill', (d) =>
         linear(data.get(d.properties.name)[valProp]),
       )

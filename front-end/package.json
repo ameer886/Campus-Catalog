@@ -13,6 +13,7 @@
     "antd": "^4.16.13",
     "axios": "^0.22.0",
     "bootstrap": "^5.1.1",
+    "d3": "^7.2.0",
     "d3-svg-legend": "^2.25.6",
     "eslint-plugin-react": "^7.26.1",
     "react": "16.14.0",

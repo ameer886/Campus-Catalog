@@ -4,10 +4,11 @@ import Tab from 'react-bootstrap/Tab';
 
 import styles from './VisualizationsPage.module.css';
 
-import UnivCostChart from './OurViz/UnivCostChart';
 import StateChoropleth from './OurViz/StateChoropleth';
+import UnivCostChart from './OurViz/UnivCostChart';
 
 import ProviderSunburst from './ProviderViz/ProviderSunburst';
+import ProviderSankey from './ProviderViz/ProviderSankey';
 
 const VisualizationsPage: React.FunctionComponent = () => {
   return (
@@ -15,7 +16,7 @@ const VisualizationsPage: React.FunctionComponent = () => {
       <h1>Visualizations</h1>
 
       <Tabs
-        defaultActiveKey="univCostChart"
+        defaultActiveKey="stateChoropleth"
         className="mb-3"
         style={{ justifyContent: 'center' }}
         // This will make the sunburst not eat every graph
@@ -23,14 +24,17 @@ const VisualizationsPage: React.FunctionComponent = () => {
         // that tabs are switched
         unmountOnExit
       >
-        <Tab eventKey="univCostChart" title="University Cost">
-          <UnivCostChart />
-        </Tab>
         <Tab eventKey="stateChoropleth" title="State Density">
           <StateChoropleth />
         </Tab>
+        <Tab eventKey="univCostChart" title="University Cost">
+          <UnivCostChart />
+        </Tab>
         <Tab eventKey="providerSunburst" title="Course Sunburst">
           <ProviderSunburst />
+        </Tab>
+        <Tab eventKey="providerSankey" title="Schedule Breakdown">
+          <ProviderSankey />
         </Tab>
       </Tabs>
     </div>
