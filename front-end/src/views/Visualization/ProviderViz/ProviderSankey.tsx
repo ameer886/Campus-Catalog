@@ -1,6 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Sankey, Tooltip } from 'recharts';
+
+import SankeyNode from './SankeyNode';
+
 import { IntentionallyAny } from '../../../utilities';
 
 const ProviderSankey: React.FunctionComponent = () => {
@@ -32,14 +35,18 @@ const ProviderSankey: React.FunctionComponent = () => {
         ],
       };
 
-      const addToLink = (source: number, target: number) => {
+      const addToLink = (
+        source: number,
+        target: number,
+        amount?: number,
+      ) => {
         // Find the link for this spread
         let found = false;
         for (let k = 0; !found && k < buildData.links.length; k++) {
           const link = buildData.links[k];
           if (link.source === source && link.target === target) {
             // Increase existing link
-            link.value += 1;
+            link.value += amount ?? 1;
             found = true;
             break;
           }
@@ -49,7 +56,7 @@ const ProviderSankey: React.FunctionComponent = () => {
           buildData.links.push({
             source: source,
             target: target,
-            value: 1,
+            value: amount ?? 1,
           });
       };
 
@@ -94,7 +101,13 @@ const ProviderSankey: React.FunctionComponent = () => {
             }
 
             // On spread, add new mid-link
-            addToLink(0, sourceIndex);
+            // You may think we should add one here, and you'd be right
+            // Except that the payloads calculate node displays via a
+            // max(sum(inputs), sum(outputs)) function
+            // So the middle layer looks like it has more outputs than
+            // inputs, which is v. ugly
+            // Hence this "fix"
+            addToLink(0, sourceIndex, dayArr.length);
 
             // Iterate each day and adjust links again
             dayArr.forEach((day) => {
@@ -120,7 +133,6 @@ const ProviderSankey: React.FunctionComponent = () => {
         }
       });
 
-      console.log(buildData);
       setData(buildData);
       setLoading(false);
     };
@@ -144,13 +156,16 @@ const ProviderSankey: React.FunctionComponent = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <Sankey
-        width={960}
-        height={720}
-        //nodePadding={15}
+        //width={1400}  // Supposedly these can be set to percentages
+        //height={1000} // but idk how, hence this fugly fix
+        width={window.innerWidth * 0.9}
+        height={window.innerHeight}
+        nodePadding={30}
         nodeWidth={15}
         data={data}
         link={{ stroke: '#7778c8' }}
-        //node={<text>Test</text>}
+        margin={{ left: 100, right: 100, top: 40, bottom: 40 }}
+        node={<SankeyNode />}
       >
         <Tooltip />
       </Sankey>
