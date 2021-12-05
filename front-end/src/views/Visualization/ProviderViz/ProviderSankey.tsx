@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Sankey } from 'recharts';
+import { Sankey, Tooltip } from 'recharts';
 import { IntentionallyAny } from '../../../utilities';
 
 const ProviderSankey: React.FunctionComponent = () => {
@@ -141,7 +141,21 @@ const ProviderSankey: React.FunctionComponent = () => {
       </div>
     );
 
-  return <div />;
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <Sankey
+        width={960}
+        height={720}
+        //nodePadding={15}
+        nodeWidth={15}
+        data={data}
+        link={{ stroke: '#7778c8' }}
+        //node={<text>Test</text>}
+      >
+        <Tooltip />
+      </Sankey>
+    </div>
+  );
 };
 
 export default ProviderSankey;
