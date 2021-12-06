@@ -297,6 +297,7 @@ def test_search_multi_term(client):
 
 ### Data Summary Endpoint Test
 
+
 def test_data_summary_endpoint(client):
     rv = client.get("/summary")
     assert rv.status_code == 200

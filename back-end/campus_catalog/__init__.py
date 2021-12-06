@@ -23,4 +23,3 @@ amenities = metadata.tables["amenities"]
 
 # import routing
 from . import main
-

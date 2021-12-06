@@ -3,6 +3,7 @@ from flask_marshmallow import Marshmallow
 
 ma = Marshmallow()
 
+
 class AmenitiesImagesSchema(ma.Schema):
     id = fields.Int(required=True)
     amen_id = fields.Int(required=True)
@@ -137,14 +138,16 @@ class HousingSchema(ma.Schema):
             "lon": property.lon,
         }
 
+
 class DataSummarySchema(ma.Schema):
     class Meta:
         ordered = True
-    
+
     num_univ = fields.Int()
     num_amen = fields.Int()
     num_prop = fields.Int()
     state = fields.String()
+
 
 class UniversitySchema(ma.Schema):
     class Meta:
@@ -263,6 +266,7 @@ class UniversitySchema(ma.Schema):
             "zipcode": university.zip_code,
         }
 
+
 amenities_schema = AmenitiesSchema()
 amenities_table_columns = (
     "amen_id",
@@ -276,7 +280,6 @@ amenities_table_columns = (
     "rating",
 )
 all_amenities_schema = AmenitiesSchema(only=amenities_table_columns, many=True)
-
 
 
 exclude_columns = (
