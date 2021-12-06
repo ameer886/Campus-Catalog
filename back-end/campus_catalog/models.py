@@ -28,7 +28,6 @@ class University(db.Model):
     tuition_out_st = db.Column(db.Integer, nullable=True)
     avg_sat = db.Column(db.Float, nullable=True)
     avg_cost_attendance = db.Column(db.Float, nullable=True)
-    
 
     def __repr__(self):
         return "<University %r>" % self.univ_name
@@ -61,7 +60,7 @@ class University(db.Model):
         housing_nearby=None,
         image_id=None,
         image=None,
-        video_id=None
+        video_id=None,
     ):
         self.univ_id = univ_id
         self.univ_name = univ_name
