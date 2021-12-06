@@ -31,3 +31,8 @@
   font-family: 'Times New Roman', Times, serif;
   font-size: 4vw;
 }
+
+.Filter {
+  border-style: solid;
+  background-color: #ddd;
+}

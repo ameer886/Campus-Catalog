@@ -1,8 +1,11 @@
-.VizContainer {
-  text-align: center;
-  background-image: url('../SplashPage/harvard.png');
-}
 .Header {
   font-family: 'Times New Roman', Times, serif;
   font-size: 4vw;
+  text-align: center;
+  background-image: url('../SplashPage/harvard.png');
+}
+
+.VizContainer {
+  text-align: center;
+  background-color: rgb(230, 228, 228);
 }

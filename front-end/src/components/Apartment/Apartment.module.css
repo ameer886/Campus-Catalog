@@ -39,7 +39,7 @@
 .ul {
   columns: 100px 4;
   border-style: solid;
-  background-color: lightgrey;
+  background-color: #ddd;
   padding-bottom: 20px;
 }
 
@@ -60,11 +60,13 @@ img {
 }
 
 .middleText {
-  background-color: lightgoldenrodyellow;
+  background-color: #ddd;
   border-style: solid;
+  text-align: center;
 }
 
 .labels {
-  background-color: lightpink;
+  background-color: rgb(201, 227, 235);
   border-style: solid;
+  text-align: center;
 }

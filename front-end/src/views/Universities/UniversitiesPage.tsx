@@ -290,37 +290,39 @@ const UniversitiesPage: React.FunctionComponent = () => {
 
         {/* Build the inputs on the right */}
         <div className={styles.SplitterInfo}>
-          <FilterPopover
-            options={popoverOptions}
-            setFilter={(e: string) => {
-              setPage(1);
-              setLoading(true);
-              setFilter(e);
-            }}
-          />
-          <p style={{ marginBottom: '0' }}>
-            Select your desired sort order:
-          </p>
-          <form>
-            {/* Default sort: do nothing */}
-            <UniversityInput
-              displayStr="None"
-              sortOrder="NONE"
-              defaultCheckedFunc={(s) => s === sortOrder}
-              onChange={updateSort}
+          <div className={styles.Filter}>
+            <FilterPopover
+              options={popoverOptions}
+              setFilter={(e: string) => {
+                setPage(1);
+                setLoading(true);
+                setFilter(e);
+              }}
             />
-
-            {/* All pairs */}
-            {inputPairs.map((input, index) => (
-              <UniversityInputPair
-                key={index}
-                displayStr={input.displayStr}
-                sortOrder={input.sortOrder}
-                onChange={updateSort}
+            <p style={{ marginBottom: '0' }}>
+              Select your desired sort order:
+            </p>
+            <form>
+              {/* Default sort: do nothing */}
+              <UniversityInput
+                displayStr="None"
+                sortOrder="NONE"
                 defaultCheckedFunc={(s) => s === sortOrder}
+                onChange={updateSort}
               />
-            ))}
-          </form>
+
+              {/* All pairs */}
+              {inputPairs.map((input, index) => (
+                <UniversityInputPair
+                  key={index}
+                  displayStr={input.displayStr}
+                  sortOrder={input.sortOrder}
+                  onChange={updateSort}
+                  defaultCheckedFunc={(s) => s === sortOrder}
+                />
+              ))}
+            </form>
+          </div>
         </div>
       </div>
     </div>

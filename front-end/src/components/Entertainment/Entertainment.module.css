@@ -31,7 +31,7 @@
   padding: 0;
 }
 .middleText {
-  background-color: lightgoldenrodyellow;
+  background-color: #eee;
   border-style: solid;
 }
 
@@ -44,11 +44,11 @@
 .ul {
   columns: 100px 4;
   border-style: solid;
-  background-color: lightgrey;
+  background-color: #eee;
   padding-bottom: 20px;
 }
 
 .labels {
-  background-color: lightpink;
+  background-color:  rgb(201, 227, 235);
   border-style: solid;
 }
