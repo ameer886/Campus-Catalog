@@ -6,7 +6,17 @@ from werkzeug.exceptions import HTTPException
 from .models import University, Housing, Amenities
 from .schemas import *
 from .exceptions import *
-from .handlers import search_housing,search_amenities,search_universities, merge_ranges, youtube_search_handler, normalize_query, json_field_handler, paginated_JSON_builder, paginated_query_result_builder
+from .handlers import (
+    search_housing,
+    search_amenities,
+    search_universities,
+    merge_ranges,
+    youtube_search_handler,
+    normalize_query,
+    json_field_handler,
+    paginated_JSON_builder,
+    paginated_query_result_builder,
+)
 from campus_catalog import app, db, university, housing, amenities
 import campus_catalog.queries as queries
 
@@ -101,7 +111,6 @@ def search():
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
-
 
 
 @app.route("/housing", methods=["GET"])
@@ -271,7 +280,7 @@ def get_univ_by_id(id):
         housing = tuple(hous_nearby)
         univ.set_amen_nearby(amenities)
         univ.set_housing_nearby(housing)
-        yt_video_id = youtube_search_handler(univ.univ_name.split(' '))
+        yt_video_id = youtube_search_handler(univ.univ_name.split(" "))
         univ.set_video(yt_video_id)
         return jsonify(single_univ_schema.dump(univ))
     except HTTPException as e:

@@ -7,20 +7,23 @@ from .models import University, Housing, Amenities
 from sqlalchemy.sql.sqltypes import VARCHAR
 from sqlalchemy import text, desc, cast, or_, func
 
+
 def youtube_search_handler(search_term):
     api_key = os.getenv("GOOGLE_GEOCODE_API_KEY")
-    url = ("https://youtube.googleapis.com/youtube/v3/search?"    
-            f"key={api_key}&"
-            "part=snippet&"
-            "maxResults=5&"
-            f"""q={'+'.join(search_term)}&"""
-            "type=video&"
-            "sort=viewCount&"
-            "videoEmbeddable=true"
-            )
+    url = (
+        "https://youtube.googleapis.com/youtube/v3/search?"
+        f"key={api_key}&"
+        "part=snippet&"
+        "maxResults=5&"
+        f"""q={'+'.join(search_term)}&"""
+        "type=video&"
+        "sort=viewCount&"
+        "videoEmbeddable=true"
+    )
     response = requests.get(url).json()
     video_list = response["items"]
-    return video_list[0]['id']['videoId']
+    return video_list[0]["id"]["videoId"]
+
 
 def merge_ranges(scores):
     score_dict = {
@@ -178,4 +181,3 @@ def search_amenities(query):
         searches.append(Amenities.state.ilike(f"%{term}%"))
         searches.append(Amenities.city.ilike(f"%{term}%"))
     return sql_query.filter(or_(*tuple(searches)))
-
