@@ -6,7 +6,6 @@ import styles from './VisualizationsPage.module.css';
 
 import StateChoropleth from './OurViz/StateChoropleth';
 import UnivCostChart from './OurViz/UnivCostChart';
-
 import Scatterplot from './OurViz/Scatterplot';
 
 import ProviderSunburst from './ProviderViz/ProviderSunburst';
