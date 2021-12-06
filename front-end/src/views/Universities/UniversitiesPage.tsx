@@ -43,7 +43,7 @@ export type UniversityType = {
   univ_name: string;
   zip_code: string;
   video_id: string;
-  
+
   amenities_nearby: Array<AmenityKey>;
   housing_nearby: Array<PropertyKey>;
 };

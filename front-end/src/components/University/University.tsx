@@ -208,8 +208,8 @@ const University: React.FunctionComponent<UniversityProps> = ({
           )}
         </div>
       </div>
-      
-      <YoutubeEmbed embedId={uniQuery.video_id}/>
+
+      <YoutubeEmbed embedId={uniQuery.video_id} />
       <img src={uniQuery.image} />
 
       <p>A map of the location:</p>
