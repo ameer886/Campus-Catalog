@@ -7,6 +7,9 @@ import {
   ScatterChart,
   XAxis,
   YAxis,
+  ZAxis,
+  Legend,
+  Tooltip,
   Scatter,
   CartesianGrid,
 } from 'recharts';
@@ -40,15 +43,18 @@ const Scatterplot: React.FunctionComponent = () => {
         };
 
         response[1].properties.forEach((house) => {
-          const { walk_score, transit_score, rent } = house;
+          const { walk_score, transit_score, rent, property_name } =
+            house;
           const avg = (rent.min + rent.max) / 2;
           output['Transit Score'].push({
             x: transit_score,
             y: avg,
+            z: property_name,
           });
           output['Walk Score'].push({
             x: walk_score,
             y: avg,
+            z: property_name,
           });
         });
 
@@ -107,10 +113,13 @@ const Scatterplot: React.FunctionComponent = () => {
                 unit="$"
                 type="number"
               />
+              <ZAxis dataKey="z" name="Housing Name" />
+              <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+              <Legend />
               <Scatter
                 name="Property"
                 data={displayData}
-                fill="#8884d8"
+                fill={score === 'Walk Score' ? '#8884d8' : '#82ca9d'}
               />
             </ScatterChart>
           </div>
