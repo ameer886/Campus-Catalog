@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
         self.driver.get(URL)
         self.driver.implicitly_wait(20)
         assert self.driver.title == "Campus Catalog"
-        title = self.driver.find_element(By.CLASS_NAME,"AboutPage_Title__2srkJ").text
+        title = self.driver.find_element(By.CLASS_NAME, "AboutPage_Title__2srkJ").text
         assert title == "About"
         subheaders = [
             "Our Mission",
@@ -43,8 +43,8 @@ class Test(unittest.TestCase):
         self.driver.get(URL)
         self.driver.implicitly_wait(30)
 
-        link = self.driver.find_element(By.LINK_TEXT,
-            "Our GitLab repository"
+        link = self.driver.find_element(
+            By.LINK_TEXT, "Our GitLab repository"
         ).get_attribute("href")
         assert link == "https://gitlab.com/RG8452/campus-catalog/"
 

@@ -293,3 +293,17 @@ def test_search_multi_term(client):
         it = _i[items[-1]]
         assert type(it) == list
         assert len(it) == _i["per_page"]
+
+
+### Data Summary Endpoint Test
+
+
+def test_data_summary_endpoint(client):
+    rv = client.get("/summary")
+    assert rv.status_code == 200
+    result = rv.get_json()
+    assert type(result) == list
+    assert len(result) == 51
+    for _i in result:
+        assert type(_i) == dict
+        assert len(_i) == 4
