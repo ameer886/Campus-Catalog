@@ -18,13 +18,17 @@ const ProviderSankey: React.FunctionComponent = () => {
         courses: [],
       };
 
-      for (let i = 1; i <= 115; i++) {
-        const pageFetch = await fetch(
-          `https://api.bevoscourseguide.me/api/allcourses?page=${i}&per_page=50`,
-        );
-        const pageData = await pageFetch.json();
-        courseData.courses.push(...pageData.courses);
-      }
+      const pageFetches = Array.from(Array(115).keys()).map((i) =>
+        fetch(
+          `https://api.bevoscourseguide.me/api/allcourses?page=${
+            i + 1
+          }&per_page=50`,
+        ).then((e) => e.json()),
+      );
+      const pages = await Promise.all(pageFetches);
+      pages.forEach((page) =>
+        courseData.courses.push(...page.courses),
+      );
 
       const buildData = {
         nodes: [
