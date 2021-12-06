@@ -8,6 +8,7 @@ from werkzeug.exceptions import HTTPException
 from .models import University, Housing, Amenities
 from .schemas import *
 from .exceptions import *
+from .handlers import *
 from campus_catalog import app, db, university, housing, amenities
 import campus_catalog.queries as queries
 
@@ -382,6 +383,8 @@ def get_univ_by_id(id):
         housing = tuple(hous_nearby)
         univ.set_amen_nearby(amenities)
         univ.set_housing_nearby(housing)
+        yt_video_id = youtube_search_handler(univ.univ_name.split(' '))
+        univ.set_video(yt_video_id)
         return jsonify(single_univ_schema.dump(univ))
     except HTTPException as e:
         abort(e.code, e)
