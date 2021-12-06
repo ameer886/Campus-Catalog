@@ -10,6 +10,7 @@ import {
 } from '../../utilities';
 import { getAPI } from '../../APIClient';
 import Location from '../Location/Location';
+import YoutubeEmbed from '../YoutubeEmbed/YoutubeEmbed';
 
 type UniversityProps = {
   id: string;
@@ -218,6 +219,7 @@ const University: React.FunctionComponent<UniversityProps> = ({
         </div>
       </div>
 
+      <YoutubeEmbed embedId={uniQuery.video_id} />
       <img src={uniQuery.image} />
 
       <div className={styles.map}>

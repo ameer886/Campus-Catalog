@@ -60,6 +60,7 @@ class University(db.Model):
         housing_nearby=None,
         image_id=None,
         image=None,
+        video_id=None,
     ):
         self.univ_id = univ_id
         self.univ_name = univ_name
@@ -87,6 +88,7 @@ class University(db.Model):
         self.housing_nearby = housing_nearby
         self.image_id = image_id
         self.image = image
+        self.video_id = video_id
 
     @classmethod
     def build_univ_from_args(cls, args):
@@ -131,6 +133,9 @@ class University(db.Model):
         for x, y in args:
             house = {"property_id": x, "property_name": y}
             self.housing_nearby.append(house)
+
+    def set_video(self, id):
+        self.video_id = id
 
     def get_id(self):
         return str(self.univ_id)
