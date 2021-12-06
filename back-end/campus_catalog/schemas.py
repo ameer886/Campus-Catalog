@@ -179,6 +179,7 @@ class UniversitySchema(ma.Schema):
     amenities_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     housing_nearby = fields.List(fields.Dict(keys=fields.Str(), values=fields.Str()))
     image = fields.Url()
+    video_id = fields.Str()
 
     def map_ownership(self, univ):
         num = univ.ownership_id
