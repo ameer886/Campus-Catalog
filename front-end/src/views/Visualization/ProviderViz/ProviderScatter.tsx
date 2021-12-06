@@ -19,10 +19,21 @@ const ProviderScatter: React.FunctionComponent = () => {
 
   useEffect(() => {
     const fetchDataAsync = async () => {
-      const deptFetch = await fetch(
-        'https://api.bevoscourseguide.me/api/alldepartments?per_page=150',
+      const deptData: IntentionallyAny = {
+        departments: [],
+      };
+
+      const pageFetches = Array.from(Array(3).keys()).map((i) =>
+        fetch(
+          `https://api.bevoscourseguide.me/api/alldepartments?page=${
+            i + 1
+          }&per_page=50`,
+        ).then((e) => e.json()),
       );
-      const deptData = await deptFetch.json();
+      const pages = await Promise.all(pageFetches);
+      pages.forEach((page) =>
+        deptData.departments.push(...page.departments),
+      );
 
       // Want to map data to array of points with coords
       const pointArray: IntentionallyAny[] = [];
