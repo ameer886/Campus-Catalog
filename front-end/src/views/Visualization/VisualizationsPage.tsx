@@ -6,6 +6,7 @@ import styles from './VisualizationsPage.module.css';
 
 import StateChoropleth from './OurViz/StateChoropleth';
 import UnivCostChart from './OurViz/UnivCostChart';
+import Scatterplot from './OurViz/Scatterplot';
 
 import ProviderSunburst from './ProviderViz/ProviderSunburst';
 import ProviderSankey from './ProviderViz/ProviderSankey';
@@ -29,6 +30,9 @@ const VisualizationsPage: React.FunctionComponent = () => {
         </Tab>
         <Tab eventKey="univCostChart" title="University Cost">
           <UnivCostChart />
+        </Tab>
+        <Tab eventKey="scatterplot" title="Rent Cost Scatterplot">
+          <Scatterplot />
         </Tab>
         <Tab eventKey="providerSunburst" title="Course Sunburst">
           <ProviderSunburst />
