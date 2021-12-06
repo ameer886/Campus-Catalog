@@ -1,17 +1,15 @@
 import unittest
-from flask import Flask
 from sqlalchemy import MetaData
 
-from db import db_init
-from models import University, Housing, Amenities
+from campus_catalog import app, db
+from campus_catalog.models import University, Housing, Amenities
 
 
 class TestBackEnd(unittest.TestCase):
 
     # set up test environment
-    app = Flask(__name__)
     app.config["TESTING"] = True
-    mock_db = db_init(app)
+    mock_db = db
 
     # test database connection established
     def test_db_connection(self):

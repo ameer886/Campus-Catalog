@@ -4,9 +4,11 @@ import Tab from 'react-bootstrap/Tab';
 
 import styles from './VisualizationsPage.module.css';
 
+import StateChoropleth from './OurViz/StateChoropleth';
 import UnivCostChart from './OurViz/UnivCostChart';
 
 import ProviderSunburst from './ProviderViz/ProviderSunburst';
+import ProviderSankey from './ProviderViz/ProviderSankey';
 
 const VisualizationsPage: React.FunctionComponent = () => {
   return (
