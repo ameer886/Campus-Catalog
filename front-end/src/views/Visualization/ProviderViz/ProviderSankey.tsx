@@ -12,10 +12,23 @@ const ProviderSankey: React.FunctionComponent = () => {
 
   useEffect(() => {
     const fetchDataAsync = async () => {
-      const courseFetch = await fetch(
-        'https://api.bevoscourseguide.me/api/allcourses?per_page=5740',
+      // Our provider's site crashes if we actually fetch every single course at once
+      // so instead we're going to run a ton of fetch requests in a row
+      const courseData: IntentionallyAny = {
+        courses: [],
+      };
+
+      const pageFetches = Array.from(Array(115).keys()).map((i) =>
+        fetch(
+          `https://api.bevoscourseguide.me/api/allcourses?page=${
+            i + 1
+          }&per_page=50`,
+        ).then((e) => e.json()),
       );
-      const courseData = await courseFetch.json();
+      const pages = await Promise.all(pageFetches);
+      pages.forEach((page) =>
+        courseData.courses.push(...page.courses),
+      );
 
       const buildData = {
         nodes: [
