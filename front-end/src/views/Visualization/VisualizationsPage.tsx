@@ -10,6 +10,7 @@ import Scatterplot from './OurViz/Scatterplot';
 
 import ProviderSunburst from './ProviderViz/ProviderSunburst';
 import ProviderSankey from './ProviderViz/ProviderSankey';
+import ProviderScatter from './ProviderViz/ProviderScatter';
 
 const VisualizationsPage: React.FunctionComponent = () => {
   return (
@@ -39,6 +40,9 @@ const VisualizationsPage: React.FunctionComponent = () => {
         </Tab>
         <Tab eventKey="providerSankey" title="Schedule Breakdown">
           <ProviderSankey />
+        </Tab>
+        <Tab eventKey="providerScatter" title="Department Sizes">
+          <ProviderScatter />
         </Tab>
       </Tabs>
     </div>
