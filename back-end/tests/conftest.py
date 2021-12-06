@@ -2,6 +2,7 @@ import pytest
 
 from campus_catalog import app
 
+
 @pytest.fixture
 def client():
     app.config["TESTING"] = True

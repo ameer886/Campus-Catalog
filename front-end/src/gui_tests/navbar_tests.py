@@ -25,8 +25,8 @@ class Test(unittest.TestCase):
     def testAbout(self):
         self.driver.get(URL)
         self.driver.implicitly_wait(10)
-        self.driver.find_element(By.LINK_TEXT,"ABOUT").click()
-        text = self.driver.find_element(By.CLASS_NAME,"AboutPage_Section__1c-dF").text
+        self.driver.find_element(By.LINK_TEXT, "ABOUT").click()
+        text = self.driver.find_element(By.CLASS_NAME, "AboutPage_Section__1c-dF").text
         assert text == "Our Mission"
 
         self.driver.back()
@@ -36,9 +36,9 @@ class Test(unittest.TestCase):
     def testHousing(self):
         self.driver.get(URL)
         self.driver.implicitly_wait(10)
-        self.driver.find_element(By.LINK_TEXT,"HOUSING").click()
+        self.driver.find_element(By.LINK_TEXT, "HOUSING").click()
         self.driver.implicitly_wait(30)
-        text = self.driver.find_element(By.TAG_NAME,"h1").text
+        text = self.driver.find_element(By.TAG_NAME, "h1").text
         assert text == "Housing"
 
         self.driver.back()
@@ -72,14 +72,23 @@ class Test(unittest.TestCase):
     def testSearch(self):
         self.driver.get(URL)
         self.driver.implicitly_wait(10)
-        search_box = self.driver.find_element(By.XPATH, "/html/body/div/div[1]/nav/form/div/input")
+        search_box = self.driver.find_element(
+            By.XPATH, "/html/body/div/div[1]/nav/form/div/input"
+        )
         search_box.send_keys("Austin")
-        self.driver.find_element(By.XPATH, "/html/body/div/div[1]/nav/form/div/div/button").click()
+        self.driver.find_element(
+            By.XPATH, "/html/body/div/div[1]/nav/form/div/div/button"
+        ).click()
 
         assert self.driver.current_url == "https://www.campuscatalog.me/search/q=Austin"
-        assert self.driver.find_element(By.XPATH, "/html/body/div/div[2]/h1[1]").text == "SEARCH RESULTS"
-        assert self.driver.find_element(By.XPATH, "/html/body/div/div[2]/h2").text == "Austin"
-
+        assert (
+            self.driver.find_element(By.XPATH, "/html/body/div/div[2]/h1[1]").text
+            == "SEARCH RESULTS"
+        )
+        assert (
+            self.driver.find_element(By.XPATH, "/html/body/div/div[2]/h2").text
+            == "Austin"
+        )
 
 
 if __name__ == "__main__":
