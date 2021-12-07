@@ -111,6 +111,9 @@ def search():
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
+    finally:
+        db.session.commit()
+        db.session.close()
 
 
 @app.route("/housing", methods=["GET"])
@@ -186,6 +189,9 @@ def get_all_housing():
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
+    finally:
+        db.session.commit()
+        db.session.close()
 
 
 @app.route("/housing/<string:id>", methods=["GET"])
@@ -213,6 +219,9 @@ def get_housing_by_id(id):
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
+    finally:
+        db.session.commit()
+        db.session.close()
 
 
 @app.route("/universities", methods=["GET"])
@@ -259,6 +268,9 @@ def get_all_universities():
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
+    finally:
+        db.session.commit()
+        db.session.close()
 
 
 @app.route("/universities/<string:id>", methods=["GET"])
@@ -290,6 +302,9 @@ def get_univ_by_id(id):
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
+    finally:
+        db.session.commit()
+        db.session.close()
 
 
 @app.route("/amenities", methods=["GET"])
@@ -332,6 +347,9 @@ def get_all_amenities():
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
+    finally:
+        db.session.commit()
+        db.session.close()
 
 
 @app.route("/amenities/<int:amen_id>", methods=["GET"])
@@ -367,6 +385,9 @@ def get_amenities_by_id(amen_id):
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
+    finally:
+        db.session.commit()
+        db.session.close()
 
 
 @app.route("/summary", methods=["GET"])
@@ -382,3 +403,6 @@ def get_data_summary():
         raise
     except Exception as e:
         abort(503, f"{type(e)}: {e}")
+    finally:
+        db.session.commit()
+        db.session.close()

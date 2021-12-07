@@ -1,7 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint
-
-db = SQLAlchemy()
+from campus_catalog import db
 
 
 class University(db.Model):

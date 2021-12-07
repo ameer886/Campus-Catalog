@@ -51,11 +51,11 @@ deploy_develop:
   image: python:3.8
   only:
     variables:
-      - $CI_COMMIT_BRANCH == "back-end"
+      - $CI_COMMIT_BRANCH == "db_bugfix2"
   stage: deploy
   before_script:
     - pip install awsebcli --upgrade --user
-    - git checkout back-end --no-guess
+    - git checkout db_bugfix2
   script:
     - cd back-end
     - /root/.local/bin/eb deploy environment-name
