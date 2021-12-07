@@ -3,6 +3,7 @@ import AmazonRDSLogoImg from './Images/AmazonRDSLogo.png';
 import AWSElasticBeanstalkLogoImg from './Images/AWSElasticBeanstalkLogo.png';
 import AWSLogoImg from './Images/AWSLogo.png';
 import AxiosLogoImg from './Images/AxiosLogo.png';
+import D3LogoImg from './Images/D3Logo.png';
 import DiscordLogoImg from './Images/DiscordLogo.png';
 import DockerLogoImg from './Images/DockerLogo.png';
 import FlaskLogoImg from './Images/FlaskLogo.png';
@@ -17,6 +18,7 @@ import PostmanLogoImg from './Images/PostmanLogo.png';
 import PythonLogoImg from './Images/PythonLogo.png';
 import ReactBootstrapLogoImg from './Images/ReactBootstrapLogo.png';
 import ReactLogoImg from './Images/ReactLogo.png';
+import RechartsLogoImg from './Images/RechartsLogo.png';
 import SeleniumLogoImg from './Images/SeleniumLogo.png';
 import SQLAlchemyLogoImg from './Images/SQLAlchemyLogo.png';
 import TypeScriptLogoImg from './Images/TypeScriptLogo.png';
@@ -160,6 +162,18 @@ export const aboutTools: ToolOrAPI[] = [
     description: 'Python SQL toolkit',
     link: 'https://www.sqlalchemy.org/',
     img: SQLAlchemyLogoImg,
+  },
+  {
+    name: 'D3',
+    description: 'Visualization Tool',
+    link: 'https://d3js.org/',
+    img: D3LogoImg,
+  },
+  {
+    name: 'Recharts',
+    description: 'D3 Simplifier',
+    link: 'https://recharts.org/en-US/',
+    img: RechartsLogoImg,
   },
 ];
 
