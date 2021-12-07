@@ -19,14 +19,14 @@ test:
     - npm install --legacy-peer-deps
     - yarn test
 
-# postman_tests:
-#   stage: test
-#   image:
-#     name: postman/newman_alpine33
-#     entrypoint: [""]
-#   script:
-#     - newman --version
-#     - newman run Postman.json
+postman_tests:
+  stage: test
+  image:
+    name: postman/newman_alpine33
+    entrypoint: [""]
+  script:
+    - newman --version
+    - newman run Postman.json
 
 selenium_tests:
   stage: test
