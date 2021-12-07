@@ -67,6 +67,7 @@ deploy_production:
       - $CI_COMMIT_BRANCH == "main"
   stage: deploy
   before_script:
+    - echo $GOOGLE_GEOCODE_API_KEY
     - pip install awsebcli --upgrade --user
     - git checkout main
   script:
