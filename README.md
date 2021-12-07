@@ -8,13 +8,15 @@
 - David He (UTEID: hh26758)
 
 ## General Info
-Git SHA: 2a49b56dc518acf01174963bcd989bd47a834147
+Git SHA: 2bca9af88fa927941acb56cd76e9d988401397d5
 
 Phase I Leader: Ryan Gahagan
 
 Phase II Leader: David He
 
 Phase III Leader: Brandon Hinh
+
+Phase IV Leader: Andrew Luo
 
 Website: https://campuscatalog.me
 
@@ -61,3 +63,16 @@ Time of completion:
 | David He | 30 | 45 |
 
 Comments: As always, thanks to Jefferson and Caitlin for all the help. Filtering was a bear and the specifications were not super clear on searching.
+
+## Phase 4
+Time of completion:
+
+| Member | Estimated | Actual |
+| ------ | ------ | ------ |
+| Ryan Gahagan | 35 | 50 |
+| Andrew Luo | 30 | 25 |
+| Brandon Hinh | 25 | 30 |
+| Richa Gadre | 25 | 30 |
+| David He | 35 | 50 |
+
+Comments: Thanks for a great semester!
