@@ -193,6 +193,7 @@ def get_all_housing():
         db.session.commit()
         db.session.close()
 
+
 @app.route("/housing/<string:id>", methods=["GET"])
 def get_housing_by_id(id):
     try:
@@ -221,6 +222,7 @@ def get_housing_by_id(id):
     finally:
         db.session.commit()
         db.session.close()
+
 
 @app.route("/universities", methods=["GET"])
 def get_all_universities():
@@ -270,6 +272,7 @@ def get_all_universities():
         db.session.commit()
         db.session.close()
 
+
 @app.route("/universities/<string:id>", methods=["GET"])
 def get_univ_by_id(id):
     try:
@@ -302,6 +305,7 @@ def get_univ_by_id(id):
     finally:
         db.session.commit()
         db.session.close()
+
 
 @app.route("/amenities", methods=["GET"])
 def get_all_amenities():
@@ -347,6 +351,7 @@ def get_all_amenities():
         db.session.commit()
         db.session.close()
 
+
 @app.route("/amenities/<int:amen_id>", methods=["GET"])
 def get_amenities_by_id(amen_id):
     try:
@@ -383,6 +388,7 @@ def get_amenities_by_id(amen_id):
     finally:
         db.session.commit()
         db.session.close()
+
 
 @app.route("/summary", methods=["GET"])
 def get_data_summary():
