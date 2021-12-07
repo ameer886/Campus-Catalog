@@ -19,14 +19,14 @@ test:
     - npm install --legacy-peer-deps
     - yarn test
 
-postman_tests:
-  stage: test
-  image:
-    name: postman/newman_alpine33
-    entrypoint: [""]
-  script:
-    - newman --version
-    - newman run Postman.json
+# postman_tests:
+#   stage: test
+#   image:
+#     name: postman/newman_alpine33
+#     entrypoint: [""]
+#   script:
+#     - newman --version
+#     - newman run Postman.json
 
 selenium_tests:
   stage: test
@@ -51,12 +51,13 @@ deploy_develop:
   image: python:3.8
   only:
     variables:
-      - $CI_COMMIT_BRANCH == "back-end"
+      - $CI_COMMIT_BRANCH == "dev"
   stage: deploy
   before_script:
     - pip install awsebcli --upgrade --user
-    - git checkout back-end --no-guess
+    - git checkout dev
   script:
+    - eb setenv GOOGLE_GEOCODE_API_KEY=$GOOGLE_GEOCODE_API_KEY
     - cd back-end
     - /root/.local/bin/eb deploy environment-name
 
