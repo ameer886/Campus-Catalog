@@ -57,7 +57,7 @@ deploy_develop:
     - pip install awsebcli --upgrade --user
     - git checkout dev
   script:
-    - eb setenv GOOGLE_GEOCODE_API_KEY=$GOOGLE_GEOCODE_API_KEY
+    - /root/.local/bin/eb setenv GOOGLE_GEOCODE_API_KEY=$GOOGLE_GEOCODE_API_KEY
     - cd back-end
     - /root/.local/bin/eb deploy environment-name
 
